@@ -1,0 +1,44 @@
+﻿@model Electronic_Medical_Record.Helpers.DataTables.DataTablesModel
+@using System.Net;
+@{
+}
+<script>
+    //Функция перезагрузки
+    function Refresh() {
+        @{@Model.Name}.ajax.reload();
+        //Если определена вспомогательная функция то вызываем и ее
+        if (typeof AuxFunction === "function") {
+            AuxFunction();
+        }
+    }
+    //Сбрасывает поле поиска ДТ
+    function ResetToDefault() {
+        @{@Model.Name}.search("").draw();
+    }
+    var @{@Model.Name};
+
+$(document).ready(function () {
+    $.fn.dataTable.moment("DD/MM/YYYY HH:mm:ss");
+    $.fn.dataTable.moment("DD/MM/YYYY");
+
+        @Model.Name = $("#@Model.Name").DataTable({
+            @await Html.PartialAsync("_Table.Definition", Model)
+        });
+});
+
+    function strtrunc(str, num) {
+        if (str.length > num) {
+            return str.slice(0, num) + "...";
+        }
+        else {
+            return str;
+        }
+    }
+
+    function edit(rowContext) {
+        if (table) {
+            var data = @{@Model.Name}.row($(rowContext).parents("tr")).data();
+            alert("Example showing row edit with id: " + data["id"] + ", name: " + data["name"]);
+        }
+    }
+</script>

@@ -1,0 +1,82 @@
+﻿@model List<Electronic_Medical_Record.Helpers.DataTables.FilterParameter>
+@using Electronic_Medical_Record.Helpers.DataTables
+@{
+    ViewData["Title"] = "_Filters";
+}
+<hr />
+<form method="get">
+    @foreach (var filter in Model)
+    {
+        if (filter.Type == typeof(string))
+        {
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                </div>
+                <input class="form-control" id="@filter.Name" onkeyup="Refresh()" placeholder="поиск..." autocomplete="off">
+            </div>
+            <br />
+            <!--onkeydown="return (event.keyCode!=13);"-->
+            continue;
+        }
+
+        if (filter.Type == typeof(List<FilterCondition>))
+        {
+            <div class="form-group form-group-sm">
+                <label class="control-label">@filter.ModelName </label><br />
+                @foreach (var item in (List<FilterCondition>)filter.Value)
+                {
+                    <label style="font-weight:normal !important;">
+                        <input type="checkbox" id="@filter.Name@item.Id" onclick="Refresh()"> @item.Name
+                    </label>
+                    <br />
+                }
+            </div>
+            continue;
+        }
+        if (filter.Type == typeof(SelectList))
+        {
+            var res = new SelectList((List<FilterCondition>)filter.Value, "Id", "Name");
+            <div class="form-group form-group-sm">
+                <label class="control-label">@filter.ModelName </label>
+                <select id="@filter.Name" asp-items="res" onchange="Refresh()" class="form-control form-control-sm"></select>
+            </div>
+            continue;
+        }
+        if (filter.Type == typeof(FilterRange))
+        {
+            var res = (FilterRange)filter.Value;
+            if (res.Type == typeof(int))
+            {
+                <div class="form-group form-group-sm">
+                    <label class="control-label">@filter.ModelName </label><br />
+                    <div class="row">
+                        <div class="input-group input-group-sm">
+                            <div class="col-md-6">
+                                <input type="text" id="@filter.Name@nameof(res.Start)" onchange="Refresh()" class="form-control form-control-sm" placeholder="от" />
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" id="@filter.Name@nameof(res.End)" onchange="Refresh()" class="form-control form-control-sm" placeholder="до" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            if (res.Type == typeof(DateTime))
+            {
+                <div class="form-group form-group-sm">
+                    <label class="control-label">@filter.ModelName </label>
+                    <div class="form-group">
+                        <input type="date" id="@filter.Name@nameof(res.Start)" asp-format="{0:mm/dd/yyyy}" onchange="Refresh()" class="form-control form-control-sm" />
+                    </div>
+                    <div class="form-group">
+                        <input type="date" id="@filter.Name@nameof(res.End)" asp-format="{0:mm/dd/yyyy}" onchange="Refresh()" class="form-control form-control-sm" />
+                    </div>
+                </div>
+            }
+            continue;
+        }
+    }
+</form>
+
+
