@@ -1,0 +1,64 @@
+﻿@using ERM.Models;
+@model Tuple<Doctor, Patient, SickLeaveSearchModel, List<Treatment>>
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Record details</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Patient</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model.Item2)
+                <a href="/PatientsController/Details?id=@Model.Item2.Id" class="btn btn-primary btn-block"><b>View patient profile</b></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Doctor</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                @await Html.PartialAsync("~/Views/Doctors/_DoctorDetailsPartialView.cshtml", Model.Item1)
+                <a href="/DoctorsController/Details?id=@Model.Item1.Id" class="btn btn-primary btn-block"><b>View doctor profile</b></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Sick Leaves for the case</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                @await Html.PartialAsync("~/Views/SickLeaves/_SickLeavesTable.cshtml", Model.Item3)
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">bggnn</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

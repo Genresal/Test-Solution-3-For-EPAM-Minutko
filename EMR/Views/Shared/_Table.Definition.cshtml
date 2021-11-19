@@ -1,0 +1,283 @@
+﻿@model ERM.Helpers.DataTables.DataTablesModel
+@using System.Net;
+@using ERM.Helpers.DataTables;
+@{
+}
+
+        stateSave: @Model.StateSave.ToString().ToLower(),
+        @if (Model.AutoWidth)
+        {
+            <text>
+                autoWidth: @Model.AutoWidth.ToString().ToLower(),
+            </text>
+        }
+        @if (Model.Processing)
+        {
+            <text>
+                processing: @Model.Processing.ToString().ToLower(),
+            </text>
+        }
+        @if (Model.ServerSide)
+        {
+            <text>
+                serverSide: @Model.ServerSide.ToString().ToLower(),
+            </text>
+        }
+        @if (Model.ScrollY > 0)
+        {
+            <text>
+                scrollY: '@Html.Raw(Model.ScrollY)px',
+            </text>
+        }
+        @if (Model.ScrollCollapse)
+        {
+            <text>
+                scrollCollapse: @Model.ScrollCollapse.ToString().ToLower(),
+            </text>
+        }
+        paging: @Model.Paging.ToString().ToLower(),
+        @if (Model.Searching)
+        {
+            <text>
+                searching: { regex: @Model.Searching.ToString().ToLower() },
+            </text>
+        }
+        @if (!Model.Searching)
+        {
+            <text>
+                searching: false,
+            </text>
+        }
+        @if (!string.IsNullOrEmpty(Model.LengthMenu))
+        {
+            <text>
+                lengthMenu: [[@Model.LengthMenu], [@Model.LengthMenu]],
+            </text>
+        }
+        @if (Model.PageLength != 0)
+        {
+            <text>
+                pageLength: @Model.PageLength.ToString(),
+            </text>
+        }
+        @if (!string.IsNullOrEmpty(Model.Select))
+        {
+            <text>
+                select: { style: 'multi' },
+            </text>
+        }
+        @if (!string.IsNullOrEmpty(Model.Order))
+        {
+            <text>
+                order: [[@Html.Raw(Model.Order)]],
+            </text>
+        }
+
+        ajax: {
+        url: "@Model.Url",
+        type: "@WebRequestMethods.Http.Post",
+        contentType: "application/json",
+        dataType: "json",
+        data: function (data) {
+        @if (Model.Filters != null)
+        {
+            foreach (var filter in Model.Filters)
+            {
+                if (filter.Type == typeof(List<FilterCondition>))
+                {
+                    <text>data.@filter.Name = []; </text>
+
+                    foreach (FilterCondition item in (List<FilterCondition>)filter.Value)
+                    {
+                        <text>
+                            if (document.getElementById("@filter.Name@item.Id").checked)
+                            {
+                            (data.@filter.Name).push({Id: @item.Id});
+                            }
+                        </text>
+                    }
+                    continue;
+                }
+                if (filter.Type == typeof(SelectList))
+                {
+                    <text>
+                        data.@filter.Name = [{Id: document.getElementById("@filter.Name").value}];
+                    </text>
+                    continue;
+                }
+                if (filter.Type == typeof(FilterRange))
+                {
+                    var value = (FilterRange)filter.Value;
+                    <text>
+                        data.@filter.Name = {@nameof(value.Start): document.getElementById("@filter.Name@nameof(value.Start)").value,
+                        @nameof(value.End): document.getElementById("@filter.Name@nameof(value.End)").value};
+                    </text>
+                    continue;
+                }
+                if (filter.Type == typeof(bool))
+                {
+                    <text>
+                        data.@filter.Name = document.getElementById("@filter.Name").checked;
+                    </text>
+                    continue;
+                }
+
+                if (filter.Type == typeof(int))
+                {
+                    <text>
+                        data.@filter.Name = @filter.Value;
+                    </text>
+                    continue;
+                }
+                if (filter.Type == typeof(string))
+                {
+                    <text>
+                        data.@filter.Name = document.getElementById("@filter.Name").value;
+                    </text>
+                    continue;
+                }
+            }
+        }
+        console.log(data);
+        return JSON.stringify(data);
+        }//,
+
+        //success: function(data){ 
+        //console.log(data);           
+        //}
+
+        },
+        // Language source
+        //language: {
+        //url: "/js/DataTables-1.10.21/json/Russian.json",
+        //},
+        columns: [
+        @for (int i = 0; i < Model.ColumnCollection.Count; i++)
+        {
+            var column = Model.ColumnCollection[i];
+            <text>
+                {
+                visible: @column.Visible.ToString().ToLower(),
+                @if (column.ClassName != string.Empty)
+                {
+                    <text>
+                    className: '@column.ClassName',
+            </text>
+        }
+                orderable: @column.Orderable.ToString().ToLower(),
+
+                @switch (column.Render)
+                {
+                    case RenderDate date:
+                        <text>
+                            render: function (data, type, row) {
+
+                            //Check datetimemin value
+                            var minDate = new Date();
+                            minDate.setFullYear(1, 0, 1);
+                            minDate.setHours(0, 0, 0, 0);
+
+                            var parsedDate = new Date(data)
+
+                            if (parsedDate.getTime() === minDate.getTime()) {
+                            return "";
+                            }
+                            //
+
+                            if (type === "display" || type === "filter") {
+                            return moment(data).lang("en").format("MM-DD-YYYY HH:mm:ss");
+                            }
+                            return data;
+                            },
+                        </text>
+                        break;
+                    case RenderReference reference:
+                        string str = reference.Url;
+
+                        @for (int q = 0; q < reference.Columns.Count; q++)
+                        {
+                            if (q == 0)
+                            {
+                                str = str + "?" + reference.Columns[q] + "=' + row." + reference.Columns[q] + " + '";
+                                continue;
+                            }
+                            str = str + "&" + reference.Columns[q] + "=' + row." + reference.Columns[q] + " + '";
+                        }
+
+                        <text>
+                            render: function (data, type, row, meta) {
+                            return '<a href="@Html.Raw(str)">@reference.Text</a>';
+
+                            },
+                        </text>
+                        break;
+                    case RenderEmpty empty:
+                        <text>
+                            render: function (data, type, row) {
+                            if (!data) {
+                            return '<span style="color:red">@empty.Text</span>';
+                            } else { return data; }
+
+                            },
+                        </text>
+                        break;
+                    case RenderWithCondition condition:
+                        <text>
+                            render: function (data, type, row) {
+                            if (data > "@condition.Value") {
+                            return '<span style="color:red">' + data + '</span>';
+                            } else { return data; }
+
+                            },
+                        </text>
+                        break;
+                    case RenderMultiple multiple:
+                        <text>
+                            render: function (data, type, row) {
+                            return data = data + '@multiple.Separator' + row.@(multiple.RowName.Substring(0, 1).ToLower() + multiple.RowName.Substring(1))
+                            },
+                        </text>
+                        break;
+                    case RenderRandom random:
+                        <text>
+                            render: function (data, type, row) {
+                            return '@Html.Raw(random.Value)';
+                            },
+                        </text>
+                        break;
+                }
+
+                //Datatables columns data needs names with first char lowercase
+
+                @if (column.Data.ToLower() == "null")
+                {
+                    <text>data: null,</text>
+                }
+                else
+                {
+                    <text>data: "@(column.Data.Substring(0, 1).ToLower() + column.Data.Substring(1))",</text>
+                }
+                defaultConsent: "@column.DefaultConsent"
+                }
+                @if (i != Model.ColumnCollection.Count - 1)
+                {<text>,</text>}
+
+                </text>
+            }
+        ],
+
+        //Column Definitions
+        columnDefs: [
+        { targets: "no-sort", orderable: false },
+        { targets: "no-search", searchable: false },
+        {
+        targets: "trim",
+        render: function (data, type, full, meta) {
+        if (type === "display") {
+        data = strtrunc(data, 10);
+        }
+        return data;
+        }
+        },
+        { targets: "date-type", type: "date-eu" },
+        ]
