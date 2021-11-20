@@ -28,15 +28,14 @@ namespace ERM.Repositories
             int dataCount = 20;
             for (int i = 1; i <= dataCount; i++)
             {
-                sqlExpression += "('" + Gen.Random.Numbers.Integers(1, 200)() +
-                    "','" + Gen.Random.Text.Words()().MakeFirstCharUppercase() +
-                    "','" + Gen.Random.Text.Long()().MakeFirstCharUppercase() +
-                    "','" + Gen.Random.Text.Long()().MakeFirstCharUppercase() +
-                    "','" + Gen.Random.Time.Dates(DateTime.Now.AddYears(-5), DateTime.Now)() +
-                    "')";
+                sqlExpression = $"{sqlExpression}('{Gen.Random.Numbers.Integers(1, 200)()}'" +
+                    $",'{Gen.Random.Text.Words()().MakeFirstCharUppercase()}'" +
+                    $",'{Gen.Random.Text.Long()().MakeFirstCharUppercase()}'" +
+                    $",'{Gen.Random.Text.Long()().MakeFirstCharUppercase()}'" +
+                    $",'{Gen.Random.Time.Dates(DateTime.Now.AddYears(-5), DateTime.Now)()}')";
                 if (i != dataCount)
                 {
-                    sqlExpression += ",";
+                    sqlExpression = $"{sqlExpression},";
                 }
 
             }

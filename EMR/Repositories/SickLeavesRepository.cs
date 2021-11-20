@@ -31,15 +31,14 @@ namespace ERM.Repositories
                 DateTime startDate = Gen.Random.Time.Dates(DateTime.Now.AddYears(-5), DateTime.Now)();
                 DateTime endDate = startDate.AddDays(Gen.Random.Numbers.Integers(1, 30)());
 
-                sqlExpression += "('" + Gen.Random.Numbers.Integers(1, 200)() +
-                    "','" + Gen.Random.Numbers.Integers(1000, 1000000)() +
-                    "','" + Gen.Random.Numbers.Integers(1, 999)() +
-                    "','" + startDate +
-                    "','" + endDate +
-                    "')";
+                sqlExpression = $"{sqlExpression}('{ Gen.Random.Numbers.Integers(1, 200)()}'" +
+                    $",'{Gen.Random.Numbers.Integers(1000, 1000000)()}'" +
+                    $",'{Gen.Random.Numbers.Integers(1, 999)()}'" +
+                    $",'{startDate}'" +
+                    $",'{endDate}')";
                 if (i != dataCount)
                 {
-                    sqlExpression += ",";
+                    sqlExpression = $"{sqlExpression},";
                 }
 
             }
