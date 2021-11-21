@@ -12,6 +12,7 @@ using ERM.Models;
 using System.Text.Json.Serialization;
 using ERM.Repositories;
 using System.Configuration;
+using ERM.Services;
 
 namespace ERM
 {
@@ -29,6 +30,8 @@ namespace ERM
             services.AddTransient<IRepository<Patient>, PatientsRepository>(provider => new PatientsRepository(conectionString));
             services.AddTransient<IRepository<SickLeave>, SickLeavesRepository>(provider => new SickLeavesRepository(conectionString));
             services.AddTransient<IRepository<Treatment>, TreatmentsRepository>(provider => new TreatmentsRepository(conectionString));
+
+            services.AddTransient<IService, RecordsService>();
 
             services.AddControllersWithViews().AddJsonOptions(options =>
             {

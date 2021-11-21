@@ -11,28 +11,17 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using ERM.Services;
 
 namespace ERM.Controllers
 {
     public class RecordsController : Controller
     {
-        RecordsRepository _recordsRepository;
-        IRepository<Doctor> _doctorsRepository;
-        IRepository<Patient> _patientsRepository;
-        IRepository<SickLeave> _sickLeavesRepository;
-        IRepository<Treatment> _treatmentsRepository;
+        IService _service;
 
-        public RecordsController(RecordsRepository r
-                                , IRepository<Doctor> rr
-                                , IRepository<Patient> rrr
-                                , IRepository<SickLeave> rrrr
-                                , IRepository<Treatment> rrrrr)
+        public RecordsController(IService s)
         {
-            _recordsRepository = r;
-            _doctorsRepository = rr;
-            _patientsRepository = rrr;
-            _sickLeavesRepository = rrrr;
-            _treatmentsRepository = rrrrr;
+            _service = s;
         }
         // GET: HomeController
         public ActionResult Index()
@@ -43,9 +32,9 @@ namespace ERM.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoadTable([FromBody] RecordSearchModel SearchParameters)
+        public IActionResult LoadTable([FromBody] RecordSearchModel SearchParameters)
         {
-            var result = Filtering(SearchParameters);
+            var result = _service.LoadTable(SearchParameters);
 
             var filteredResultsCount = result.Count();
             var totalResultsCount = result.Count();
@@ -61,56 +50,9 @@ namespace ERM.Controllers
             });
         }
 
-        public IQueryable<RecordViewModel> Filtering(RecordSearchModel searchParameters)
-        {
-            var searchBy = searchParameters.Search?.Value;
+        
 
-            // if we have an empty search then just order the results by Id ascending
-            var orderCriteria = "Id";
-            var orderAscendingDirection = true;
-
-            if (searchParameters.Order != null)
-            {
-                // in this example we just default sort on the 1st column
-                orderCriteria = searchParameters.Columns[searchParameters.Order[0].Column].Data;
-                orderAscendingDirection = searchParameters.Order[0].Dir.ToString().ToLower() == "asc";
-            }
-
-            var result = _recordsRepository.GetAllViewModel().AsQueryable();
-
-
-            // Filters
-            //date
-            DateTime date1 = new DateTime();
-            DateTime date2 = new DateTime();
-            
-            if (searchParameters.DateRange != null)
-            {
-                if (searchParameters.DateRange.Start != "")
-                    date1 = DateTime.Parse(searchParameters.DateRange.Start);
-
-                if (searchParameters.DateRange.End != "")
-                    date2 = DateTime.Parse(searchParameters.DateRange.End);
-            }
-            
-
-            if (date1 != DateTime.MinValue)
-                result = result.Where(u => u.ModifyingDate >= date1);
-
-            if (date2 != DateTime.MinValue)
-                result = result.Where(u => u.ModifyingDate <= date2);
-
-            if (!string.IsNullOrEmpty(searchBy))
-            {
-                result = result.Where(r => r.Diagnosis != null && r.Diagnosis.ToString().ToUpper().Contains(searchBy.ToUpper()));
-            }
-
-            result = orderAscendingDirection ? result.OrderByDynamic(orderCriteria, TableOrder.Asc) : result.OrderByDynamic(orderCriteria, TableOrder.Desc);
-
-            return result;
-
-        }
-
+    /*
         private void ViewBagForAddOrEdit()
         {
             List<SelectListItem> doctors = new List<SelectListItem>();
@@ -195,6 +137,6 @@ namespace ERM.Controllers
         {
             _recordsRepository.Delete(id);
             return RedirectToAction(nameof(Index));
-        }
+        }*/
     }
 }

@@ -1,4 +1,6 @@
 ﻿using ERM.DataTables;
+using ERM.Helpers;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,13 +8,10 @@ using System.Threading.Tasks;
 
 namespace ERM.Services
 {
-    public class PrepareDataForDatatables<T, S> where S : DataTablesParameters
+    public abstract class BaseService
     {
-        /*
-        public IQueryable<T>LoadTable(S searchParameters, IQueryable baseQuery)
+        public IQueryable<T> Order<T, S>(S searchParameters, IQueryable<T> baseQuery) where S : DataTablesParameters
         {
-            var searchBy = searchParameters.Search?.Value;
-
             // if we have an empty search then just order the results by Id ascending
             var orderCriteria = "Id";
             var orderAscendingDirection = true;
@@ -26,15 +25,9 @@ namespace ERM.Services
 
             var result = baseQuery;
 
-            // Fitering
-
-            var searchAttributes = typeof(S).GetProperties(System.Reflection.BindingFlags.Public
-    | System.Reflection.BindingFlags.Instance
-    | System.Reflection.BindingFlags.DeclaredOnly);
-
-            foreach (var prop in searchAttributes)
+            result = orderAscendingDirection ? result.OrderByDynamic(orderCriteria, TableOrder.Asc) : result.OrderByDynamic(orderCriteria, TableOrder.Desc);
 
             return result;
-        }*/
+        }
     }
 }
