@@ -1,4 +1,4 @@
-﻿namespace ERM.Helpers.DataTables
+﻿namespace ERM.DataTables
 {
     /// <summary>
     /// Represent DataTables column property

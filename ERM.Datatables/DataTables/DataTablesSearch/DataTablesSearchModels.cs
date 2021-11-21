@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace ERM.Helpers.DataTables
+namespace ERM.DataTables
 {
     /// <summary>
     /// jQuery DataTables search field. https://datatables.net/manual/server-side

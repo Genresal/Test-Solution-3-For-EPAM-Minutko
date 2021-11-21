@@ -1,5 +1,5 @@
 ﻿@model ERM.ViewModels.RecordSearchModel
-@using ERM.Helpers.DataTables
+@using ERM.DataTables
 @{
     ViewData["Title"] = "Home page";
     Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
@@ -15,10 +15,9 @@
 
 <div class="row">
     <div class="col-md-2">
-        <!--Частичное представление-->
         @await Html.PartialAsync("_Filters", _filters)
 
-        <form method="post" action="~/Forging">
+        <form method="post" action="~/Records">
             <div class="form-group">
                 <input type="submit" value="Сброс" class="btn btn-secondary btn btn-block" />
             </div>
@@ -34,7 +33,7 @@
                     <th>@Html.DisplayNameFor(value => _model.DoctorName)</th>
                     <th>@Html.DisplayNameFor(value => _model.Diagnosis)</th>
                     <th>@Html.DisplayNameFor(value => _model.ModifyingDate)</th>
-                    <th></th>
+                    <th>Actions</th>
                 </tr>
             </thead>
         </table>
@@ -53,8 +52,8 @@
         Paging = true,
         Searching = true,
         Order = "0, 'desc'",
-        LengthMenu = "22, 50, 100, 500",
-        PageLength = 22,
+        LengthMenu = "12, 24, 100, 500",
+        PageLength = 12,
         Name = "table",
         Url = "/Records/LoadTable",
         Filters = _filters
@@ -75,6 +74,7 @@
 
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id))
     {
+        Orderable = false,
         Render = new RenderRandom(button)
     }
 );

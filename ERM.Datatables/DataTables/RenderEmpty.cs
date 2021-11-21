@@ -1,4 +1,4 @@
-﻿namespace ERM.Helpers.DataTables
+﻿namespace ERM.DataTables
 {
     /// <summary>
     /// Represents manage method to render empty data for DataTables column

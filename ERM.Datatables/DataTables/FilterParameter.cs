@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ERM.Helpers.DataTables
+namespace ERM.DataTables
 {
     public class FilterParameter
     {

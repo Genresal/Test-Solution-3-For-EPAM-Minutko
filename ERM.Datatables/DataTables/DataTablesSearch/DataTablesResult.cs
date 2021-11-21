@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace ERM.Helpers.DataTables
+namespace ERM.DataTables
 {
     /// <summary>
     /// Result for jQuery DataTables. https://datatables.net/manual/server-side

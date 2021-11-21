@@ -7,14 +7,16 @@ using System.Threading.Tasks;
 
 namespace ERM.ViewModels
 {
-    public class RecordSearchModel : DataTablesParameters
+    public class SickLeaveSearchModel : DataTablesParameters
     {
-        public RecordSearchModel()
+        public SickLeaveSearchModel()
         {
             DateRange = new FilterRange(typeof(DateTime));
         }
 
         [Display(Name = "Date range, from-to")]
         public FilterRange DateRange { get; set; }
+
+        public int RecordId { get; set; }
     }
 }

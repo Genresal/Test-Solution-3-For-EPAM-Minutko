@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ERM.Helpers.DataTables
+namespace ERM.DataTables
 {
     /// <summary>
     /// Represents reference render for DataTables column

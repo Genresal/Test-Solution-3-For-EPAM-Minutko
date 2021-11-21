@@ -1,4 +1,4 @@
-﻿using ERM.Helpers.DataTables;
+﻿using ERM.DataTables;
 using System;
 using System.Collections.Generic;
 using System.Linq;

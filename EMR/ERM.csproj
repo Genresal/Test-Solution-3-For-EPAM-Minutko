@@ -11,8 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
     <Folder Include="wwwroot\plugins\datatables-pageresize\css\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ERM.Datatables\ERM.Datatables.csproj" />
   </ItemGroup>
 
 </Project>

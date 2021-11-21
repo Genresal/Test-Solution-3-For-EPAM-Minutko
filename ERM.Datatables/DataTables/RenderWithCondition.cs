@@ -2,25 +2,25 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ERM.Helpers.DataTables
+namespace ERM.DataTables
 {
     /// <summary>
     /// Represents row render with some condition for DataTables column
     /// </summary>
-    public partial class RenderRandom : IRender
+    public partial class RenderWithCondition : IRender
     {
 
         /// <summary>
-        /// Initializes a new instance of the RenderRandom class 
+        /// Initializes a new instance of the RenderWithCondition class 
         /// </summary>
-        /// <param name="value">random HTML rendering</param>
-        public RenderRandom(string value)
+        /// <param name="value">If data more than that valuer? row will be recolored to red</param>
+        public RenderWithCondition(string value)
         {
             Value = value;
         }
 
         /// <summary>
-        /// HTML string
+        /// Condition value
         /// </summary>
         public string Value { get; set; }
     }

@@ -1,5 +1,5 @@
 ﻿using ERM.Helpers;
-using ERM.Helpers.DataTables;
+using ERM.DataTables;
 using ERM.Models;
 using ERM.Repositories;
 using ERM.ViewModels;

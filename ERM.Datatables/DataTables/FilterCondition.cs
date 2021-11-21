@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ERM.Helpers.DataTables
+namespace ERM.DataTables
 {
     public class FilterCondition
     {

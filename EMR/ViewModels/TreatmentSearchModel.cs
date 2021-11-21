@@ -1,15 +1,12 @@
-﻿using ERM.Helpers.DataTables;
+﻿using ERM.DataTables;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ERM.ViewModels
 {
-    public class SickLeaveSearchModel : DataTablesParameters
+    public class TreatmentSearchModel : DataTablesParameters
     {
-        public SickLeaveSearchModel()
+        public TreatmentSearchModel()
         {
             DateRange = new FilterRange(typeof(DateTime));
         }
