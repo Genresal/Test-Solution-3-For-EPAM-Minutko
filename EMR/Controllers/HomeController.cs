@@ -1,15 +1,15 @@
-﻿using ERM.Helpers;
-using ERM.DataTables;
-using ERM.Models;
-using ERM.Repositories;
-using ERM.ViewModels;
+﻿using EMR.Helpers;
+using EMR.DataTables;
+using EMR.Models;
+using EMR.Repositories;
+using EMR.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ERM.Controllers
+namespace EMR.Controllers
 {
     public class HomeController : Controller
     {

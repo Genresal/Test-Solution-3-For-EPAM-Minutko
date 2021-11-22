@@ -1,5 +1,5 @@
-﻿@using ERM.Models;
-@model Tuple<Doctor, Patient, SickLeaveSearchModel, List<Treatment>>
+﻿@using EMR.Models;
+@model (Doctor, Patient, SickLeaveSearchModel, TreatmentSearchModel)
 @{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";

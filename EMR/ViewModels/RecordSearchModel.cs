@@ -1,11 +1,11 @@
-﻿using ERM.DataTables;
+﻿using EMR.DataTables;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ERM.ViewModels
+namespace EMR.ViewModels
 {
     public class RecordSearchModel : DataTablesParameters
     {

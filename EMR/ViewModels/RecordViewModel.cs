@@ -1,10 +1,10 @@
-﻿using ERM.Models;
+﻿using EMR.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ERM.ViewModels
+namespace EMR.ViewModels
 {
     public class RecordViewModel : Record
     {

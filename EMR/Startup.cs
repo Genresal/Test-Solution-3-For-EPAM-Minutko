@@ -8,13 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ERM.Models;
+using EMR.Business.Models;
 using System.Text.Json.Serialization;
-using ERM.Repositories;
+using EMR.Business.Repositories;
 using System.Configuration;
-using ERM.Services;
+using EMR.Business.Services;
+using EMR.Data.Repositories;
 
-namespace ERM
+namespace EMR
 {
     public class Startup
     {
@@ -29,9 +30,8 @@ namespace ERM
             services.AddTransient<IRepository<Doctor>, DoctorsRepository>(provider => new DoctorsRepository(conectionString));
             services.AddTransient<IRepository<Patient>, PatientsRepository>(provider => new PatientsRepository(conectionString));
             services.AddTransient<IRepository<SickLeave>, SickLeavesRepository>(provider => new SickLeavesRepository(conectionString));
-            services.AddTransient<IRepository<Treatment>, TreatmentsRepository>(provider => new TreatmentsRepository(conectionString));
 
-            services.AddTransient<IService, RecordsService>();
+            services.AddTransient<IRecordService, RecordService>();
 
             services.AddControllersWithViews().AddJsonOptions(options =>
             {

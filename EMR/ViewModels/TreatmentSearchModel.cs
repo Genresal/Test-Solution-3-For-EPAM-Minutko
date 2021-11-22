@@ -1,8 +1,8 @@
-﻿using ERM.DataTables;
+﻿using EMR.DataTables;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ERM.ViewModels
+namespace EMR.ViewModels
 {
     public class TreatmentSearchModel : DataTablesParameters
     {

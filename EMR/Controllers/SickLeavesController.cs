@@ -1,8 +1,8 @@
-﻿using ERM.Helpers;
-using ERM.DataTables;
-using ERM.Models;
-using ERM.Repositories;
-using ERM.ViewModels;
+﻿using EMR.Helpers;
+using EMR.DataTables;
+using EMR.Business.Models;
+using EMR.Business.Repositories;
+using EMR.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,7 +12,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ERM.Controllers
+namespace EMR.Controllers
 {
     public class SickLeavesController : Controller
     {

@@ -1,8 +1,8 @@
-﻿using ERM.Helpers;
-using ERM.DataTables;
-using ERM.Models;
-using ERM.Repositories;
-using ERM.ViewModels;
+﻿using EMR.Helpers;
+using EMR.DataTables;
+using EMR.Models;
+using EMR.Repositories;
+using EMR.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,20 +11,20 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
-using ERM.Services;
+using EMR.Services;
 
-namespace ERM.Controllers
+namespace EMR.Controllers
 {
     public class RecordsController : Controller
     {
-        IService _service;
+        readonly IRecordService _service;
 
-        public RecordsController(IService s)
+        public RecordsController(IRecordService s)
         {
             _service = s;
         }
         // GET: HomeController
-        public ActionResult Index()
+        public IActionResult Index()
         {
             RecordSearchModel searchModel = new RecordSearchModel();
             //
@@ -50,27 +50,9 @@ namespace ERM.Controllers
             });
         }
 
-        
-
-    /*
-        private void ViewBagForAddOrEdit()
-        {
-            List<SelectListItem> doctors = new List<SelectListItem>();
-            List<SelectListItem> patients = new List<SelectListItem>();
-            doctors.AddRange(_doctorsRepository.GetAll()
-                    //.OrderBy(x => x.Name)
-                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = "Dr. " + x.FirstName + " " + x.LastName }).ToList());
-
-            patients.AddRange(_patientsRepository.GetAll()
-                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.FirstName + " " + x.LastName }).ToList());
-
-            ViewBag.Doctors = new SelectList(doctors, "Value", "Text");
-            ViewBag.Patients = new SelectList(patients, "Value", "Text");
-        }
-
         public IActionResult AddOrEdit(int id = 0)
         {
-            ViewBagForAddOrEdit();
+            PrepareViewBagForAddOrEdit();
 
             if (id == 0)
             {
@@ -80,7 +62,7 @@ namespace ERM.Controllers
             }
             else
             {
-                var model = _recordsRepository.FindById(id);
+                var model = _service.FindById(id);
                 if (model == null)
                 {
                     return NotFound();
@@ -97,16 +79,14 @@ namespace ERM.Controllers
                 //Insert
                 if (id == 0)
                 {
-                    model.ModifyingDate = DateTime.Now;
-                    _recordsRepository.Create(model);
+                    _service.Create(model);
                 }
                 //Update
                 else
                 {
                     try
                     {
-                        model.ModifyingDate = DateTime.Now;
-                        _recordsRepository.Update(model);
+                        _service.Update(model);
                     }
                     catch (Exception)
                     {
@@ -115,28 +95,35 @@ namespace ERM.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBagForAddOrEdit();
+            PrepareViewBagForAddOrEdit();
             return View(model);
         }
 
         // GET: HomeController/Details/5
         public IActionResult Details(int id)
         {
-            var record = _recordsRepository.FindById(id);
-            var patient = _patientsRepository.FindById(record.PatientId);
-            var doctor = _doctorsRepository.FindById(record.DoctorId);
-            var sickLeaves = new SickLeaveSearchModel() { RecordId = record.Id};
-            var treatments = _treatmentsRepository.GetByField(nameof(Treatment.RecordId), record.DoctorId.ToString()).ToList();
-
-            var result = new Tuple<Doctor, Patient, SickLeaveSearchModel, List<Treatment>>(doctor, patient, sickLeaves, treatments);
-            return View(result);
+            return View(_service.GetDetails(id));
         }
 
         // GET: HomeController/Delete/5
         public IActionResult Delete(int id)
         {
-            _recordsRepository.Delete(id);
+            _service.Delete(id);
             return RedirectToAction(nameof(Index));
-        }*/
+        }
+
+        private void PrepareViewBagForAddOrEdit()
+        {
+            List<SelectListItem> doctors = new List<SelectListItem>();
+            List<SelectListItem> patients = new List<SelectListItem>();
+            doctors.AddRange(_service.GetDoctors()
+                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = "Dr. " + x.FirstName + " " + x.LastName }).ToList());
+
+            patients.AddRange(_service.GetPatients()
+                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.FirstName + " " + x.LastName }).ToList());
+
+            ViewBag.Doctors = new SelectList(doctors, "Value", "Text");
+            ViewBag.Patients = new SelectList(patients, "Value", "Text");
+        }
     }
 }

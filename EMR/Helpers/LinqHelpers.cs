@@ -1,11 +1,11 @@
-﻿using ERM.DataTables;
+﻿using EMR.DataTables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace ERM.Helpers
+namespace EMR.Helpers
 {
     public static class LinqHelpers
     {
