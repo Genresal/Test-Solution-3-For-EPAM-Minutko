@@ -26,7 +26,7 @@ namespace EMR
             string conectionString = @"Data Source =.; Database=EMR;Integrated Security = True";
             //string conectionString = @"Server=(localdb)\\mssqllocaldb;Database=EMR;Trusted_Connection=True;";
   
-            services.AddTransient(provider => new RecordsRepository(conectionString));
+            services.AddTransient<IRepository<Record>, RecordsRepository>(provider => new RecordsRepository(conectionString));
             services.AddTransient<IRepository<Doctor>, DoctorsRepository>(provider => new DoctorsRepository(conectionString));
             services.AddTransient<IRepository<Patient>, PatientsRepository>(provider => new PatientsRepository(conectionString));
             services.AddTransient<IRepository<SickLeave>, SickLeavesRepository>(provider => new SickLeavesRepository(conectionString));

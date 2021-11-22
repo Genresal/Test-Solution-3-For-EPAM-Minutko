@@ -1,7 +1,5 @@
 ﻿using EMR.Helpers;
 using EMR.DataTables;
-using EMR.Models;
-using EMR.Repositories;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

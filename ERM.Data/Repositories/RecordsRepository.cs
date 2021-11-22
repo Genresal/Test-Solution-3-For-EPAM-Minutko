@@ -1,6 +1,5 @@
 ﻿using EMR.Data.Helpers;
 using EMR.Business.Models;
-using EMR.ViewModels;
 using RandomGen;
 using System;
 using System.Collections.Generic;
