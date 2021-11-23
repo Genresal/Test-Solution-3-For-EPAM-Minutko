@@ -10,5 +10,6 @@ namespace EMR.Business.Models
     {
         public int UserId { get; set; }
         public int PositionId { get; set; }
+        public User User { get; set; }
     }
 }

@@ -15,6 +15,10 @@ namespace EMR.Data.Repositories
         public PositionRepository(string conn) : base(conn)
         {
         }
+        public override IEnumerable<Position> GetAll()
+        {
+            return new List<Position>();
+        }
 
         public override void SetDefaultData()
         {

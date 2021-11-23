@@ -16,6 +16,11 @@ namespace EMR.Data.Repositories
         {
         }
 
+        public override IEnumerable<SickLeave> GetAll()
+        {
+            return new List<SickLeave>();
+        }
+
         public override void SetDefaultData()
         {
             string sqlExpression = $@"INSERT INTO [dbo].[{nameof(SickLeave).ConvertToTableName()}](

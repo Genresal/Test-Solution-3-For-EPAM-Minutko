@@ -16,6 +16,11 @@ namespace EMR.Data.Repositories
         {
         }
 
+        public override IEnumerable<User> GetAll()
+        {
+            return new List<User>();
+        }
+
         public override void SetDefaultData()
         {
             string sqlExpression = $@"INSERT INTO [dbo].[{nameof(User).ConvertToTableName()}](

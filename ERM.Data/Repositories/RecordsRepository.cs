@@ -15,22 +15,26 @@ namespace EMR.Data.Repositories
         public RecordsRepository(string conn) : base (conn)
         {
         }
-        /*
-        public IEnumerable<RecordViewModel> GetAllViewModel()
+        
+        public override IEnumerable<Record> GetAll()
         {
-            List<RecordViewModel> items = new List<RecordViewModel>();
+            List<Record> items = new List<Record>();
 
             string sqlExpression = $"SELECT r.{nameof(Record.Id)}, " +
-                                    $"{nameof(Record.PatientId)}, " +
-                                    $"{nameof(Record.Diagnosis)}, " +
+                                    $"{nameof(Record.DiagnosisId)}, " +
+                                    $"{nameof(Record.SickLeaveId)}, " +
                                     $"{nameof(Record.DoctorId)}, " +
-                                    $"{nameof(Record.ModifyingDate)}, " +
-                                    $"CONCAT('Dr. ', d.{nameof(Doctor.FirstName)}, ' ',d.{nameof(Doctor.LastName)})  as {nameof(RecordViewModel.DoctorName)}, " +
-                                    $"CONCAT(p.{nameof(Patient.FirstName)}, ' ',p.{nameof(Patient.LastName)})  as {nameof(RecordViewModel.PatientName)}, " +
-                                    $"{nameof(Record.ModifyingDate)} " +
+                                    $"{nameof(Record.PatientId)}, " +
+                                    $"{nameof(Record.ModifiedDate)}, " +
+                                    $"d.{nameof(Doctor.PositionId)}, " +
+                                    $"d.{nameof(Doctor.UserId)}, " +
+                                    $"ud.{nameof(User.FirstName)}, " +
+                                    $"up.{nameof(User.FirstName)}, " +
                                     $"FROM {nameof(Record).ConvertToTableName()} as r  " +
                                     $"LEFT JOIN {nameof(Doctor).ConvertToTableName()} as d ON d.{nameof(Doctor.Id)} = r.{nameof(Record.DoctorId)} " +
-                                    $"LEFT JOIN {nameof(Patient).ConvertToTableName()} as p ON p.{nameof(Patient.Id)} = r.{nameof(Record.PatientId)}";
+                                    $"LEFT JOIN {nameof(Patient).ConvertToTableName()} as p ON p.{nameof(Patient.Id)} = r.{nameof(Record.PatientId)} " +
+                                    $"LEFT JOIN {nameof(User).ConvertToTableName()} as ud ON ud.{nameof(User.Id)} = d.{nameof(Doctor.UserId)} " +
+                                    $"LEFT JOIN {nameof(User).ConvertToTableName()} as up ON up.{nameof(User.Id)} = p.{nameof(Patient.UserId)}";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -41,14 +45,14 @@ namespace EMR.Data.Repositories
                 {
                     while (reader.Read())
                     {
-                        items.Add(MapViewModel(reader));
+                        items.Add(Map(reader));
                     }
                 }
                 connection.Close();
             }
             return items;
         }
-        */
+        
 
         public override void SetDefaultData()
         {
@@ -88,23 +92,9 @@ namespace EMR.Data.Repositories
             model.DoctorId = (int)reader[nameof(model.DoctorId)];
             model.PatientId = (int)reader[nameof(model.PatientId)];
             model.ModifiedDate = (DateTime)reader[nameof(model.ModifiedDate)];
+            model.Doctor.User.FirstName = (string)reader[$"d.{nameof(model.Doctor.User.FirstName)}"];
 
             return model;
         }
-        /*
-        protected RecordViewModel MapViewModel(SqlDataReader reader)
-        {
-            var model = new RecordViewModel();
-
-            model.Id = (int)reader[nameof(model.Id)];
-            model.PatientId = (int)reader[nameof(model.PatientId)];
-            model.Diagnosis = (string)reader[nameof(model.Diagnosis)];
-            model.DoctorId = (int)reader[nameof(model.DoctorId)];
-            model.ModifyingDate = (DateTime)reader[nameof(model.ModifyingDate)];
-            model.DoctorName = (string)reader[nameof(model.DoctorName)];
-            model.PatientName = (string)reader[nameof(model.PatientName)];
-
-            return model;
-        }*/
     }
 }
