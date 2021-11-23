@@ -3,11 +3,16 @@ using System.Collections.Generic;
 
 namespace EMR.Business.Repositories
 {
+    public interface IRepository
+    {
+        public void CheckTable();
+    }
+
     /// <summary>
     /// Base repository
     /// </summary>
     /// <typeparam name="T">Business Model class</typeparam>
-    public interface IRepository<T>
+    public interface IRepository<T> : IRepository
     {
         IEnumerable<T> GetAll();
         //IEnumerable<T> GetByField(string field, string value);
@@ -16,4 +21,6 @@ namespace EMR.Business.Repositories
         void Update(T item);
         void Delete(int id);
     }
+
+
 }

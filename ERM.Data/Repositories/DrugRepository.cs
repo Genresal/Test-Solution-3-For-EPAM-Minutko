@@ -10,42 +10,45 @@ using RandomGen;
 
 namespace EMR.Data.Repositories
 {
-    public class DiagnosisRepository : BaseRepository<Diagnosis>
+    public class DrugRepository : BaseRepository<Drug>
     {
-        public DiagnosisRepository(string conn) : base(conn)
+        public DrugRepository(string conn) : base (conn)
         {
         }
 
-        public override IEnumerable<Diagnosis> GetAll()
+        public override IEnumerable<Drug> GetAll()
         {
-            return new List<Diagnosis>();
+            return new List<Drug>();
         }
 
         public override void SetDefaultData()
         {
-            string sqlExpression = $@"INSERT INTO [dbo].[{nameof(Diagnosis).ConvertToTableName()}](
-                                                        [{nameof(Diagnosis.Name)}])
+            string sqlExpression = $@"INSERT INTO [dbo].[{nameof(Drug).ConvertToTableName()}](
+                                                         [{nameof(Drug.Name)}]
+                                                        ,[{nameof(Drug.Description)}])
                                                     VALUES";
-            int dataCount = 100;
+            int dataCount = 80;
             for (int i = 1; i <= dataCount; i++)
             {
-
                 sqlExpression = $"{sqlExpression}" +
-                    $"('{Gen.Random.Text.Short()().MakeFirstCharUppercase()}')";
+                    $"('{Gen.Random.Text.Short()()}'" +
+                    $",'{Gen.Random.Text.Long()()}')";
                 if (i != dataCount)
                 {
                     sqlExpression = $"{sqlExpression},";
                 }
+
             }
             SetDefaultData(sqlExpression);
         }
 
-        protected override Diagnosis Map(SqlDataReader reader)
+        protected override Drug Map(SqlDataReader reader)
         {
-            var model = new Diagnosis();
+            var model = new Drug();
 
             model.Id = (int)reader[nameof(model.Id)];
             model.Name = (string)reader[nameof(model.Name)];
+            model.Description = (string)reader[nameof(model.Description)];
 
             return model;
         }

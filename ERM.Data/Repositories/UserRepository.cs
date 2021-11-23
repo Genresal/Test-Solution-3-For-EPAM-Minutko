@@ -33,7 +33,7 @@ namespace EMR.Data.Repositories
                                                         ,[{nameof(User.PhoneNumber)}]
                                                         ,[{nameof(User.PhotoUrl)}])
                                                     VALUES";
-            int dataCount = 4;
+            int dataCount = 100;
             for (int i = 1; i <= dataCount; i++)
             {
                 string name = i % 2 == 0 ? Gen.Random.Names.Male()() : Gen.Random.Names.Female()();

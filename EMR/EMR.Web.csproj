@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EMR.Core\EMR.Business.csproj" />
+    <ProjectReference Include="..\ERM.Data\EMR.Data.csproj" />
   </ItemGroup>
 
 </Project>

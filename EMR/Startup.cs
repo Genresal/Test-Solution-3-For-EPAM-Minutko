@@ -25,17 +25,25 @@ namespace EMR
         public void ConfigureServices(IServiceCollection services)
         {
             string conectionString = @"Data Source =.; Database=EMR;Integrated Security = True";
-            //string conectionString = @"Server=(localdb)\\mssqllocaldb;Database=EMR;Trusted_Connection=True;";
-  
-            services.AddTransient<IRepository<Record>, RecordsRepository>(provider => new RecordsRepository(conectionString));
+
+            services.AddTransient<IRepository<SickLeave>, SickLeavesRepository>(provider => new SickLeavesRepository(conectionString));
+            services.AddTransient<IRepository<Diagnosis>, DiagnosisRepository>(provider => new DiagnosisRepository(conectionString));
+            services.AddTransient<IRepository<Drug>, DrugRepository>(provider => new DrugRepository(conectionString));
+            services.AddTransient<IRepository<Procedure>, ProcedureRepository>(provider => new ProcedureRepository(conectionString));
+            services.AddTransient<IRepository<Role>, RoleRepository>(provider => new RoleRepository(conectionString));
+            services.AddTransient<IRepository<User>, UserRepository>(provider => new UserRepository(conectionString));
+            services.AddTransient<IRepository<Position>, PositionRepository>(provider => new PositionRepository(conectionString));
             services.AddTransient<IRepository<Doctor>, DoctorsRepository>(provider => new DoctorsRepository(conectionString));
             services.AddTransient<IRepository<Patient>, PatientsRepository>(provider => new PatientsRepository(conectionString));
-            services.AddTransient<IRepository<SickLeave>, SickLeavesRepository>(provider => new SickLeavesRepository(conectionString));
+            services.AddTransient<IRepository<Record>, RecordsRepository>(provider => new RecordsRepository(conectionString));
+            services.AddTransient<IRepository<RecordTreatment>, RecordTreatmentsRepository>(provider => new RecordTreatmentsRepository(conectionString));
 
             services.AddTransient<IRecordService, RecordService>();
             services.AddTransient<IDoctorService, DoctorService>();
 
             services.AddTransient<IRecordPageService, RecordPageService>();
+
+            services.AddSingleton<IDbService, DbService>();
 
             services.AddControllersWithViews().AddJsonOptions(options =>
             {
@@ -45,7 +53,7 @@ namespace EMR
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbService db)
         {
             if (env.IsDevelopment())
             {
@@ -62,6 +70,8 @@ namespace EMR
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}");
             });
+
+            db.CheckDb();
         }
     }
 }

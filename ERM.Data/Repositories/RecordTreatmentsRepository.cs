@@ -28,11 +28,10 @@ namespace EMR.Data.Repositories
                                                         ,[{nameof(RecordTreatment.DrugId)}]
                                                         ,[{nameof(RecordTreatment.ProcedureId)}])
                                                     VALUES";
-            int dataCount = 200;
+            int dataCount = 300;
             for (int i = 1; i <= dataCount; i++)
             {
                 sqlExpression = $"{sqlExpression}('{Gen.Random.Numbers.Integers(1, 200)()}'" +
-                    $",'{Gen.Random.Numbers.Integers(1, 80)()}'" +
                     $",'{Gen.Random.Numbers.Integers(1, 80)()}'" +
                     $",'{Gen.Random.Numbers.Integers(1, 80)()}')";
                 if (i != dataCount)

@@ -1,4 +1,5 @@
 ﻿using EMR.Business.Services;
+using EMR.Mapper;
 using EMR.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace EMR.Services
         }
         public IQueryable<RecordViewModel> LoadTable(RecordSearchModel searchParameters)
         {
-            var result = _recordService.GetAll();
+            var result = _recordService.GetAll().Select(x => x.ToViewModel()).AsQueryable();
 
             DateTime date1 = new DateTime();
             DateTime date2 = new DateTime();
@@ -44,12 +45,14 @@ namespace EMR.Services
 
             if (!string.IsNullOrEmpty(searchBy))
             {
-                result = result.Where(r => r.Diagnosis != null && r.Diagnosis.ToString().ToUpper().Contains(searchBy.ToUpper()));
+                result = result.Where(r => r.PatientName != null && r.PatientName.ToString().ToUpper().Contains(searchBy.ToUpper()));
             }
 
             result = Order(searchParameters, result);
 
             return result;
         }
+
+
     }
 }

@@ -8,7 +8,7 @@ namespace EMR.Business.Services
     public interface IRecordService
     {
         IEnumerable<Record> GetAll();
-        Record FindById(int id);
+        //Record FindById(int id);
         void Create(Record model);
         void Update(Record Model);
         void Delete(int id);

@@ -8,6 +8,13 @@ namespace EMR.Business.Models
 {
     public class Record : BaseModel
     {
+        public Record()
+        {
+            Diagnosis = new Diagnosis();
+            SickLeave = new SickLeave();
+            Doctor = new Doctor();
+            Patient = new Patient();
+        }
         public int DiagnosisId { get; set; }
         public int SickLeaveId { get; set; }
         public int DoctorId { get; set; }

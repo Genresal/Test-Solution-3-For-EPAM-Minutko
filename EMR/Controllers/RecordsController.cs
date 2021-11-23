@@ -11,16 +11,17 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using EMR.Business.Services;
+using EMR.Services;
 
 namespace EMR.Controllers
 {
     public class RecordsController : Controller
     {
-        readonly IRecordService _service;
+        readonly IRecordPageService _pageService;
 
-        public RecordsController(IRecordService s)
+        public RecordsController(IRecordPageService s)
         {
-            _service = s;
+            _pageService = s;
         }
         // GET: HomeController
         public IActionResult Index()
@@ -33,7 +34,7 @@ namespace EMR.Controllers
         [HttpPost]
         public async Task<IActionResult> LoadTable([FromBody] RecordSearchModel SearchParameters)
         {
-            var result = Filtering(SearchParameters);
+            var result = _pageService.LoadTable(SearchParameters);
 
             var filteredResultsCount = result.Count();
             var totalResultsCount = result.Count();
@@ -49,56 +50,8 @@ namespace EMR.Controllers
             });
         }
 
-        public IQueryable<Record> Filtering(RecordSearchModel searchParameters)
-        {
-            var searchBy = searchParameters.Search?.Value;
-
-            // if we have an empty search then just order the results by Id ascending
-            var orderCriteria = "Id";
-            var orderAscendingDirection = true;
-
-            if (searchParameters.Order != null)
-            {
-                // in this example we just default sort on the 1st column
-                orderCriteria = searchParameters.Columns[searchParameters.Order[0].Column].Data;
-                orderAscendingDirection = searchParameters.Order[0].Dir.ToString().ToLower() == "asc";
-            }
-
-            var result = _service.GetAll().AsQueryable();
-
-
-            // Filters
-            //date
-            DateTime date1 = new DateTime();
-            DateTime date2 = new DateTime();
-
-            if (searchParameters.DateRange != null)
-            {
-                if (searchParameters.DateRange.Start != "")
-                    date1 = DateTime.Parse(searchParameters.DateRange.Start);
-
-                if (searchParameters.DateRange.End != "")
-                    date2 = DateTime.Parse(searchParameters.DateRange.End);
-            }
-
-
-            if (date1 != DateTime.MinValue)
-                result = result.Where(u => u.ModifiedDate >= date1);
-
-            if (date2 != DateTime.MinValue)
-                result = result.Where(u => u.ModifiedDate <= date2);
-
-            if (!string.IsNullOrEmpty(searchBy))
-            {
-                //result = result.Where(r => r.Diagnosis != null && r.Diagnosis.ToString().ToUpper().Contains(searchBy.ToUpper()));
-            }
-
-            result = orderAscendingDirection ? result.OrderByDynamic(orderCriteria, TableOrder.Asc) : result.OrderByDynamic(orderCriteria, TableOrder.Desc);
-
-            return result;
-
-        }
-
+        
+    /*
         public IActionResult AddOrEdit(int id = 0)
         {
             PrepareViewBagForAddOrEdit();
@@ -152,7 +105,7 @@ namespace EMR.Controllers
         /*public IActionResult Details(int id)
         {
             return View(_service.GetDetails(id));
-        }*/
+        }
 
         // GET: HomeController/Delete/5
         public IActionResult Delete(int id)
@@ -163,7 +116,7 @@ namespace EMR.Controllers
 
         private void PrepareViewBagForAddOrEdit()
         {
-            /*
+            
             List<SelectListItem> doctors = new List<SelectListItem>();
             List<SelectListItem> patients = new List<SelectListItem>();
             doctors.AddRange(_service.GetDoctors()
@@ -174,7 +127,8 @@ namespace EMR.Controllers
 
             ViewBag.Doctors = new SelectList(doctors, "Value", "Text");
             ViewBag.Patients = new SelectList(patients, "Value", "Text");
-            */
+            
         }
+    */
     }
 }

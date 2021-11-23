@@ -20,11 +20,6 @@ namespace EMR.Business.Services
             return _mainRepository.GetAll();
         }
 
-        public T FindById(int id)
-        {
-            return _mainRepository.FindById(id);
-        }
-
         public virtual void Create(T model)
         {
             _mainRepository.Create(model);

@@ -100,6 +100,57 @@ namespace EMR.Data.Repositories
                 connection.Close();
             }
         }
+        public void CheckTable()
+        {
+            if (!IsTableHasRecords())
+            {
+                SetDefaultData();
+            }
+        }
+
+        public bool IsTableExist()
+        {
+            string sqlExpression = $@"IF OBJECT_ID('dbo.{typeof(T).Name.ConvertToTableName()}', 'U') IS NOT NULL " +
+                                                                                        "SELECT 1 as 'Result' " +
+                                                                                        "ELSE " +
+                                                                                        "SELECT 0 as 'Result'";
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    result = (int)reader["Result"];
+                }
+                connection.Close();
+            }
+
+            return result == 1;
+        }
+
+        public bool IsTableHasRecords()
+        {
+            string sqlExpression = $"SELECT COUNT(*) as result " + 
+                                   $"FROM dbo.{typeof(T).Name.ConvertToTableName()}";
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    result = (int)reader["result"];
+                }
+                connection.Close();
+            }
+
+            return result > 1;
+        }
 
         protected abstract T Map(SqlDataReader reader);
         public abstract void SetDefaultData();

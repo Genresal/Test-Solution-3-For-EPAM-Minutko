@@ -28,8 +28,8 @@ namespace EMR.Data.Repositories
                                     $"{nameof(Record.ModifiedDate)}, " +
                                     $"d.{nameof(Doctor.PositionId)}, " +
                                     $"d.{nameof(Doctor.UserId)}, " +
-                                    $"ud.{nameof(User.FirstName)}, " +
-                                    $"up.{nameof(User.FirstName)}, " +
+                                    $"ud.{nameof(User.FirstName)} as ud{nameof(User.FirstName)}, " +
+                                    $"up.{nameof(User.FirstName)} as up{nameof(User.FirstName)} " +
                                     $"FROM {nameof(Record).ConvertToTableName()} as r  " +
                                     $"LEFT JOIN {nameof(Doctor).ConvertToTableName()} as d ON d.{nameof(Doctor.Id)} = r.{nameof(Record.DoctorId)} " +
                                     $"LEFT JOIN {nameof(Patient).ConvertToTableName()} as p ON p.{nameof(Patient.Id)} = r.{nameof(Record.PatientId)} " +
@@ -67,7 +67,7 @@ namespace EMR.Data.Repositories
             for (int i = 1; i <= dataCount; i++)
             {
                 sqlExpression = $"{sqlExpression}('{Gen.Random.Numbers.Integers(1, 100)()}'" +
-                                $",'{Gen.Random.Numbers.Integers(1, 200)()}'" +
+                                $",'{i}'" +
                                 $",'{Gen.Random.Numbers.Integers(1, 20)()}'" +
                                 $",'{Gen.Random.Numbers.Integers(1, 80)()}'" +
                                 $",'{Gen.Random.Time.Dates(DateTime.Now.AddYears(-1), DateTime.Now)()}')";
@@ -92,7 +92,7 @@ namespace EMR.Data.Repositories
             model.DoctorId = (int)reader[nameof(model.DoctorId)];
             model.PatientId = (int)reader[nameof(model.PatientId)];
             model.ModifiedDate = (DateTime)reader[nameof(model.ModifiedDate)];
-            model.Doctor.User.FirstName = (string)reader[$"d.{nameof(model.Doctor.User.FirstName)}"];
+            model.Doctor.User.FirstName = (string)reader[$"ud{nameof(model.Doctor.User.FirstName)}"];
 
             return model;
         }
