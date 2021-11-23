@@ -15,8 +15,8 @@ namespace EMR.Mapper
             {
                 return new RecordViewModel
                 {
-                    PatientName = record.Patient.User.FirstName,
-                    DoctorName = $"Dr. {record.Doctor.User.FirstName}",
+                    PatientName = $"{record.Patient.User.FirstName} {record.Patient.User.FirstName}",
+                    DoctorName = $"Dr. {record.Doctor.User.FirstName} {record.Doctor.User.LastName}",
                     ModifiedDate = record.ModifiedDate
                 };
             }
