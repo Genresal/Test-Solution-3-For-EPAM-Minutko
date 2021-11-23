@@ -14,6 +14,11 @@ namespace EMR.Business.Models
         public int PatientId { get; set; }
         public DateTime ModifiedDate { get; set; }
 
+        public Diagnosis Diagnosis { get; set; }
+        public SickLeave SickLeave { get; set; }
+        public Doctor Doctor { get; set; }
+        public Patient Patient { get; set; }
+
 
     }
 }

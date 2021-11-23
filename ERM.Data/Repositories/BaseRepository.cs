@@ -1,4 +1,5 @@
-﻿using EMR.Business.Repositories;
+﻿using EMR.Business.Models;
+using EMR.Business.Repositories;
 using EMR.Data.Helpers;
 using System;
 using System.Collections.Generic;
@@ -12,75 +13,9 @@ namespace EMR.Data.Repositories
         public BaseRepository(string conn)
         {
             connectionString = conn;
-            CheckTable();
         }
 
-        public IEnumerable<T> GetAll()
-        {
-            List<T> items = new List<T>();
-
-            string sqlExpression = $"SELECT * FROM {typeof(T).Name.ConvertToTableName()}";
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand(sqlExpression, connection);
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        items.Add(Map(reader));
-                    }
-                }
-                connection.Close();
-            }
-            return items;
-        }
-
-        public IEnumerable<T> GetByField(string field, string value)
-        {
-            List<T> items = new List<T>();
-
-            string sqlExpression = $"SELECT * FROM {typeof(T).Name.ConvertToTableName()} WHERE {field} = '{value}'";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand(sqlExpression, connection);
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        items.Add(Map(reader));
-                    }
-                }
-                connection.Close();
-            }
-            return items;
-        }
-
-        public T FindById(int id)
-        {
-            T item = default(T);
-            string sqlExpression = $@"SELECT * FROM {typeof(T).Name.ConvertToTableName()} WHERE Id = @id";
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand(sqlExpression, connection);
-                command.Parameters.Add(new SqlParameter("@id", id));
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.Read())
-                {
-                    item = Map(reader);
-                }
-                connection.Close();
-            }
-            return item;
-        }
+        public abstract IEnumerable<T> GetAll();
 
         public void Create(T model)
         {
@@ -135,8 +70,8 @@ namespace EMR.Data.Repositories
                     sqlExpression += ", ";
                 }
             }
-        
-        sqlExpression += " WHERE Id = @Id";
+
+            sqlExpression += " WHERE Id = @Id";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -146,113 +81,39 @@ namespace EMR.Data.Repositories
                 {
                     command.Parameters.Add(new SqlParameter($"@{prop.Name}", model.GetType().GetProperty(prop.Name).GetValue(model, null)));
                 }
-    command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
 
                 connection.Close();
             }
         }
 
         public void Delete(int id)
-{
-    string sqlExpression = $@"DELETE FROM {typeof(T).Name.ConvertToTableName()} WHERE Id = @Id";
-    using (SqlConnection connection = new SqlConnection(connectionString))
-    {
-        connection.Open();
-        SqlCommand command = new SqlCommand(sqlExpression, connection);
-        command.Parameters.Add(new SqlParameter("@Id", id));
-        command.ExecuteNonQuery();
-
-        connection.Close();
-    }
-}
-
-protected abstract T Map(SqlDataReader reader);
-public abstract void SetDefaultData();
-public void CheckTable()
-{
-    if (!IsTableExist())
-    {
-        CreateTable<T>();
-        SetDefaultData();
-    }
-}
-
-public bool IsTableExist()
-{
-    string sqlExpression = $@"IF OBJECT_ID('dbo.{typeof(T).Name.ConvertToTableName()}', 'U') IS NOT NULL " +
-                                                                                "SELECT 1 as 'Result' " +
-                                                                                "ELSE " +
-                                                                                "SELECT 0 as 'Result'";
-    int result = 0;
-    using (SqlConnection connection = new SqlConnection(connectionString))
-    {
-        connection.Open();
-        SqlCommand command = new SqlCommand(sqlExpression, connection);
-        SqlDataReader reader = command.ExecuteReader();
-
-        if (reader.Read())
         {
-            result = (int)reader["Result"];
-        }
-        connection.Close();
-    }
-
-    return result == 1 ? true : false;
-}
-
-public void CreateTable<T>()
-{
-    string sqlExpression = $@"CREATE TABLE [dbo].[{typeof(T).Name.ConvertToTableName()}](";
-
-    foreach (var prop in typeof(T).GetProperties())
-    {
-        if (prop.Name == "Id")
-        {
-            sqlExpression += $"[Id] [int] IDENTITY(1, 1) ";
-        }
-        else
-        {
-            sqlExpression += $"[{prop.Name}] ";
-            switch (Type.GetTypeCode(prop.PropertyType))
+            string sqlExpression = $@"DELETE FROM {typeof(T).Name.ConvertToTableName()} WHERE Id = @Id";
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                case TypeCode.Int32:
-                    sqlExpression += "[int] ";
-                    break;
-                case TypeCode.String:
-                    sqlExpression += "[nvarchar](255) ";
-                    break;
-                case TypeCode.DateTime:
-                    sqlExpression += "[datetime] ";
-                    break;
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                command.Parameters.Add(new SqlParameter("@Id", id));
+                command.ExecuteNonQuery();
+
+                connection.Close();
             }
-
         }
-        sqlExpression += "NOT NULL, ";
-    }
 
-    sqlExpression += $"CONSTRAINT[PK_{typeof(T).Name.ConvertToTableName()}] PRIMARY KEY CLUSTERED([Id] ASC))";
+        protected abstract T Map(SqlDataReader reader);
+        public abstract void SetDefaultData();
 
+        public virtual void SetDefaultData(string sqlExpression)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                command.ExecuteNonQuery();
 
-    using (SqlConnection connection = new SqlConnection(connectionString))
-    {
-        connection.Open();
-        SqlCommand command = new SqlCommand(sqlExpression, connection);
-        command.ExecuteNonQuery();
-
-        connection.Close();
-    }
-}
-
-public virtual void SetDefaultData(string sqlExpression)
-{
-    using (SqlConnection connection = new SqlConnection(connectionString))
-    {
-        connection.Open();
-        SqlCommand command = new SqlCommand(sqlExpression, connection);
-        command.ExecuteNonQuery();
-
-        connection.Close();
-    }
-}
+                connection.Close();
+            }
+        }
     }
 }

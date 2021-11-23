@@ -14,6 +14,7 @@ using EMR.Business.Repositories;
 using System.Configuration;
 using EMR.Business.Services;
 using EMR.Data.Repositories;
+using EMR.Services;
 
 namespace EMR
 {
@@ -32,6 +33,9 @@ namespace EMR
             services.AddTransient<IRepository<SickLeave>, SickLeavesRepository>(provider => new SickLeavesRepository(conectionString));
 
             services.AddTransient<IRecordService, RecordService>();
+            services.AddTransient<IDoctorService, DoctorService>();
+
+            services.AddTransient<IRecordPageService, RecordPageService>();
 
             services.AddControllersWithViews().AddJsonOptions(options =>
             {

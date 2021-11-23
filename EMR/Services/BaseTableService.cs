@@ -7,16 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EMR.Business.Services
+namespace EMR.Services
 {
-    public abstract class BaseTableService<T> where T : BaseModel
+    public abstract class BaseTableService
     {
-        protected IRecordService _mainService;
-        protected BaseTableService(IRecordService s)
-        {
-            _mainService = s;
-        }
-
         public IQueryable<M> Order<M, S>(S searchParameters, IQueryable<M> baseQuery) where S : DataTablesParameters
         {
             // if we have an empty search then just order the results by Id ascending

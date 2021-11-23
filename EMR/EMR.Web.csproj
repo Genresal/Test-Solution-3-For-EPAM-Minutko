@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>ERM</RootNamespace>
+    <RootNamespace>EMR</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
