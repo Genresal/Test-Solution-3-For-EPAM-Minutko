@@ -14,5 +14,6 @@ namespace EMR.Services
         public void Create(Record);
         public void Ubdate(Record);
         */
+        public Record GetDetails(int id);
     }
 }

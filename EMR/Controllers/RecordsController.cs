@@ -100,13 +100,7 @@ namespace EMR.Controllers
             return View(model);
         }
 
-        // GET: HomeController/Details/5
-        public IActionResult Details(int id)
-        {
-            return View(_service.GetDetails(id));
-        }
-
-        // GET: HomeController/Delete/5
+                // GET: HomeController/Delete/5
         public IActionResult Delete(int id)
         {
             _service.Delete(id);
@@ -129,5 +123,11 @@ namespace EMR.Controllers
             
         }
         */
+
+        // GET: HomeController/Details/5
+        public IActionResult Details(int id)
+        {
+            return View(_pageService.GetDetails(id));
+        }
     }
 }

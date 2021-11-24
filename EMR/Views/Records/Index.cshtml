@@ -29,6 +29,7 @@
             <thead>
                 <tr>
                     <th>@Html.DisplayNameFor(value => _model.Id)</th>
+                    <th>@Html.DisplayNameFor(value => _model.Diagnosis)</th>
                     <th>@Html.DisplayNameFor(value => _model.PatientName)</th>
                     <th>@Html.DisplayNameFor(value => _model.DoctorName)</th>
                     <th>@Html.DisplayNameFor(value => _model.ModifiedDate)</th>
@@ -59,6 +60,7 @@
     };
 
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id)));
+    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Diagnosis)));
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.PatientName)));
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.DoctorName)));
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.ModifiedDate))

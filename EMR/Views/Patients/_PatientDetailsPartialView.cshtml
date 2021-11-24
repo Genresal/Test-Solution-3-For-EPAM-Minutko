@@ -1,21 +1,15 @@
 ﻿@model EMR.Business.Models.Patient
 
 <h3 class="profile-username text-center">
-    <span></span>
-    <span></span>
+    <span>@Model.User.FirstName</span>
+    <span>@Model.User.LastName</span>
 </h3>
-
-<hr>
-
-<strong><i class="fas fa-venus-mars mr-1"></i> Sex</strong>
-
-<p class="text-muted"></p>
 
 <hr>
 
 <strong><i class="fas fa-birthday-cake mr-1"></i> Day Of Birth</strong>
 
-<p class="text-muted"></p>
+<p class="text-muted">@Model.User.Birthday</p>
 
 <hr>
 
@@ -27,4 +21,4 @@
 
 <strong><i class="fas fa-phone mr-1"></i> Phone number</strong>
 
-<p class="text-muted"></p>
+<p class="text-muted">@Model.User.PhoneNumber</p>

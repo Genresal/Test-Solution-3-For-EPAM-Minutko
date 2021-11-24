@@ -1,5 +1,5 @@
 ﻿@using EMR.Business.Models;
-@model (Doctor, Patient, SickLeaveSearchModel, TreatmentSearchModel)
+@model Record
 @{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
@@ -17,8 +17,8 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model.Item2)
-                <a href="/PatientsController/Details?id=@Model.Item2.Id" class="btn btn-primary btn-block"><b>View patient profile</b></a>
+                @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model.Patient)
+                <a href="/PatientsController/Details?id=@Model.Patient.Id" class="btn btn-primary btn-block"><b>View patient profile</b></a>
             </div>
         </div>
     </div>
@@ -29,8 +29,8 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                @await Html.PartialAsync("~/Views/Doctors/_DoctorDetailsPartialView.cshtml", Model.Item1)
-                <a href="/DoctorsController/Details?id=@Model.Item1.Id" class="btn btn-primary btn-block"><b>View doctor profile</b></a>
+                @await Html.PartialAsync("~/Views/Doctors/_DoctorDetailsPartialView.cshtml", Model.Doctor)
+                <a href="/DoctorsController/Details?id=@Model.Doctor.Id" class="btn btn-primary btn-block"><b>View doctor profile</b></a>
             </div>
         </div>
     </div>
@@ -44,7 +44,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                @await Html.PartialAsync("~/Views/SickLeaves/_SickLeavesTable.cshtml", Model.Item3)
+                <!--await Html.PartialAsync("~/Views/SickLeaves/_SickLeavesTable.cshtml", Model.SickLeave)-->
             </div>
         </div>
     </div>
@@ -54,9 +54,9 @@
                 <h3 class="card-title">bggnn</h3>
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
+                <div class="card-body">
+                </div>
             </div>
-        </div>
     </div>
 </div>
 

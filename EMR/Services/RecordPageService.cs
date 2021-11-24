@@ -1,4 +1,5 @@
-﻿using EMR.Business.Services;
+﻿using EMR.Business.Models;
+using EMR.Business.Services;
 using EMR.Mapper;
 using EMR.ViewModels;
 using System;
@@ -10,14 +11,11 @@ namespace EMR.Services
 {
     public class RecordPageService : BaseTableService, IRecordPageService
     {
-
         IRecordService _recordService;
-        IDoctorService _doctorService;
 
-        public RecordPageService(IRecordService s, IDoctorService ss)
+        public RecordPageService(IRecordService s)
         {
             _recordService = s;
-            _doctorService = ss;
         }
         public IQueryable<RecordViewModel> LoadTable(RecordSearchModel searchParameters)
         {
@@ -45,7 +43,9 @@ namespace EMR.Services
 
             if (!string.IsNullOrEmpty(searchBy))
             {
-                result = result.Where(r => r.PatientName != null && r.PatientName.ToString().ToUpper().Contains(searchBy.ToUpper()));
+                result = result.Where(r => r.PatientName != null && r.PatientName.ToString().ToUpper().Contains(searchBy.ToUpper())  ||
+                r.DoctorName != null && r.DoctorName.ToString().ToUpper().Contains(searchBy.ToUpper()) ||
+                r.Diagnosis != null && r.Diagnosis.ToString().ToUpper().Contains(searchBy.ToUpper()));
             }
 
             result = Order(searchParameters, result);
@@ -53,6 +53,11 @@ namespace EMR.Services
             return result;
         }
 
+        public Record GetDetails(int id)
+        {
+            Record result = _recordService.GetAll().Where(x => x.Id == id).FirstOrDefault();
+            return result;
+        }
 
     }
 }

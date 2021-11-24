@@ -15,7 +15,9 @@ namespace EMR.Mapper
             {
                 return new RecordViewModel
                 {
-                    PatientName = $"{record.Patient.User.FirstName} {record.Patient.User.FirstName}",
+                    Id = record.Id,
+                    Diagnosis = $"({record.DiagnosisId.ToString("000")}) {record.Diagnosis.Name}",
+                    PatientName = $"{record.Patient.User.FirstName} {record.Patient.User.LastName}",
                     DoctorName = $"Dr. {record.Doctor.User.FirstName} {record.Doctor.User.LastName}",
                     ModifiedDate = record.ModifiedDate
                 };
