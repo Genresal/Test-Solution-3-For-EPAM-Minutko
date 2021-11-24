@@ -24,6 +24,7 @@ namespace EMR.Business.Services
         IRepository<RecordTreatment> _recordTreatment;
         */
         private List<IRepository> repositories = new List<IRepository>();
+        private IDbRepository _dbRepository;
 
         public DbService(IRepository<SickLeave> sickLeave
             , IRepository<Diagnosis> diagnosis
@@ -35,7 +36,8 @@ namespace EMR.Business.Services
             , IRepository<Doctor> doctor
             , IRepository<Patient> patient
             , IRepository<Record> record
-            , IRepository<RecordTreatment> recordTreatment)
+            , IRepository<RecordTreatment> recordTreatment
+            , IDbRepository dbRepository)
         {
             repositories.Add(sickLeave);
             repositories.Add(diagnosis);
@@ -48,7 +50,7 @@ namespace EMR.Business.Services
             repositories.Add(patient);
             repositories.Add(record);
             repositories.Add(recordTreatment);
-
+            _dbRepository = dbRepository;
         }
 
         public void CheckDb()
@@ -57,6 +59,22 @@ namespace EMR.Business.Services
             {
                 repo.CheckTable();
             }
+        }
+        public void CreateDb()
+        {
+            _dbRepository.CreateDb();
+        }
+        public void DropDb()
+        {
+            _dbRepository.DropDb();
+        }
+        public void CreateTables()
+        {
+            _dbRepository.CreateTables();
+        }
+        public void DropTables()
+        {
+            _dbRepository.DropTables();
         }
     }
 }

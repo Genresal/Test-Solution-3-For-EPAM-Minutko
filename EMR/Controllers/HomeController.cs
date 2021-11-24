@@ -6,18 +6,27 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace EMR.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController()
+        private IConfiguration _configuration;
+        public HomeController(IConfiguration configuration)
         {
+            _configuration = configuration;
         }
         // GET: HomeController
-        public ActionResult Index()
+        public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult SetConnectionString(string connectionString)
+        {
+            _configuration["Database"] = connectionString;
+            return RedirectToAction(nameof(Index));
         }
     }
 }

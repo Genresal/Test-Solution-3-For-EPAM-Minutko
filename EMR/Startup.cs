@@ -1,20 +1,14 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using EMR.Business.Models;
-using System.Text.Json.Serialization;
 using EMR.Business.Repositories;
-using System.Configuration;
 using EMR.Business.Services;
 using EMR.Data.Repositories;
 using EMR.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Text.Json.Serialization;
 
 namespace EMR
 {
@@ -22,9 +16,25 @@ namespace EMR
     {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public IConfigurationRoot Configuration { get; set; }
+
+        public Startup(Microsoft.Extensions.Hosting.IHostingEnvironment env)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            Configuration = builder.Build();
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            string conectionString = @"Data Source =.; Database=EMR;Integrated Security = True";
+            //string conectionString = @"Data Source =.; Database=EMR;Integrated Security = True";
+
+            string conectionString = Configuration.GetConnectionString("Database");
+
+            services.AddSingleton<IConfiguration>(Configuration);
+
+            services.AddTransient<IDbRepository, DbRepository>(provider => new DbRepository(conectionString));
 
             services.AddTransient<IRepository<SickLeave>, SickLeavesRepository>(provider => new SickLeavesRepository(conectionString));
             services.AddTransient<IRepository<Diagnosis>, DiagnosisRepository>(provider => new DiagnosisRepository(conectionString));

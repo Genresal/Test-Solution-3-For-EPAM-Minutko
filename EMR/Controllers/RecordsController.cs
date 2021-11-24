@@ -32,7 +32,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoadTable([FromBody] RecordSearchModel SearchParameters)
+        public IActionResult LoadTable([FromBody] RecordSearchModel SearchParameters)
         {
             var result = _pageService.LoadTable(SearchParameters);
 
@@ -50,8 +50,7 @@ namespace EMR.Controllers
             });
         }
 
-        
-    /*
+        /*
         public IActionResult AddOrEdit(int id = 0)
         {
             PrepareViewBagForAddOrEdit();
@@ -102,7 +101,7 @@ namespace EMR.Controllers
         }
 
         // GET: HomeController/Details/5
-        /*public IActionResult Details(int id)
+        public IActionResult Details(int id)
         {
             return View(_service.GetDetails(id));
         }
@@ -129,6 +128,6 @@ namespace EMR.Controllers
             ViewBag.Patients = new SelectList(patients, "Value", "Text");
             
         }
-    */
+        */
     }
 }

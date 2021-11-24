@@ -30,13 +30,20 @@ namespace EMR.Data.Repositories
                                     $"d.{nameof(Doctor.UserId)}, " +
                                     $"ud.{nameof(User.FirstName)} as ud{nameof(User.FirstName)}, " +
                                     $"ud.{nameof(User.LastName)} as ud{nameof(User.LastName)}, " +
+                                    $"ud.{nameof(User.Birthday)} as ud{nameof(User.Birthday)}, " +
+                                    $"ud.{nameof(User.PhoneNumber)} as ud{nameof(User.PhoneNumber)}, " +
                                     $"up.{nameof(User.FirstName)} as up{nameof(User.FirstName)}, " +
-                                    $"up.{nameof(User.LastName)} as up{nameof(User.LastName)} " +
-                                    $"FROM {nameof(Record).ConvertToTableName()} as r  " +
+                                    $"up.{nameof(User.LastName)} as up{nameof(User.LastName)}, " +
+                                    $"up.{nameof(User.Birthday)} as up{nameof(User.Birthday)}, " +
+                                    $"up.{nameof(User.PhoneNumber)} as up{nameof(User.PhoneNumber)} " +
+                                    $"FROM {nameof(Record).ConvertToTableName()} as r " +
                                     $"LEFT JOIN {nameof(Doctor).ConvertToTableName()} as d ON d.{nameof(Doctor.Id)} = r.{nameof(Record.DoctorId)} " +
                                     $"LEFT JOIN {nameof(Patient).ConvertToTableName()} as p ON p.{nameof(Patient.Id)} = r.{nameof(Record.PatientId)} " +
                                     $"LEFT JOIN {nameof(User).ConvertToTableName()} as ud ON ud.{nameof(User.Id)} = d.{nameof(Doctor.UserId)} " +
                                     $"LEFT JOIN {nameof(User).ConvertToTableName()} as up ON up.{nameof(User.Id)} = p.{nameof(Patient.UserId)}";
+
+                                    
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -96,8 +103,12 @@ namespace EMR.Data.Repositories
             model.ModifiedDate = (DateTime)reader[nameof(model.ModifiedDate)];
             model.Doctor.User.FirstName = (string)reader[$"ud{nameof(model.Doctor.User.FirstName)}"];
             model.Doctor.User.LastName = (string)reader[$"ud{nameof(model.Doctor.User.LastName)}"];
+            model.Doctor.User.Birthday = (DateTime)reader[$"ud{nameof(model.Doctor.User.Birthday)}"];
+            model.Doctor.User.PhoneNumber = (string)reader[$"ud{nameof(model.Doctor.User.PhoneNumber)}"];
             model.Patient.User.FirstName = (string)reader[$"up{nameof(model.Doctor.User.FirstName)}"];
             model.Patient.User.LastName = (string)reader[$"up{nameof(model.Doctor.User.LastName)}"];
+            model.Patient.User.Birthday = (DateTime)reader[$"up{nameof(model.Doctor.User.Birthday)}"];
+            model.Patient.User.PhoneNumber = (string)reader[$"up{nameof(model.Doctor.User.PhoneNumber)}"];
 
             return model;
         }

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EMR.Business.Services
+namespace EMR.Business.Repositories
 {
-    public interface IDbService
+    public interface IDbRepository
     {
-        public void CheckDb();
         public void CreateDb();
         public void DropDb();
         public void CreateTables();
