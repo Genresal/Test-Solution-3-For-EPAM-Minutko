@@ -16,9 +16,8 @@ namespace EMR.Data.Repositories
         }
 
         public void DropDb()
-        {
-            string sqlExpression = $@"USE [master]
-                                    GO
+        {//USE [master] GO
+            string sqlExpression = $@"
                                     
                                     ALTER DATABASE [EMR] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
                                     IF  EXISTS (SELECT name FROM sys.databases WHERE name = 'EMR')
@@ -35,14 +34,8 @@ namespace EMR.Data.Repositories
 
         public void CreateDb()
         {
-            string sqlExpression = $@"USE [master]
-                                    GO
-                                    
-                                    IF  NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'EMR')
-                                    CREATE DATABASE [EMR];
-
-                                    USE [EMR]
-                                    GO";
+            string sqlExpression = $@"IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'EMR')
+                                    CREATE DATABASE [EMR];";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -53,11 +46,32 @@ namespace EMR.Data.Repositories
             }
         }
 
-        public void CreateTables()
+        public bool IsDbExist()
         {
-            string sqlExpression = $@"USE [EMR]
-GO
+            string sqlExpression = $@"IF  EXISTS (SELECT name FROM sys.databases WHERE name = 'EMR')
+                                                                                        SELECT 1 as 'Result' 
+                                                                                        ELSE 
+                                                                                        SELECT 0 as 'Result'";
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                SqlDataReader reader = command.ExecuteReader();
 
+                if (reader.Read())
+                {
+                    result = (int)reader["Result"];
+                }
+                connection.Close();
+            }
+
+            return result == 1;
+        }
+
+        public void CreateTables()
+        {//USE [EMR] GO
+            string sqlExpression = $@" USE [EMR] 
 CREATE TABLE [dbo].[tSickLeave](
   [Id] [int] IDENTITY(1,1) NOT NULL,
   [Number] [nvarchar](255) NOT NULL,
@@ -178,23 +192,22 @@ CREATE TABLE [dbo].[tRecordTreatment](
                 connection.Close();
             }
         }
-
+        /*
         public void DropTables()
         {
-            string sqlExpression = $@"USE [EMR]
-GO
+            string sqlExpression =// $@"USE [EMR] GO " +
 
-DROP TABLE [tRecordTreatment];
-DROP TABLE [tRecord];
-DROP TABLE [tPatient];
-DROP TABLE [tDoctor];
-DROP TABLE [tPosition];
-DROP TABLE [tUser];
-DROP TABLE [tRole];
-DROP TABLE [tProcedure];
-DROP TABLE [tDrug];
-DROP TABLE [tDiagnosis];
-DROP TABLE [tSickLeave];";
+$"DROP TABLE [tRecordTreatment];" +
+$"DROP TABLE [tRecord];" +
+$"DROP TABLE [tPatient];" +
+$"DROP TABLE [tDoctor];" +
+$"DROP TABLE [tPosition];" +
+$"DROP TABLE [tUser];" +
+$"DROP TABLE [tRole];" +
+$"DROP TABLE [tProcedure];" +
+$"DROP TABLE [tDrug];" +
+$"DROP TABLE [tDiagnosis];" +
+$"DROP TABLE [tSickLeave];";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -203,6 +216,6 @@ DROP TABLE [tSickLeave];";
 
                 connection.Close();
             }
-        }
+        }*/
     }
 }

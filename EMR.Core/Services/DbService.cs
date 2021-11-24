@@ -53,6 +53,45 @@ namespace EMR.Business.Services
             _dbRepository = dbRepository;
         }
 
+        public DbStatus GetDbStatus()
+        {
+            DbStatus result = new DbStatus();
+            result.IsDbExist = _dbRepository.IsDbExist();
+
+            if(!result.IsDbExist)
+            {
+                return result;
+            }
+
+            result.IsTablesExist = true;
+
+            foreach(var repo in repositories)
+            {
+                if (!repo.IsTableExist())
+                {
+                    result.IsTablesExist = false;
+                    break;
+                }
+            }
+
+            if (!result.IsTablesExist)
+            {
+                return result;
+            }
+
+            result.IsDataExist = true;
+            foreach (var repo in repositories)
+            {
+                if (!repo.IsTableHasRecords())
+                {
+                    result.IsDataExist = false;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
         public void CheckDb()
         {
             foreach(var repo in repositories)
@@ -74,7 +113,10 @@ namespace EMR.Business.Services
         }
         public void DropTables()
         {
-            _dbRepository.DropTables();
+            for (int i = repositories.Count-1; i >= 0; i--)
+            {
+                repositories[i].DropTable();
+            }
         }
     }
 }

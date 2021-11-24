@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMR.Business.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace EMR.Business.Services
 {
     public interface IDbService
     {
+        public DbStatus GetDbStatus();
         public void CheckDb();
         public void CreateDb();
         public void DropDb();

@@ -7,25 +7,47 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using EMR.Services;
 
 namespace EMR.Controllers
 {
     public class HomeController : Controller
     {
-        private IConfiguration _configuration;
-        public HomeController(IConfiguration configuration)
+        private IHomePageService _pageService;
+        public HomeController(IHomePageService pageService)
         {
-            _configuration = configuration;
+            _pageService = pageService;
         }
         // GET: HomeController
         public IActionResult Index()
         {
-            return View();
+            var status = _pageService.GetDbStatus();
+            return View(status);
         }
 
-        public IActionResult SetConnectionString(string connectionString)
+        public IActionResult CheckDb()
         {
-            _configuration["Database"] = connectionString;
+            _pageService.CheckDb();
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult CreateDb()
+        {
+            _pageService.CreateDb();
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult DropDb()
+        {
+            _pageService.DropDb();
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult CreateTables()
+        {
+            _pageService.CreateTables();
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult DropTables()
+        {
+            _pageService.DropTables();
             return RedirectToAction(nameof(Index));
         }
     }

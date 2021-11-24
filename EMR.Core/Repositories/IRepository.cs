@@ -6,6 +6,9 @@ namespace EMR.Business.Repositories
     public interface IRepository
     {
         public void CheckTable();
+        void DropTable();
+        bool IsTableExist();
+        bool IsTableHasRecords();
     }
 
     /// <summary>
@@ -15,9 +18,6 @@ namespace EMR.Business.Repositories
     public interface IRepository<T> : IRepository
     {
         IEnumerable<T> GetAll();
-        
-
-
         void Create(T item);
         void Update(T item);
         void Delete(int id);

@@ -16,6 +16,20 @@ namespace EMR.Data.Repositories
         }
 
         public abstract IEnumerable<T> GetAll();
+        //public abstract void CreateTable();
+
+        public void DropTable()
+        {
+            string sqlExpression = $@"DROP TABLE [{typeof(T).Name.ConvertToTableName()}];";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                command.ExecuteNonQuery();
+
+                connection.Close();
+            }
+        }
 
         public void Create(T model)
         {

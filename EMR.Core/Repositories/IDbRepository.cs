@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMR.Business.Models;
+using System;
 using System.Collections.Generic;
 
 namespace EMR.Business.Repositories
@@ -8,6 +9,6 @@ namespace EMR.Business.Repositories
         public void CreateDb();
         public void DropDb();
         public void CreateTables();
-        public void DropTables();
+        bool IsDbExist();
     }
 }

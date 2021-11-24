@@ -1,4 +1,5 @@
-﻿using EMR.Business.Services;
+﻿using EMR.Business.Models;
+using EMR.Business.Services;
 using EMR.Mapper;
 using EMR.ViewModels;
 using System;
@@ -15,6 +16,10 @@ namespace EMR.Services
         public HomePageService(IDbService s)
         {
             _dbService = s;
+        }
+        public DbStatus GetDbStatus()
+        {
+            return _dbService.GetDbStatus();
         }
 
         public void CheckDb()

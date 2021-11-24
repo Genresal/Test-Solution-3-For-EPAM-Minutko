@@ -30,11 +30,12 @@ namespace EMR
         {
             //string conectionString = @"Data Source =.; Database=EMR;Integrated Security = True";
 
-            string conectionString = Configuration.GetConnectionString("Database");
+            string conectionString = Configuration.GetConnectionString("EMR");
+            string mainConectionString = Configuration.GetConnectionString("MASTER");
 
             services.AddSingleton<IConfiguration>(Configuration);
 
-            services.AddTransient<IDbRepository, DbRepository>(provider => new DbRepository(conectionString));
+            services.AddTransient<IDbRepository, DbRepository>(provider => new DbRepository(mainConectionString));
 
             services.AddTransient<IRepository<SickLeave>, SickLeavesRepository>(provider => new SickLeavesRepository(conectionString));
             services.AddTransient<IRepository<Diagnosis>, DiagnosisRepository>(provider => new DiagnosisRepository(conectionString));
@@ -52,6 +53,7 @@ namespace EMR
             services.AddTransient<IDoctorService, DoctorService>();
 
             services.AddTransient<IRecordPageService, RecordPageService>();
+            services.AddTransient<IHomePageService, HomePageService>();
 
             services.AddSingleton<IDbService, DbService>();
 
@@ -63,7 +65,7 @@ namespace EMR
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbService db)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)//, IDbService db)
         {
             if (env.IsDevelopment())
             {
@@ -81,7 +83,7 @@ namespace EMR
                 pattern: "{controller=Home}/{action=Index}");
             });
 
-            db.CheckDb();
+            //db.CheckDb();
         }
     }
 }
