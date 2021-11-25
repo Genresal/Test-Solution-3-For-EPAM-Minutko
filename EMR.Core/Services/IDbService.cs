@@ -10,7 +10,7 @@ namespace EMR.Business.Services
     public interface IDbService
     {
         public DbStatus GetDbStatus();
-        public void CheckDb();
+        public void CreateDefaultDate();
         public void CreateDb();
         public void DropDb();
         public void CreateTables();

@@ -22,9 +22,9 @@ namespace EMR.Services
             return _dbService.GetDbStatus();
         }
 
-        public void CheckDb()
+        public void CreateDefaultDate()
         {
-            _dbService.CheckDb();
+            _dbService.CreateDefaultDate();
         }
         public void CreateDb()
         {

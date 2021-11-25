@@ -114,7 +114,7 @@ namespace EMR.Data.Repositories
                 connection.Close();
             }
         }
-        public void CheckTable()
+        public void CreateDefaultDate()
         {
             if (!IsTableHasRecords())
             {

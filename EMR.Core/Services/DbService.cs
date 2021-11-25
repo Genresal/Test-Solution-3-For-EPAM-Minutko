@@ -92,11 +92,11 @@ namespace EMR.Business.Services
             return result;
         }
 
-        public void CheckDb()
+        public void CreateDefaultDate()
         {
             foreach(var repo in repositories)
             {
-                repo.CheckTable();
+                repo.CreateDefaultDate();
             }
         }
         public void CreateDb()

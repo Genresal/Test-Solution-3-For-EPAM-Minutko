@@ -25,9 +25,9 @@ namespace EMR.Controllers
             return View(status);
         }
 
-        public IActionResult CheckDb()
+        public IActionResult CreateBaseDate()
         {
-            _pageService.CheckDb();
+            _pageService.CreateDefaultDate();
             return RedirectToAction(nameof(Index));
         }
         public IActionResult CreateDb()
