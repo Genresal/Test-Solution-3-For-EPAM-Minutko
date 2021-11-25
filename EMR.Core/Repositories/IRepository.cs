@@ -18,6 +18,8 @@ namespace EMR.Business.Repositories
     public interface IRepository<T> : IRepository
     {
         IEnumerable<T> GetAll();
+        IEnumerable<T> GetByColumn(string column, string value);
+        T GetById(int id);
         void Create(T item);
         void Update(T item);
         void Delete(int id);

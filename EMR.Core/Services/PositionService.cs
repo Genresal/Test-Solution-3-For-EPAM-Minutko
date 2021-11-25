@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace EMR.Business.Services
 {
-    public class DoctorService : BaseBusinessService<Doctor>
+    public class PositionService : BaseBusinessService<Position>
     {
-        public DoctorService(IRepository<Doctor> r) : base (r)
+        public PositionService(IRepository<Position> r) : base (r)
         {
         }
     }

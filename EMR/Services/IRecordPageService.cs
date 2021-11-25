@@ -15,5 +15,6 @@ namespace EMR.Services
         public void Ubdate(Record);
         */
         public Record GetDetails(int id);
+        public IEnumerable<Position> GetDoctorPositions();
     }
 }

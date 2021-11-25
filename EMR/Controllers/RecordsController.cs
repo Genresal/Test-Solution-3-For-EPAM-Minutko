@@ -27,6 +27,9 @@ namespace EMR.Controllers
         public IActionResult Index()
         {
             RecordSearchModel searchModel = new RecordSearchModel();
+            searchModel.DoctorPositions = _pageService.GetDoctorPositions()
+                                            .Select(x => new FilterCondition(x.Id, x.Name))
+                                            .ToList();
             //
             return View(searchModel);
         }

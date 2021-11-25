@@ -16,14 +16,11 @@ namespace EMR
     {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public IConfigurationRoot Configuration { get; set; }
+        public IConfiguration Configuration { get;}
 
-        public Startup(Microsoft.Extensions.Hosting.IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -33,7 +30,7 @@ namespace EMR
             string conectionString = Configuration.GetConnectionString("EMR");
             string mainConectionString = Configuration.GetConnectionString("MASTER");
 
-            services.AddSingleton<IConfiguration>(Configuration);
+            //services.AddSingleton<IConfiguration>(Configuration);
 
             services.AddTransient<IDbRepository, DbRepository>(provider => new DbRepository(mainConectionString));
 
@@ -49,8 +46,11 @@ namespace EMR
             services.AddTransient<IRepository<Record>, RecordsRepository>(provider => new RecordsRepository(conectionString));
             services.AddTransient<IRepository<RecordTreatment>, RecordTreatmentsRepository>(provider => new RecordTreatmentsRepository(conectionString));
 
-            services.AddTransient<IRecordService, RecordService>();
-            services.AddTransient<IDoctorService, DoctorService>();
+            services.AddTransient<IBusinessService<Position>, PositionService>();
+            services.AddTransient<IBusinessService<Record>, RecordService>();
+            services.AddTransient<IBusinessService<Doctor>, DoctorService>();
+            services.AddTransient<IBusinessService<Drug>, DrugService>();
+            services.AddTransient<IBusinessService<Procedure>, ProcedureService>();
 
             services.AddTransient<IRecordPageService, RecordPageService>();
             services.AddTransient<IHomePageService, HomePageService>();

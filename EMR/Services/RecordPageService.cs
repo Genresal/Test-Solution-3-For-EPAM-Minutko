@@ -11,15 +11,34 @@ namespace EMR.Services
 {
     public class RecordPageService : BaseTableService, IRecordPageService
     {
-        IRecordService _recordService;
+        IBusinessService<Record> _recordService;
+        IBusinessService<Position> _positionService;
 
-        public RecordPageService(IRecordService s)
+        public RecordPageService(IBusinessService<Record> sr, IBusinessService<Position> sp)
         {
-            _recordService = s;
+            _recordService = sr;
+            _positionService = sp;
         }
+
+        public IEnumerable<Position> GetDoctorPositions()
+        {
+            return _positionService.GetAll();
+        }
+
         public IQueryable<RecordViewModel> LoadTable(RecordSearchModel searchParameters)
         {
             var result = _recordService.GetAll().Select(x => x.ToViewModel()).AsQueryable();
+
+            if (searchParameters.DoctorPositions.Count > 0)
+            {
+                var filterParams = searchParameters.DoctorPositions.Select(r => r.Id);
+                result = result.Where(r => filterParams.Contains(r.DoctorPositionId));
+            }
+
+            if (!string.IsNullOrEmpty(searchParameters.Diagnosis))
+            {
+                result = result.Where(r => r.Diagnosis != null && r.Diagnosis.ToString().ToUpper().Contains(searchParameters.Diagnosis.ToUpper()));
+            }
 
             DateTime date1 = new DateTime();
             DateTime date2 = new DateTime();
@@ -44,7 +63,7 @@ namespace EMR.Services
             if (!string.IsNullOrEmpty(searchBy))
             {
                 result = result.Where(r => r.PatientName != null && r.PatientName.ToString().ToUpper().Contains(searchBy.ToUpper())  ||
-                r.DoctorName != null && r.DoctorName.ToString().ToUpper().Contains(searchBy.ToUpper()) ||
+                r.Doctor != null && r.Doctor.ToString().ToUpper().Contains(searchBy.ToUpper()) ||
                 r.Diagnosis != null && r.Diagnosis.ToString().ToUpper().Contains(searchBy.ToUpper()));
             }
 

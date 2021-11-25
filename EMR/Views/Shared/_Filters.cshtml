@@ -9,14 +9,14 @@
     {
         if (filter.Type == typeof(string))
         {
+            <label class="control-label">@filter.ModelName </label><br />
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-search"></i></span>
                 </div>
-                <input class="form-control" id="@filter.Name" onkeyup="Refresh()" placeholder="поиск..." autocomplete="off">
+                <input class="form-control" id="@filter.Name" onkeyup="Refresh()" placeholder="Search..." autocomplete="off">
             </div>
             <br />
-            <!--onkeydown="return (event.keyCode!=13);"-->
             continue;
         }
 

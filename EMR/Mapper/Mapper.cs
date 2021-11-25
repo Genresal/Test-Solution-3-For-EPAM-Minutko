@@ -18,7 +18,9 @@ namespace EMR.Mapper
                     Id = record.Id,
                     Diagnosis = $"({record.DiagnosisId.ToString("000")}) {record.Diagnosis.Name}",
                     PatientName = $"{record.Patient.User.FirstName} {record.Patient.User.LastName}",
-                    DoctorName = $"Dr. {record.Doctor.User.FirstName} {record.Doctor.User.LastName}",
+                    Doctor = $"Dr. {record.Doctor.User.FirstName} {record.Doctor.User.LastName}",
+                    DoctorPosition = record.Doctor.Position.Name,
+                    DoctorPositionId = record.Doctor.PositionId,
                     ModifiedDate = record.ModifiedDate
                 };
             }

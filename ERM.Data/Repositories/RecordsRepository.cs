@@ -109,6 +109,7 @@ namespace EMR.Data.Repositories
             model.ModifiedDate = (DateTime)reader[nameof(model.ModifiedDate)];
             model.Diagnosis.Name = (string)reader[$"{nameof(Diagnosis)}{nameof(Diagnosis.Name)}"];
             model.Doctor.PositionId = (int)reader[$"{nameof(Doctor)}{nameof(model.Doctor.PositionId)}"];
+            model.Doctor.Position.Name = (string)reader[$"{nameof(Doctor)}{nameof(model.Doctor.Position.Name)}"];
             model.Doctor.UserId = (int)reader[$"{nameof(Doctor)}{nameof(model.Doctor.UserId)}"];
             model.Patient.Job = (string)reader[$"{nameof(Patient)}{nameof(model.Patient.Job)}"];
             model.Patient.UserId = (int)reader[$"{nameof(Patient)}{nameof(model.Patient.UserId)}"];
@@ -120,7 +121,7 @@ namespace EMR.Data.Repositories
             model.Patient.User.LastName = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.LastName)}"];
             model.Patient.User.Birthday = (DateTime)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.Birthday)}"];
             model.Patient.User.PhoneNumber = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.PhoneNumber)}"];
-            model.Doctor.Position.Name = (string)reader[$"{nameof(Doctor)}{nameof(model.Doctor.Position.Name)}"];
+
 
             return model;
         }

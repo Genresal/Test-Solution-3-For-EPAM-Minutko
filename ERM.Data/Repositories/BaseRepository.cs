@@ -15,7 +15,89 @@ namespace EMR.Data.Repositories
             connectionString = conn;
         }
 
-        public abstract IEnumerable<T> GetAll();
+        public virtual IEnumerable<T> GetAll()
+        {
+            List<T> items = new List<T>();
+
+            string sqlExpression = $"SELECT * " +
+                                   $"FROM {nameof(T).ConvertToTableName()}";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            items.Add(Map(reader));
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+            return items;
+        }
+
+        public IEnumerable<T> GetByColumn(string column, string value)
+        {
+            List<T> result = new List<T>();
+
+            string sqlExpression = $"SELECT * " +
+                                   $"FROM {nameof(T).ConvertToTableName()} " +
+                                   $"WHERE[column] = @value";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                command.Parameters.Add(new SqlParameter("@value", value));
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            result.Add(Map(reader));
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+            return result;
+        }
+
+        public virtual T GetById(int id)
+        {
+            T result = default(T);
+
+            string sqlExpression = $"SELECT * " +
+                                   $"FROM {nameof(T).ConvertToTableName()} " +
+                                   $"WHERE [Id] = @Id";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                command.Parameters.Add(new SqlParameter("@Id", id));
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        result = (Map(reader));
+                    }
+                }
+
+                connection.Close();
+            }
+            return result;
+        }
         //public abstract void CreateTable();
 
         public void DropTable()
