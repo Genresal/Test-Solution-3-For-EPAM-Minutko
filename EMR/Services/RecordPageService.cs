@@ -13,11 +13,13 @@ namespace EMR.Services
     {
         IBusinessService<Record> _recordService;
         IBusinessService<Position> _positionService;
+        ITreatmentService _treatmentService;
 
-        public RecordPageService(IBusinessService<Record> sr, IBusinessService<Position> sp)
+        public RecordPageService(IBusinessService<Record> sr, IBusinessService<Position> sp, ITreatmentService t)
         {
             _recordService = sr;
             _positionService = sp;
+            _treatmentService = t;
         }
 
         public IEnumerable<Position> GetDoctorPositions()
@@ -78,5 +80,36 @@ namespace EMR.Services
             return result;
         }
 
+        public IQueryable<Drug> LoadDrugTable(DrugSearchModel searchParameters)
+        {
+            var result = _treatmentService.GetAllDrugs(searchParameters.RecordId).AsQueryable();
+
+            var searchBy = searchParameters.Search?.Value;
+
+            if (!string.IsNullOrEmpty(searchBy))
+            {
+                result = result.Where(r => r.Name != null && r.Name.ToString().ToUpper().Contains(searchBy.ToUpper()));
+            }
+
+            result = Order(searchParameters, result);
+
+            return result;
+        }
+
+        public IQueryable<Procedure> LoadProcedureTable(ProcedureSearchModel searchParameters)
+        {
+            var result = _treatmentService.GetAllProcedures(searchParameters.RecordId).AsQueryable();
+
+            var searchBy = searchParameters.Search?.Value;
+
+            if (!string.IsNullOrEmpty(searchBy))
+            {
+                result = result.Where(r => r.Name != null && r.Name.ToString().ToUpper().Contains(searchBy.ToUpper()));
+            }
+
+            result = Order(searchParameters, result);
+
+            return result;
+        }
     }
 }

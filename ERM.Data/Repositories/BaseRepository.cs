@@ -20,7 +20,7 @@ namespace EMR.Data.Repositories
             List<T> items = new List<T>();
 
             string sqlExpression = $"SELECT * " +
-                                   $"FROM {nameof(T).ConvertToTableName()}";
+                                   $"FROM {typeof(T).Name.ConvertToTableName()}";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -48,8 +48,8 @@ namespace EMR.Data.Repositories
             List<T> result = new List<T>();
 
             string sqlExpression = $"SELECT * " +
-                                   $"FROM {nameof(T).ConvertToTableName()} " +
-                                   $"WHERE[column] = @value";
+                                   $"FROM {typeof(T).Name.ConvertToTableName()} " +
+                                   $"WHERE [{column}] = @value";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -73,12 +73,58 @@ namespace EMR.Data.Repositories
             return result;
         }
 
+        public IEnumerable<T> GetByColumn(string column, List<string> values)
+        {
+            List<T> result = new List<T>();
+
+            string sqlExpression = $"SELECT * " +
+                                   $"FROM {typeof(T).Name.ConvertToTableName()} " +
+                                   $"WHERE[{column}] IN (";
+
+            for (int i = 0; i < values.Count; i++)
+            {
+                if (i > 0)
+                {
+                    sqlExpression = $"{sqlExpression}, ";
+                }
+                sqlExpression = $"{sqlExpression}@value{i}";
+            }
+
+            sqlExpression = $"{sqlExpression})";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+
+                for (int i = 0; i < values.Count; i++)
+                { 
+                    command.Parameters.Add(new SqlParameter($"@value{i}", values[i]));
+                }
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            result.Add(Map(reader));
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+            return result;
+        }
+
         public virtual T GetById(int id)
         {
             T result = default(T);
 
             string sqlExpression = $"SELECT * " +
-                                   $"FROM {nameof(T).ConvertToTableName()} " +
+                                   $"FROM {typeof(T).Name.ConvertToTableName()} " +
                                    $"WHERE [Id] = @Id";
 
             using (SqlConnection connection = new SqlConnection(connectionString))

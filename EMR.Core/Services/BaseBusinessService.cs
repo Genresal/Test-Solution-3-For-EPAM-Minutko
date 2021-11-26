@@ -15,9 +15,14 @@ namespace EMR.Business.Services
             _mainRepository = r;
         }
 
-        public IEnumerable<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
             return _mainRepository.GetAll();
+        }
+
+        public virtual IEnumerable<T> GetByColumn(string column, string value)
+        {
+            return _mainRepository.GetByColumn(column, value);
         }
 
         public T GetById(int id)

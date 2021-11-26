@@ -10,6 +10,8 @@ namespace EMR.Services
     public interface IRecordPageService
     {
         public IQueryable<RecordViewModel> LoadTable(RecordSearchModel searchParameters);
+        public IQueryable<Drug> LoadDrugTable(DrugSearchModel searchParameters);
+        public IQueryable<Procedure> LoadProcedureTable(ProcedureSearchModel searchParameters);
         /*
         public void Create(Record);
         public void Ubdate(Record);

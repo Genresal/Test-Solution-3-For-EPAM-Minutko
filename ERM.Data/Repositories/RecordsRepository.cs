@@ -39,14 +39,17 @@ namespace EMR.Data.Repositories
                                     $"up.{nameof(User.LastName)} as {nameof(Patient)}{nameof(User.LastName)}, " +
                                     $"up.{nameof(User.Birthday)} as {nameof(Patient)}{nameof(User.Birthday)}, " +
                                     $"up.{nameof(User.PhoneNumber)} as {nameof(Patient)}{nameof(User.PhoneNumber)}, " +
-                                    $"pos.{nameof(Position.Name)} as {nameof(Doctor)}{nameof(Position.Name)} " +
+                                    $"pos.{nameof(Position.Name)} as {nameof(Doctor)}{nameof(Position.Name)}, " +
+                                    $"s.{nameof(SickLeave.StartDate)} as {nameof(SickLeave)}{nameof(SickLeave.StartDate)}, " +
+                                    $"s.{nameof(SickLeave.FinalDate)} as {nameof(SickLeave)}{nameof(SickLeave.FinalDate)} " +
                                     $"FROM {nameof(Record).ConvertToTableName()} as r " +
                                     $"LEFT JOIN {nameof(Doctor).ConvertToTableName()} as d ON d.{nameof(Doctor.Id)} = r.{nameof(Record.DoctorId)} " +
                                     $"LEFT JOIN {nameof(Patient).ConvertToTableName()} as p ON p.{nameof(Patient.Id)} = r.{nameof(Record.PatientId)} " +
                                     $"LEFT JOIN {nameof(User).ConvertToTableName()} as ud ON ud.{nameof(User.Id)} = d.{nameof(Doctor.UserId)} " +
                                     $"LEFT JOIN {nameof(User).ConvertToTableName()} as up ON up.{nameof(User.Id)} = p.{nameof(Patient.UserId)} " +
                                     $"LEFT JOIN {nameof(Diagnosis).ConvertToTableName()} as di ON di.{nameof(Diagnosis.Id)} = r.{nameof(Record.DiagnosisId)} " +
-                                    $"LEFT JOIN {nameof(Position).ConvertToTableName()} as pos ON pos.{nameof(Position.Id)} = d.{nameof(Doctor.PositionId)}";
+                                    $"LEFT JOIN {nameof(Position).ConvertToTableName()} as pos ON pos.{nameof(Position.Id)} = d.{nameof(Doctor.PositionId)} " +
+                                    $"LEFT JOIN {nameof(SickLeave).ConvertToTableName()} as s ON s.{nameof(SickLeave.Id)} = r.{nameof(SickLeave.Id)}";
 
 
 
@@ -121,7 +124,9 @@ namespace EMR.Data.Repositories
             model.Patient.User.LastName = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.LastName)}"];
             model.Patient.User.Birthday = (DateTime)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.Birthday)}"];
             model.Patient.User.PhoneNumber = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.PhoneNumber)}"];
-
+            model.SickLeave.Id = model.SickLeaveId;
+            model.SickLeave.StartDate = (DateTime)reader[$"{nameof(SickLeave)}{nameof(SickLeave.StartDate)}"];
+            model.SickLeave.FinalDate = (DateTime)reader[$"{nameof(SickLeave)}{nameof(SickLeave.FinalDate)}"];
 
             return model;
         }

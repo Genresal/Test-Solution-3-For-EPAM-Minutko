@@ -37,26 +37,39 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title">Sick Leaves for the case</h3>
+                <h3 class="card-title">Used drugs for the case</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <!--await Html.PartialAsync("~/Views/SickLeaves/_SickLeavesTable.cshtml", Model.SickLeave)-->
+                @await Html.PartialAsync("~/Views/Drugs/_DrugsTable.cshtml", new DrugSearchModel() { RecordId = Model.Id })
             </div>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title">bggnn</h3>
+                <h3 class="card-title">Procedures</h3>
             </div>
             <!-- /.card-header -->
-                <div class="card-body">
-                </div>
+            <div class="card-body">
+                @await Html.PartialAsync("~/Views/Procedures/_ProceduresTable.cshtml", new ProcedureSearchModel() { RecordId = Model.Id })
             </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Sick Leave</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                @await Html.PartialAsync("~/Views/SickLeaves/_Details.cshtml", Model.SickLeave)
+            </div>
+        </div>
     </div>
 </div>
 

@@ -19,6 +19,7 @@ namespace EMR.Business.Repositories
     {
         IEnumerable<T> GetAll();
         IEnumerable<T> GetByColumn(string column, string value);
+        IEnumerable<T> GetByColumn(string column, List<string> values);
         T GetById(int id);
         void Create(T item);
         void Update(T item);
