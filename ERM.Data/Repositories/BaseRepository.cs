@@ -159,6 +159,18 @@ namespace EMR.Data.Repositories
             }
         }
 
+        protected void ExecuteNonQuery(string sqlExpression)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                command.ExecuteNonQuery();
+
+                connection.Close();
+            }
+        }
+
         public void Create(T model)
         {
             var properties = model.GetType().GetProperties();
