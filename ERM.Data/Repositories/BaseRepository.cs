@@ -17,30 +17,10 @@ namespace EMR.Data.Repositories
 
         public virtual IEnumerable<T> GetAll()
         {
-            List<T> items = new List<T>();
-
             string sqlExpression = $"SELECT * " +
                                    $"FROM {typeof(T).Name.ConvertToTableName()}";
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand(sqlExpression, connection);
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            items.Add(Map(reader));
-                        }
-                    }
-                }
-
-                connection.Close();
-            }
-            return items;
+            return ExecuteReader(sqlExpression);
         }
 
         public IEnumerable<T> GetByColumn(string column, string value)
@@ -241,7 +221,7 @@ namespace EMR.Data.Repositories
             }
         }
 
-        public void Delete(int id)
+        public virtual void Delete(int id)
         {
             string sqlExpression = $@"DELETE FROM {typeof(T).Name.ConvertToTableName()} WHERE Id = @Id";
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -254,6 +234,7 @@ namespace EMR.Data.Repositories
                 connection.Close();
             }
         }
+
         public void CreateDefaultDate()
         {
             if (!IsTableHasRecords())
@@ -308,6 +289,30 @@ namespace EMR.Data.Repositories
 
         protected abstract T Map(SqlDataReader reader);
         public abstract void SetDefaultData();
+
+        protected List<T> ExecuteReader(string sqlExpression)
+        {
+            List<T> results = new List<T>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            results.Add(Map(reader));
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+            return results;
+        }
 
         public virtual void SetDefaultData(string sqlExpression)
         {

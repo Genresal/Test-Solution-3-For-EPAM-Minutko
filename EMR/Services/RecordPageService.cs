@@ -12,12 +12,20 @@ namespace EMR.Services
     public class RecordPageService : BaseTableService, IRecordPageService
     {
         IBusinessService<Record> _recordService;
+        IBusinessService<Doctor> _doctorService;
+        IBusinessService<Patient> _patientService;
         IBusinessService<Position> _positionService;
         ITreatmentService _treatmentService;
 
-        public RecordPageService(IBusinessService<Record> sr, IBusinessService<Position> sp, ITreatmentService t)
+        public RecordPageService(IBusinessService<Record> sr
+            , IBusinessService<Doctor> d
+            , IBusinessService<Patient> p
+                            , IBusinessService<Position> sp
+                            , ITreatmentService t)
         {
             _recordService = sr;
+            _doctorService = d;
+            _patientService = p;
             _positionService = sp;
             _treatmentService = t;
         }
@@ -74,10 +82,35 @@ namespace EMR.Services
             return result;
         }
 
-        public Record GetDetails(int id)
+        public Record GetById(int id)
         {
-            Record result = _recordService.GetAll().Where(x => x.Id == id).FirstOrDefault();
+            Record result = _recordService.GetById(id);
             return result;
+        }
+
+        public void Create(Record item)
+        {
+            _recordService.Create(item);
+        }
+        public void Update(Record item)
+        {
+            _recordService.Update(item);
+        }
+        public void Delete(int id)
+        {
+            _recordService.Delete(id);
+        }
+
+        public List<Doctor> GetDoctors()
+        {
+            var result = _doctorService.GetAll();
+            return result.ToList();
+        }
+
+        public List<Patient> GetPatients()
+        {
+            var result = _patientService.GetAll();
+            return result.ToList();
         }
 
         public IQueryable<Drug> LoadDrugTable(DrugSearchModel searchParameters)

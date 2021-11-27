@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Text.Json.Serialization;
 
 namespace EMR
@@ -49,6 +51,7 @@ namespace EMR
             services.AddTransient<IBusinessService<Position>, PositionService>();
             services.AddTransient<IBusinessService<Record>, RecordService>();
             services.AddTransient<IBusinessService<Doctor>, DoctorService>();
+            services.AddTransient<IBusinessService<Patient>, PatientService>();
             services.AddTransient<ITreatmentService, RecordTreatmentService>();
             services.AddTransient<IBusinessService<Drug>, DrugService>();
             services.AddTransient<IBusinessService<Procedure>, ProcedureService>();
@@ -66,8 +69,11 @@ namespace EMR
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)//, IDbService db)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)//, IDbService db)
         {
+            var path = AppContext.BaseDirectory;
+            loggerFactory.AddFile($"{path}\\Logs\\Log.txt");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

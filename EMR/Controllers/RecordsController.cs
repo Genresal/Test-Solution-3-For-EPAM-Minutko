@@ -12,16 +12,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using EMR.Business.Services;
 using EMR.Services;
+using Microsoft.Extensions.Logging;
 
 namespace EMR.Controllers
 {
     public class RecordsController : Controller
     {
-        readonly IRecordPageService _pageService;
+        private readonly IRecordPageService _pageService;
+        private readonly ILogger<RecordsController> _logger;
 
-        public RecordsController(IRecordPageService s)
+        public RecordsController(IRecordPageService s, ILogger<RecordsController> logger)
         {
             _pageService = s;
+            _logger = logger;
         }
         // GET: HomeController
         public IActionResult Index()
@@ -31,6 +34,8 @@ namespace EMR.Controllers
                                             .Select(x => new FilterCondition(x.Id, x.Name))
                                             .ToList();
             //
+            _logger.LogInformation("The main page has been accessed");
+
             return View(searchModel);
         }
 
@@ -53,7 +58,7 @@ namespace EMR.Controllers
             });
         }
 
-        /*
+        
         public IActionResult AddOrEdit(int id = 0)
         {
             PrepareViewBagForAddOrEdit();
@@ -66,7 +71,7 @@ namespace EMR.Controllers
             }
             else
             {
-                var model = _service.FindById(id);
+                var model = _pageService.GetById(id);
                 if (model == null)
                 {
                     return NotFound();
@@ -83,14 +88,14 @@ namespace EMR.Controllers
                 //Insert
                 if (id == 0)
                 {
-                    _service.Create(model);
+                    _pageService.Create(model);
                 }
                 //Update
                 else
                 {
                     try
                     {
-                        _service.Update(model);
+                        _pageService.Update(model);
                     }
                     catch (Exception)
                     {
@@ -106,7 +111,7 @@ namespace EMR.Controllers
                 // GET: HomeController/Delete/5
         public IActionResult Delete(int id)
         {
-            _service.Delete(id);
+            _pageService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
@@ -115,22 +120,22 @@ namespace EMR.Controllers
             
             List<SelectListItem> doctors = new List<SelectListItem>();
             List<SelectListItem> patients = new List<SelectListItem>();
-            doctors.AddRange(_service.GetDoctors()
-                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = "Dr. " + x.FirstName + " " + x.LastName }).ToList());
+            doctors.AddRange(_pageService.GetDoctors()
+                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = "Dr. " + x.User.FirstName + " " + x.User.LastName }).ToList());
 
-            patients.AddRange(_service.GetPatients()
-                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.FirstName + " " + x.LastName }).ToList());
+            patients.AddRange(_pageService.GetPatients()
+                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.User.FirstName + " " + x.User.LastName }).ToList());
 
             ViewBag.Doctors = new SelectList(doctors, "Value", "Text");
             ViewBag.Patients = new SelectList(patients, "Value", "Text");
             
         }
-        */
+        
 
         // GET: HomeController/Details/5
         public IActionResult Details(int id)
         {
-            return View(_pageService.GetDetails(id));
+            return View(_pageService.GetById(id));
         }
     }
 }
