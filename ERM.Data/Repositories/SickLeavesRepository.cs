@@ -44,7 +44,7 @@ namespace EMR.Data.Repositories
                 }
 
             }
-            SetDefaultData(sqlExpression);
+            ExecuteNonQuery(sqlExpression);
         }
 
         protected override SickLeave Map(SqlDataReader reader)

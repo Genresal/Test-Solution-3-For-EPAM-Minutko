@@ -15,35 +15,6 @@ namespace EMR.Data.Repositories
         public PositionRepository(string conn) : base(conn)
         {
         }
-        /*
-        public override IEnumerable<Position> GetAll()
-        {
-            List<Position> items = new List<Position>();
-
-            string sqlExpression = $"SELECT * " +
-                                   $"FROM {nameof(Position).ConvertToTableName()}";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand(sqlExpression, connection);
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            items.Add(Map(reader));
-                        }
-                    }
-                }
-
-                connection.Close();
-            }
-            return items;
-        }
-        */
 
         public override void SetDefaultData()
         {
@@ -61,7 +32,7 @@ namespace EMR.Data.Repositories
                     sqlExpression = $"{sqlExpression},";
                 }
             }
-            SetDefaultData(sqlExpression);
+            ExecuteNonQuery(sqlExpression);
         }
 
         protected override Position Map(SqlDataReader reader)

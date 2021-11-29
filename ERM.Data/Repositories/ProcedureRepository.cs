@@ -34,7 +34,7 @@ namespace EMR.Data.Repositories
                 }
 
             }
-            SetDefaultData(sqlExpression);
+            ExecuteNonQuery(sqlExpression);
         }
 
         protected override Procedure Map(SqlDataReader reader)

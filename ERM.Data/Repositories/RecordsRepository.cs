@@ -71,27 +71,10 @@ namespace EMR.Data.Repositories
 
         public override Record GetById(int id)
         {
-            Record result = default(Record);
-
             string sqlExpression = $"{baseQuery} " +
                                    $"WHERE r.[Id] = @Id";
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand(sqlExpression, connection);
-                command.Parameters.Add(new SqlParameter("@Id", id));
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        result = (Map(reader));
-                    }
-                }
-
-                connection.Close();
-            }
-            return result;
+            return ExecuteReader(sqlExpression, new SqlParameter("@Id", id)).FirstOrDefault();
         }
 
         public override void Delete(int id)
@@ -108,16 +91,7 @@ namespace EMR.Data.Repositories
                 $"ROLLBACK TRAN " +
                 $"END CATCH";
 
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand(sqlExpression, connection);
-                command.Parameters.Add(new SqlParameter("@parId", id));
-                command.ExecuteNonQuery();
-
-                connection.Close();
-            }
+            ExecuteNonQuery(sqlExpression, new SqlParameter("@parId", id));
         }
 
         public override void SetDefaultData()
@@ -144,7 +118,7 @@ namespace EMR.Data.Repositories
 
             }
 
-            SetDefaultData(sqlExpression);
+            ExecuteNonQuery(sqlExpression);
         }
     
 

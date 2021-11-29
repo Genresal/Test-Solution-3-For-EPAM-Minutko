@@ -38,7 +38,7 @@ namespace EMR.Data.Repositories
                     sqlExpression = $"{sqlExpression},";
                 }
             }
-            SetDefaultData(sqlExpression);
+            ExecuteNonQuery(sqlExpression);
         }
 
         protected override Patient Map(SqlDataReader reader)

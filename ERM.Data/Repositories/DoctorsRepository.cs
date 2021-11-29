@@ -39,7 +39,7 @@ namespace EMR.Data.Repositories
                 }
 
             }
-            SetDefaultData(sqlExpression);
+            ExecuteNonQuery(sqlExpression);
         }
 
         protected override Doctor Map(SqlDataReader reader)

@@ -52,7 +52,7 @@ namespace EMR.Data.Repositories
                     sqlExpression = $"{sqlExpression},";
                 }
             }
-            SetDefaultData(sqlExpression);
+            ExecuteNonQuery(sqlExpression);
         }
 
         protected override User Map(SqlDataReader reader)
