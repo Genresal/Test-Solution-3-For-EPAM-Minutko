@@ -12,13 +12,36 @@ namespace EMR.Data.Repositories
 {
     public class PatientsRepository : BaseRepository<Patient>
     {
+        private readonly string baseQuery;
         public PatientsRepository(string conn) : base (conn)
         {
+            baseQuery = $"SELECT p.{nameof(Patient.Id)}, " +
+              $"{nameof(Patient.UserId)}, " +
+              $"{nameof(Patient.Job)}, " +
+              $"up.{nameof(User.FirstName)} as {nameof(Patient)}{nameof(User.FirstName)}, " +
+              $"up.{nameof(User.LastName)} as {nameof(Patient)}{nameof(User.LastName)}, " +
+              $"up.{nameof(User.Birthday)} as {nameof(Patient)}{nameof(User.Birthday)}, " +
+              $"up.{nameof(User.Email)} as {nameof(Patient)}{nameof(User.Email)}, " +
+              $"up.{nameof(User.PhoneNumber)} as {nameof(Patient)}{nameof(User.PhoneNumber)} " +
+              $"FROM {nameof(Patient).ConvertToTableName()} as p " +
+              $"LEFT JOIN {nameof(User).ConvertToTableName()} as up ON up.{nameof(User.Id)} = p.{nameof(Patient.UserId)}";
         }
 
         public override IEnumerable<Patient> GetAll()
         {
-            return new List<Patient>();
+            return ExecuteReader(baseQuery);
+        }
+
+        public override IEnumerable<Patient> GetByColumn(string column, string value)
+        {
+            string sqlExpression = $"{baseQuery} WHERE [{column}] = @value";
+            return ExecuteReader(sqlExpression, new SqlParameter("@value", value));
+        }
+
+        public override Patient GetById(int id)
+        {
+            string sqlExpression = $"{baseQuery} WHERE p.Id = @id";
+            return ExecuteReader(sqlExpression, new SqlParameter("@id", id)).FirstOrDefault();
         }
 
         public override void SetDefaultData()
@@ -46,7 +69,13 @@ namespace EMR.Data.Repositories
             var model = new Patient();
 
             model.Id = (int)reader[nameof(model.Id)];
+            model.UserId = (int)reader[nameof(model.UserId)];
             model.Job = (string)reader[nameof(model.Job)];
+            model.User.FirstName = (string)reader[$"{nameof(Patient)}{nameof(model.User.FirstName)}"];
+            model.User.LastName = (string)reader[$"{nameof(Patient)}{nameof(model.User.LastName)}"];
+            model.User.Birthday = (DateTime)reader[$"{nameof(Patient)}{nameof(model.User.Birthday)}"];
+            model.User.Email = (string)reader[$"{nameof(Patient)}{nameof(model.User.Email)}"];
+            model.User.PhoneNumber = (string)reader[$"{nameof(Patient)}{nameof(model.User.PhoneNumber)}"];
 
             return model;
         }

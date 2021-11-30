@@ -119,6 +119,7 @@ CREATE TABLE [dbo].[tUser](
   [FirstName] [nvarchar](255) NOT NULL,
   [LastName] [nvarchar](255) NOT NULL,
   [Birthday] [datetime] NOT NULL,
+  [Email] [nvarchar](255) NOT NULL,
   [PhoneNumber] [nvarchar](255) NOT NULL,
   [PhotoUrl] [nvarchar](255) NOT NULL,
   PRIMARY KEY ([Id]),

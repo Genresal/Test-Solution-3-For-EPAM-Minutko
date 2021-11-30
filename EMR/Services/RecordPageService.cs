@@ -20,8 +20,8 @@ namespace EMR.Services
         public RecordPageService(IBusinessService<Record> sr
             , IBusinessService<Doctor> d
             , IBusinessService<Patient> p
-                            , IBusinessService<Position> sp
-                            , ITreatmentService t)
+            , IBusinessService<Position> sp
+            , ITreatmentService t)
         {
             _recordService = sr;
             _doctorService = d;
@@ -37,7 +37,19 @@ namespace EMR.Services
 
         public IQueryable<RecordViewModel> LoadTable(RecordSearchModel searchParameters)
         {
-            var result = _recordService.GetAll().Select(x => x.ToViewModel()).AsQueryable();
+            IQueryable<RecordViewModel> result;
+            if (searchParameters.PatientId > 0)
+            {
+                result = _recordService.GetByColumn(nameof(searchParameters.PatientId), searchParameters.PatientId.ToString())
+                                        .Select(x => x.ToViewModel())
+                                        .AsQueryable();
+            }
+            else
+            {
+                result = _recordService.GetAll()
+                                        .Select(x => x.ToViewModel())
+                                        .AsQueryable();
+            }
 
             if (searchParameters.DoctorPositions.Count > 0)
             {
@@ -111,6 +123,12 @@ namespace EMR.Services
         {
             var result = _patientService.GetAll();
             return result.ToList();
+        }
+
+        public Patient GetPatient(int id)
+        {
+            var result = _patientService.GetById(id);
+            return result;
         }
 
         public IQueryable<Drug> LoadDrugTable(DrugSearchModel searchParameters)

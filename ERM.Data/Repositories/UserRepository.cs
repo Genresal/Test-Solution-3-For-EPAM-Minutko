@@ -30,6 +30,7 @@ namespace EMR.Data.Repositories
                                                         ,[{nameof(User.FirstName)}]
                                                         ,[{nameof(User.LastName)}]
                                                         ,[{nameof(User.Birthday)}]
+                                                        ,[{nameof(User.Email)}]
                                                         ,[{nameof(User.PhoneNumber)}]
                                                         ,[{nameof(User.PhotoUrl)}])
                                                     VALUES";
@@ -45,6 +46,7 @@ namespace EMR.Data.Repositories
                     $",'{name}'" +
                     $",'{Gen.Random.Names.Surname()()}'" +
                     $",'{Gen.Random.Time.Dates(DateTime.Now.AddYears(-100), DateTime.Now)()}'" +
+                    $",'{Gen.Random.Internet.EmailAddresses()()}'" +
                     $",'{Gen.Random.PhoneNumbers.WithRandomFormat()()}'" +
                     $",'{Gen.Random.Internet.Urls()()}')";
                 if (i != dataCount)
@@ -66,6 +68,7 @@ namespace EMR.Data.Repositories
             model.FirstName = (string)reader[nameof(model.FirstName)];
             model.LastName = (string)reader[nameof(model.LastName)];
             model.Birthday = (DateTime)reader[nameof(model.Birthday)];
+            model.Email = (string)reader[nameof(model.Email)];
             model.PhoneNumber = (string)reader[nameof(model.PhoneNumber)];
             model.PhotoUrl = (string)reader[nameof(model.PhotoUrl)];
 

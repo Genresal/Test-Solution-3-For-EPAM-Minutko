@@ -26,5 +26,53 @@ namespace EMR.Mapper
             }
             return null;
         }
+
+        public static Patient ToModel(this PatientViewModel model)
+        {
+            if (model != null)
+            {
+                return new Patient
+                {
+                    Id = model.Id,
+                    UserId = model.UserId,
+                    Job = model.Job,
+                    User = new User
+                    {
+                        Login = "Logit",
+                        Password = "Passt",
+                        RoleId = model.RoleId,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        Birthday = model.Birthday,
+                        PhoneNumber = model.PhoneNumber,
+                        Email = model.Email,
+                        PhotoUrl = model.PhotoUrl
+                    }
+                };
+            }
+            return null;
+        }
+
+        public static PatientViewModel ToViewModel(this Patient model)
+        {
+            if (model != null)
+            {
+                return new PatientViewModel
+                {
+                    Id = model.Id,
+                    UserId = model.UserId,
+                    Job = model.Job,
+                    RoleId = model.User.RoleId,
+                    FirstName = model.User.FirstName,
+                    LastName = model.User.LastName,
+                    Birthday = model.User.Birthday,
+                    PhoneNumber = model.User.PhoneNumber,
+                    Email = model.User.Email,
+                    PhotoUrl = model.User.PhotoUrl
+                    
+                };
+            }
+            return null;
+        }
     }
 }

@@ -29,10 +29,12 @@ namespace EMR.Data.Repositories
                          $"ud.{nameof(User.FirstName)} as {nameof(Doctor)}{nameof(User.FirstName)}, " +
                          $"ud.{nameof(User.LastName)} as {nameof(Doctor)}{nameof(User.LastName)}, " +
                          $"ud.{nameof(User.Birthday)} as {nameof(Doctor)}{nameof(User.Birthday)}, " +
+                         $"ud.{nameof(User.Email)} as {nameof(Doctor)}{nameof(User.Email)}, " +
                          $"ud.{nameof(User.PhoneNumber)} as {nameof(Doctor)}{nameof(User.PhoneNumber)}, " +
                          $"up.{nameof(User.FirstName)} as {nameof(Patient)}{nameof(User.FirstName)}, " +
                          $"up.{nameof(User.LastName)} as {nameof(Patient)}{nameof(User.LastName)}, " +
                          $"up.{nameof(User.Birthday)} as {nameof(Patient)}{nameof(User.Birthday)}, " +
+                         $"up.{nameof(User.Email)} as {nameof(Patient)}{nameof(User.Email)}, " +
                          $"up.{nameof(User.PhoneNumber)} as {nameof(Patient)}{nameof(User.PhoneNumber)}, " +
                          $"pos.{nameof(Position.Name)} as {nameof(Doctor)}{nameof(Position.Name)}, " +
                          $"s.{nameof(SickLeave.StartDate)} as {nameof(SickLeave)}{nameof(SickLeave.StartDate)}, " +
@@ -49,24 +51,13 @@ namespace EMR.Data.Repositories
         
         public override IEnumerable<Record> GetAll()
         {
-            List<Record> items = new List<Record>();
+            return ExecuteReader(baseQuery);
+        }
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand(baseQuery, connection);
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        items.Add(Map(reader));
-                    }
-                }
-                connection.Close();
-            }
-            return items;
+        public override IEnumerable<Record> GetByColumn(string column, string value)
+        {
+            string sqlExpression = $"{baseQuery} WHERE [{column}] = @value";
+            return ExecuteReader(sqlExpression, new SqlParameter("@value", value));
         }
 
         public override Record GetById(int id)
@@ -141,10 +132,12 @@ namespace EMR.Data.Repositories
             model.Doctor.User.FirstName = (string)reader[$"{nameof(Doctor)}{nameof(model.Doctor.User.FirstName)}"];
             model.Doctor.User.LastName = (string)reader[$"{nameof(Doctor)}{nameof(model.Doctor.User.LastName)}"];
             model.Doctor.User.Birthday = (DateTime)reader[$"{nameof(Doctor)}{nameof(model.Doctor.User.Birthday)}"];
+            model.Doctor.User.Email = (string)reader[$"{nameof(Doctor)}{nameof(model.Doctor.User.Email)}"];
             model.Doctor.User.PhoneNumber = (string)reader[$"{nameof(Doctor)}{nameof(model.Doctor.User.PhoneNumber)}"];
             model.Patient.User.FirstName = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.FirstName)}"];
             model.Patient.User.LastName = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.LastName)}"];
             model.Patient.User.Birthday = (DateTime)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.Birthday)}"];
+            model.Patient.User.Email = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.Email)}"];
             model.Patient.User.PhoneNumber = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.PhoneNumber)}"];
             model.SickLeave.Id = model.SickLeaveId;
             model.SickLeave.StartDate = (DateTime)reader[$"{nameof(SickLeave)}{nameof(SickLeave.StartDate)}"];

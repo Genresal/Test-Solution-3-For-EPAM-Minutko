@@ -22,5 +22,7 @@ namespace EMR.ViewModels
 
         [Display(Name = "Date range, from-to")]
         public FilterRange DateRange { get; set; }
+
+        public int PatientId { get; set; }
     }
 }

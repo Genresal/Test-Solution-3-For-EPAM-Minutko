@@ -57,6 +57,7 @@ namespace EMR
             services.AddTransient<IBusinessService<Procedure>, ProcedureService>();
 
             services.AddTransient<IRecordPageService, RecordPageService>();
+            services.AddTransient<IPatientPageService, PatientPageService>();
             services.AddTransient<IHomePageService, HomePageService>();
 
             services.AddSingleton<IDbService, DbService>();

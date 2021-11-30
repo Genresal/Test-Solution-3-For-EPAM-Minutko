@@ -25,7 +25,7 @@ namespace EMR.Data.Repositories
             return ExecuteReader(sqlExpression);
         }
 
-        public IEnumerable<T> GetByColumn(string column, string value)
+        public virtual IEnumerable<T> GetByColumn(string column, string value)
         {
             string sqlExpression = $"SELECT * " +
                                    $"FROM {typeof(T).Name.ConvertToTableName()} " +
@@ -67,9 +67,12 @@ namespace EMR.Data.Repositories
             return ExecuteReader(sqlExpression, new SqlParameter("@Id", id)).FirstOrDefault();
         }
 
-        public void Create(T model)
+        public void Create(T item)
         {
-            var properties = model.GetType().GetProperties();
+            var properties = item.GetType()
+                                  .GetProperties()
+                                  .Where(x => x.PropertyType != typeof(BaseModel));
+
             string sqlExpression = $@"INSERT INTO {typeof(T).Name.ConvertToTableName()} (";
 
             foreach (var prop in properties)
@@ -91,7 +94,7 @@ namespace EMR.Data.Repositories
             {
                 if (prop.PropertyType != typeof(BaseModel))
                 {
-                    parameters.Add(new SqlParameter($"@{prop.Name}", model.GetType().GetProperty(prop.Name).GetValue(model, null)));
+                    parameters.Add(new SqlParameter($"@{prop.Name}", item.GetType().GetProperty(prop.Name).GetValue(item, null)));
                 }
             }
 
@@ -212,6 +215,17 @@ namespace EMR.Data.Repositories
                 connection.Open();
                 SqlCommand command = new SqlCommand(sqlExpression, connection);
 
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            results.Add(Map(reader));
+                        }
+                    }
+                }
 
                 connection.Close();
             }

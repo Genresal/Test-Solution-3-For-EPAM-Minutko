@@ -1,0 +1,112 @@
+﻿@model EMR.Business.Models.Patient
+@using EMR.DataTables
+@{
+    ViewData["Title"] = "Home page";
+    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
+
+    var _model = new EMR.ViewModels.RecordViewModel();
+    var _searchModel = new EMR.ViewModels.RecordSearchModel() { PatientId = Model.Id};
+    var _filters = new List<FilterParameter>
+{
+        new FilterParameter(nameof(_searchModel.Diagnosis), Html.DisplayNameFor(value => _searchModel.Diagnosis)),
+        //new FilterParameter(nameof(_searchModel.DoctorPositions), _searchModel.DoctorPositions, Html.DisplayNameFor(value => _searchModel.DoctorPositions)),
+        new FilterParameter(nameof(_searchModel.DateRange), _searchModel.DateRange, Html.DisplayNameFor(value => _searchModel.DateRange)),
+        new FilterParameter(nameof(_searchModel.PatientId), _searchModel.PatientId, typeof(int))
+                                };
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<div class="row">
+
+    <div class="col-md-2">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Patient</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model)
+                <a href="/Patients/AddOrEdit?id=@Model.Id" class="btn btn-primary btn-block"><b>View patient profile</b></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-10">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Records</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        @await Html.PartialAsync("_Filters", _filters)
+
+                        <form method="post" action="~/Records">
+                            <div class="form-group">
+                                <input type="submit" value="Reset Filters" class="btn btn-secondary btn btn-block" />
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-10">
+                        <table id="table" class="table table-sm table-striped table-bordered h-auto" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>@Html.DisplayNameFor(value => _model.Id)</th>
+                                    <th>@Html.DisplayNameFor(value => _model.Diagnosis)</th>
+                                    <th>@Html.DisplayNameFor(value => _model.Doctor)</th>
+                                    <th>@Html.DisplayNameFor(value => _model.DoctorPosition)</th>
+                                    <th>@Html.DisplayNameFor(value => _model.ModifiedDate)</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <partial name="_TableScriptsAndStyles" />
+
+    @{
+        var gridModel = new DataTablesModel
+        {
+            StateSave = false, //save state
+            AutoWidth = true,
+            Processing = true,
+            ServerSide = true,
+            Paging = true,
+            Searching = true,
+            Order = "0, 'desc'",
+            LengthMenu = "12, 24, 100, 500",
+            PageLength = 12,
+            Name = "table",
+            Url = "/Records/LoadTable",
+            Filters = _filters
+        };
+
+        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id)));
+        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Diagnosis)));
+        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Doctor)));
+        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.DoctorPosition)));
+        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.ModifiedDate))
+        {
+            Render = new RenderDate()
+        }
+    );
+        string button = " <a href =\"/Records/Details?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"far fa-eye\"></i></a>" +
+                        " <a href=\"/Records/AddOrEdit?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-edit\"></i></a>" +
+                        " <a href=\"/Records/Delete?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-trash\"></i></a>";
+
+        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id))
+        {
+            Orderable = false,
+            Render = new RenderRandom(button)
+        }
+    );
+
+    }
+    @await Html.PartialAsync("Table", gridModel)
