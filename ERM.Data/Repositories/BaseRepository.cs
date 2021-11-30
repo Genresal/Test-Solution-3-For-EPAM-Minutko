@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace EMR.Data.Repositories
 {
-    public abstract class BaseRepository<T> : IRepository<T>
+    public abstract class BaseRepository<T> : IRepository<T> where T : BaseModel
     {
         protected string connectionString = null;
         protected BaseRepository(string conn)
@@ -103,28 +103,30 @@ namespace EMR.Data.Repositories
 
         public void Update(T model)
         {
-            var properties = model.GetType().GetProperties();
-            string sqlExpression = $@"UPDATE {typeof(T).Name.ConvertToTableName()} SET";
+            var properties = model.GetType()
+                                  .GetProperties()
+                                  .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
+                                  .Where(x => x.Name != "Id")
+                                  .ToList();
+            string sqlExpression = $@"UPDATE {typeof(T).Name.ConvertToTableName()} SET ";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            int lastArrayIndex = properties.Length - 1;
+            int lastArrayIndex = properties.Count - 1;
             for (int i = 0; i <= lastArrayIndex; i++)
             {
                 var prop = properties[i];
-                if (prop.Name == "Id")
-                {
-                    continue;
-                }
 
-                sqlExpression = $"{sqlExpression}[{prop.Name}] = @{prop.Name}";
-
-                if (i < lastArrayIndex)
+                if (i > 0 )
                 {
                     sqlExpression = $"{sqlExpression}, ";
                 }
 
+                sqlExpression = $"{sqlExpression}[{prop.Name}] = @{prop.Name}";
+
                 parameters.Add(new SqlParameter($"@{prop.Name}", model.GetType().GetProperty(prop.Name).GetValue(model, null)));
             }
+
+            parameters.Add(new SqlParameter($"@Id", model.Id));
 
             sqlExpression += " WHERE Id = @Id";
 

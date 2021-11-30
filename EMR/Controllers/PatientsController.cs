@@ -53,7 +53,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddOrEdit(int id, [Bind("Id,UserId,RoleId,FirstName,LastName,Birthday,PhoneNumber,Email,PhotoUrl")] PatientViewModel model)
+        public IActionResult AddOrEdit(int id, [Bind("Id,Job,UserId,RoleId,FirstName,LastName,Birthday,PhoneNumber,Email,PhotoUrl")] PatientViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -65,14 +65,14 @@ namespace EMR.Controllers
                 //Update
                 else
                 {
-                    try
-                    {
+                    //*try
+                    //{
                         _pageService.Update(model.ToModel());
-                    }
-                    catch (Exception)
+                    //}
+                    /*catch (Exception)
                     {
                         return NotFound();
-                    }
+                    }*/
                 }
                 return RedirectToAction(nameof(Details), model.Id);
             }

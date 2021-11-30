@@ -20,9 +20,11 @@ namespace EMR.Data.Repositories
               $"{nameof(Patient.Job)}, " +
               $"up.{nameof(User.FirstName)} as {nameof(Patient)}{nameof(User.FirstName)}, " +
               $"up.{nameof(User.LastName)} as {nameof(Patient)}{nameof(User.LastName)}, " +
+              $"up.{nameof(User.RoleId)} as {nameof(Patient)}{nameof(User.RoleId)}, " +
               $"up.{nameof(User.Birthday)} as {nameof(Patient)}{nameof(User.Birthday)}, " +
               $"up.{nameof(User.Email)} as {nameof(Patient)}{nameof(User.Email)}, " +
-              $"up.{nameof(User.PhoneNumber)} as {nameof(Patient)}{nameof(User.PhoneNumber)} " +
+              $"up.{nameof(User.PhoneNumber)} as {nameof(Patient)}{nameof(User.PhoneNumber)}, " +
+              $"up.{nameof(User.PhotoUrl)} as {nameof(Patient)}{nameof(User.PhotoUrl)} " +
               $"FROM {nameof(Patient).ConvertToTableName()} as p " +
               $"LEFT JOIN {nameof(User).ConvertToTableName()} as up ON up.{nameof(User.Id)} = p.{nameof(Patient.UserId)}";
         }
@@ -73,9 +75,11 @@ namespace EMR.Data.Repositories
             model.Job = (string)reader[nameof(model.Job)];
             model.User.FirstName = (string)reader[$"{nameof(Patient)}{nameof(model.User.FirstName)}"];
             model.User.LastName = (string)reader[$"{nameof(Patient)}{nameof(model.User.LastName)}"];
+            model.User.RoleId = (int)reader[$"{nameof(Patient)}{nameof(model.User.RoleId)}"];
             model.User.Birthday = (DateTime)reader[$"{nameof(Patient)}{nameof(model.User.Birthday)}"];
             model.User.Email = (string)reader[$"{nameof(Patient)}{nameof(model.User.Email)}"];
             model.User.PhoneNumber = (string)reader[$"{nameof(Patient)}{nameof(model.User.PhoneNumber)}"];
+            model.User.PhotoUrl = (string)reader[$"{nameof(Patient)}{nameof(model.User.PhotoUrl)}"];
 
             return model;
         }

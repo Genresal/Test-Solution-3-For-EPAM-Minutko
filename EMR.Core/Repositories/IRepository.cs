@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMR.Business.Models;
+using System;
 using System.Collections.Generic;
 
 namespace EMR.Business.Repositories
@@ -15,7 +16,7 @@ namespace EMR.Business.Repositories
     /// Base repository
     /// </summary>
     /// <typeparam name="T">Business Model class</typeparam>
-    public interface IRepository<T> : IRepository
+    public interface IRepository<T> : IRepository where T : BaseModel
     {
         IEnumerable<T> GetAll();
         IEnumerable<T> GetByColumn(string column, string value);
