@@ -30,7 +30,7 @@ namespace EMR.Controllers
 
         public IActionResult Details(int id = 3)
         {
-            return View(_pageService.GetById(id));
+            return View(_pageService.GetById(id).ToViewModel());
         }
 
         public IActionResult AddOrEdit(int id = 0)
@@ -43,7 +43,7 @@ namespace EMR.Controllers
             }
             else
             {
-                var model = _pageService.GetById(id);
+                var model = _pageService.GetById(id).ToViewModel();
                 if (model == null)
                 {
                     return NotFound();
@@ -65,14 +65,14 @@ namespace EMR.Controllers
                 //Update
                 else
                 {
-                    //*try
-                    //{
+                    try
+                    {
                         _pageService.Update(model.ToModel());
-                    //}
-                    /*catch (Exception)
+                    }
+                    catch (Exception)
                     {
                         return NotFound();
-                    }*/
+                    }
                 }
                 return RedirectToAction(nameof(Details), model.Id);
             }

@@ -26,17 +26,9 @@ namespace EMR.Data.Repositories
             string sqlExpression = $@"INSERT INTO [dbo].[{nameof(Role).ConvertToTableName()}](
                                                         [{nameof(Role.Name)}])
                                                     VALUES";
-            int dataCount = 4;
-            for (int i = 1; i <= dataCount; i++)
-            {
 
-                sqlExpression = $"{sqlExpression}" +
-                    $"('{Gen.Random.Text.Words()().MakeFirstCharUppercase()}')";
-                if (i != dataCount)
-                {
-                    sqlExpression = $"{sqlExpression},";
-                }
-            }
+            sqlExpression = $"{sqlExpression}" +
+            $"('User', 'Doctor', 'Editor', 'Admin')";
             ExecuteNonQuery(sqlExpression);
         }
 

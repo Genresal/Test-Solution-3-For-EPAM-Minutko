@@ -52,8 +52,8 @@ namespace EMR.Data.Repositories
                                                          [{nameof(Patient.UserId)}]
                                                         ,[{nameof(Patient.Job)}])
                                                     VALUES";
-            int dataCount = 80;
-            for (int i = 1; i <= dataCount; i++)
+            int dataCount = 100;
+            for (int i = 21; i <= dataCount; i++)
             {
                 sqlExpression = $"{sqlExpression}" +
                     $"('{i}'" +

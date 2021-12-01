@@ -9,6 +9,5 @@ namespace EMR.Services
 {
     public interface IPatientPageService : IBasePageService<Patient>
     {
-        public PatientViewModel GetById(int id);
     }
 }

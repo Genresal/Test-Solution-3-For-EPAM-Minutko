@@ -38,6 +38,7 @@ namespace EMR.Mapper
                     Job = model.Job,
                     User = new User
                     {
+                        Id = model.UserId,
                         Login = "Logit",
                         Password = "Passt",
                         RoleId = model.RoleId,
@@ -70,6 +71,88 @@ namespace EMR.Mapper
                     Email = model.User.Email,
                     PhotoUrl = model.User.PhotoUrl
                     
+                };
+            }
+            return null;
+        }
+
+        public static ServiceUserViewModel ToViewModel(this User model)
+        {
+            if (model != null)
+            {
+                return new ServiceUserViewModel
+                {
+                    Id = model.Id,
+                    RoleId = model.RoleId,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Birthday = model.Birthday,
+                    PhoneNumber = model.PhoneNumber,
+                    Email = model.Email,
+                    PhotoUrl = model.PhotoUrl
+
+                };
+            }
+            return null;
+        }
+
+        public static User ToModel(this ServiceUserViewModel model)
+        {
+            if (model != null)
+            {
+                return new User
+                {
+                    Id = model.Id,
+                    RoleId = model.RoleId,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Birthday = model.Birthday,
+                    PhoneNumber = model.PhoneNumber,
+                    Email = model.Email,
+                    PhotoUrl = model.PhotoUrl
+
+                };
+            }
+            return null;
+        }
+
+        public static ServiceUserViewModel ToServiceUser(this RegisterViewModel model)
+        {
+            if (model != null)
+            {
+                return new ServiceUserViewModel
+                {
+                    RoleId = model.RoleId,
+                    Login = model.Login,
+                    Password = model.Password
+                };
+            }
+            return null;
+        }
+
+        public static PatientViewModel ToPatient(this RegisterViewModel model)
+        {
+            if (model != null)
+            {
+                return new PatientViewModel
+                {
+                    RoleId = model.RoleId,
+                    Login = model.Login,
+                    Password = model.Password
+                };
+            }
+            return null;
+        }
+
+        public static DoctorViewModel ToDoctor(this RegisterViewModel model)
+        {
+            if (model != null)
+            {
+                return new DoctorViewModel
+                {
+                    RoleId = model.RoleId,
+                    Login = model.Login,
+                    Password = model.Password
                 };
             }
             return null;

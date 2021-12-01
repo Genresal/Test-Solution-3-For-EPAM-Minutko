@@ -12,13 +12,39 @@ namespace EMR.Data.Repositories
 {
     public class UserRepository : BaseRepository<User>
     {
+        private readonly string baseQuery;
         public UserRepository(string conn) : base(conn)
         {
+            baseQuery = $"SELECT u.{nameof(User.Id)}, " +
+                        $"{nameof(User.Login)}, " +
+                        $"{nameof(User.Password)}, " +
+                        $"{nameof(User.FirstName)}, " +
+                        $"{nameof(User.LastName)}, " +
+                        $"{nameof(User.RoleId)}, " +
+                        $"{nameof(User.Birthday)}, " +
+                        $"{nameof(User.Email)}, " +
+                        $"{nameof(User.PhoneNumber)}, " +
+                        $"{nameof(User.PhotoUrl)}, " +
+                        $"r.{nameof(Role.Name)} as {nameof(Role)}{nameof(Role.Name)} " +
+                        $"FROM {nameof(User).ConvertToTableName()} as u " +
+                        $"LEFT JOIN {nameof(Role).ConvertToTableName()} as r ON r.{nameof(Role.Id)} = u.{nameof(User.RoleId)}";
         }
 
         public override IEnumerable<User> GetAll()
         {
-            return new List<User>();
+            return ExecuteReader(baseQuery);
+        }
+
+        public override IEnumerable<User> GetByColumn(string column, string value)
+        {
+            string sqlExpression = $"{baseQuery} WHERE [{column}] = @value";
+            return ExecuteReader(sqlExpression, new SqlParameter("@value", value));
+        }
+
+        public override User GetById(int id)
+        {
+            string sqlExpression = $"{baseQuery} WHERE p.Id = @id";
+            return ExecuteReader(sqlExpression, new SqlParameter("@id", id)).FirstOrDefault();
         }
 
         public override void SetDefaultData()
@@ -38,11 +64,12 @@ namespace EMR.Data.Repositories
             for (int i = 1; i <= dataCount; i++)
             {
                 string name = i % 2 == 0 ? Gen.Random.Names.Male()() : Gen.Random.Names.Female()();
+                int roleId = i > 20 ? 2 : 1;
 
                 sqlExpression = $"{sqlExpression}" +
                     $"('{Gen.Random.Text.Words()().MakeFirstCharUppercase()}'" +
                     $",'{Gen.Random.Text.Words()()}'" +
-                    $",'{Gen.Random.Numbers.Integers(1, 4)()}'" +
+                    $",'{roleId}'" +
                     $",'{name}'" +
                     $",'{Gen.Random.Names.Surname()()}'" +
                     $",'{Gen.Random.Time.Dates(DateTime.Now.AddYears(-100), DateTime.Now)()}'" +
@@ -71,6 +98,7 @@ namespace EMR.Data.Repositories
             model.Email = (string)reader[nameof(model.Email)];
             model.PhoneNumber = (string)reader[nameof(model.PhoneNumber)];
             model.PhotoUrl = (string)reader[nameof(model.PhotoUrl)];
+            model.Role.Name = (string)reader[$"{nameof(Role)}{nameof(Role.Name)}"];
 
             return model;
         }

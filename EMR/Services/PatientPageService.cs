@@ -18,9 +18,9 @@ namespace EMR.Services
             _patientService = p;
         }
 
-        public PatientViewModel GetById(int id)
+        public Patient GetById(int id)
         {
-            return _patientService.GetById(id).ToViewModel();
+            return _patientService.GetById(id);
         }
 
         public void Create(Patient item)

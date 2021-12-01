@@ -3,6 +3,7 @@ using EMR.Business.Repositories;
 using EMR.Business.Services;
 using EMR.Data.Repositories;
 using EMR.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,21 +19,31 @@ namespace EMR
     {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public IConfiguration Configuration { get;}
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        public IConfiguration Configuration { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            //string conectionString = @"Data Source =.; Database=EMR;Integrated Security = True";
-
             string conectionString = Configuration.GetConnectionString("EMR");
             string mainConectionString = Configuration.GetConnectionString("MASTER");
 
-            //services.AddSingleton<IConfiguration>(Configuration);
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/User/Login");
+                    options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/User/Login");
+                });
+
+            services.AddControllersWithViews().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
+
+            services.AddRazorPages();
 
             services.AddTransient<IDbRepository, DbRepository>(provider => new DbRepository(mainConectionString));
 
@@ -55,22 +66,18 @@ namespace EMR
             services.AddTransient<ITreatmentService, RecordTreatmentService>();
             services.AddTransient<IBusinessService<Drug>, DrugService>();
             services.AddTransient<IBusinessService<Procedure>, ProcedureService>();
+            services.AddTransient<IBusinessService<User>, UserService>();
 
             services.AddTransient<IRecordPageService, RecordPageService>();
             services.AddTransient<IPatientPageService, PatientPageService>();
+            services.AddTransient<IUserPageService, UserPageService>();
             services.AddTransient<IHomePageService, HomePageService>();
 
             services.AddSingleton<IDbService, DbService>();
-
-            services.AddControllersWithViews().AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            });
-            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)//, IDbService db)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             var path = AppContext.BaseDirectory;
             loggerFactory.AddFile($"{path}\\Logs\\Log.txt");
@@ -84,14 +91,15 @@ namespace EMR
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}");
             });
-
-            //db.CheckDb();
         }
     }
 }

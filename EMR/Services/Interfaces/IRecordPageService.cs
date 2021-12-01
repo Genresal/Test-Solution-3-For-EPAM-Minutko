@@ -16,6 +16,5 @@ namespace EMR.Services
         public List<Patient> GetPatients();
         public Patient GetPatient(int id);
         public IEnumerable<Position> GetDoctorPositions();
-        public Record GetById(int id);
     }
 }

@@ -21,10 +21,16 @@
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             @if (User.Identity.IsAuthenticated)
             {
-        <a asp-controller="Account" asp-action="Logout">LogIn</a> }
-                    else
-                    {
-        <a asp-controller="Account" asp-action="Login">LogOut</a>}
+                @User.Identity.Name
+
+                @User.IsInRole("Admin")
+                {
+                    <text>nhhh</text>
+                }
+                <a asp-controller="User" asp-action="Logout">LogOut</a> }
+            else
+            {
+                <a asp-controller="User" asp-action="Login">LogIn</a>}
         </div>
 
     <!-- SidebarSearch Form -->
