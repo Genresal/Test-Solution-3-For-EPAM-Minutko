@@ -18,6 +18,8 @@ namespace EMR.Data.Repositories
             baseQuery = $"SELECT p.{nameof(Patient.Id)}, " +
               $"{nameof(Patient.UserId)}, " +
               $"{nameof(Patient.Job)}, " +
+              $"up.{nameof(User.Login)} as {nameof(Patient)}{nameof(User.Login)}, " +
+              $"up.{nameof(User.Password)} as {nameof(Patient)}{nameof(User.Password)}, " +
               $"up.{nameof(User.FirstName)} as {nameof(Patient)}{nameof(User.FirstName)}, " +
               $"up.{nameof(User.LastName)} as {nameof(Patient)}{nameof(User.LastName)}, " +
               $"up.{nameof(User.RoleId)} as {nameof(Patient)}{nameof(User.RoleId)}, " +
@@ -73,6 +75,8 @@ namespace EMR.Data.Repositories
             model.Id = (int)reader[nameof(model.Id)];
             model.UserId = (int)reader[nameof(model.UserId)];
             model.Job = (string)reader[nameof(model.Job)];
+            model.User.Login = (string)reader[$"{nameof(Patient)}{nameof(model.User.Login)}"];
+            model.User.Password = (string)reader[$"{nameof(Patient)}{nameof(model.User.Password)}"];
             model.User.FirstName = (string)reader[$"{nameof(Patient)}{nameof(model.User.FirstName)}"];
             model.User.LastName = (string)reader[$"{nameof(Patient)}{nameof(model.User.LastName)}"];
             model.User.RoleId = (int)reader[$"{nameof(Patient)}{nameof(model.User.RoleId)}"];

@@ -28,8 +28,14 @@ namespace EMR.Controllers
             _logger = logger;
         }
 
-        public IActionResult Details(int id = 3)
+        public IActionResult Details(int id = 0)
         {
+            if (id ==  0 && HttpContext.User.Identity.IsAuthenticated)
+            {
+                string login = HttpContext.User.Identity.Name;
+                return View(_pageService.GetByLogin(login).ToViewModel());
+            }
+
             return View(_pageService.GetById(id).ToViewModel());
         }
 
@@ -53,7 +59,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddOrEdit(int id, [Bind("Id,Job,UserId,RoleId,FirstName,LastName,Birthday,PhoneNumber,Email,PhotoUrl")] PatientViewModel model)
+        public IActionResult AddOrEdit(int id, [Bind("Id,Job,Login,Password,UserId,RoleId,FirstName,LastName,Birthday,PhoneNumber,Email,PhotoUrl")] PatientViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -74,7 +80,7 @@ namespace EMR.Controllers
                         return NotFound();
                     }
                 }
-                return RedirectToAction(nameof(Details), model.Id);
+                return RedirectToAction(nameof(Details), model);
             }
             return View(model);
         }

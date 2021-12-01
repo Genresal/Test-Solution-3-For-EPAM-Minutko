@@ -9,5 +9,6 @@ namespace EMR.Services
 {
     public interface IPatientPageService : IBasePageService<Patient>
     {
+        public Patient GetByLogin(string login);
     }
 }

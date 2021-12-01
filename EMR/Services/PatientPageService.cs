@@ -18,6 +18,11 @@ namespace EMR.Services
             _patientService = p;
         }
 
+        public Patient GetByLogin(string login)
+        {
+            return _patientService.GetByColumn("Login", login).FirstOrDefault();
+        }
+
         public Patient GetById(int id)
         {
             return _patientService.GetById(id);

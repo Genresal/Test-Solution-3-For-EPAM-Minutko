@@ -39,8 +39,8 @@ namespace EMR.Mapper
                     User = new User
                     {
                         Id = model.UserId,
-                        Login = "Logit",
-                        Password = "Passt",
+                        Login = model.Login,
+                        Password = model.Password,
                         RoleId = model.RoleId,
                         FirstName = model.FirstName,
                         LastName = model.LastName,
@@ -64,6 +64,8 @@ namespace EMR.Mapper
                     UserId = model.UserId,
                     Job = model.Job,
                     RoleId = model.User.RoleId,
+                    Login = model.User.Login,
+                    Password = model.User.Password,
                     FirstName = model.User.FirstName,
                     LastName = model.User.LastName,
                     Birthday = model.User.Birthday,
