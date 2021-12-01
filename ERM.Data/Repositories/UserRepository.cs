@@ -64,7 +64,7 @@ namespace EMR.Data.Repositories
             for (int i = 1; i <= dataCount; i++)
             {
                 string name = i % 2 == 0 ? Gen.Random.Names.Male()() : Gen.Random.Names.Female()();
-                int roleId = i > 20 ? 2 : 1;
+                int roleId = i > 20 ? 1 : 2;
 
                 sqlExpression = $"{sqlExpression}" +
                     $"('{Gen.Random.Text.Words()().MakeFirstCharUppercase()}'" +

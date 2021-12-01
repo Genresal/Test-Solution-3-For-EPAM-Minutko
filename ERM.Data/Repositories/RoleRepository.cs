@@ -28,7 +28,7 @@ namespace EMR.Data.Repositories
                                                     VALUES";
 
             sqlExpression = $"{sqlExpression}" +
-            $"('User', 'Doctor', 'Editor', 'Admin')";
+            $"('User'), ('Doctor'), ('Editor'), ('Admin')";
             ExecuteNonQuery(sqlExpression);
         }
 
