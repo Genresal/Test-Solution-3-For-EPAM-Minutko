@@ -1,0 +1,80 @@
+﻿@model EMR.ViewModels.RecordSearchModel
+@using EMR.DataTables
+@{
+
+    var _model = new EMR.ViewModels.RecordViewModel();
+    var _filters = new List<FilterParameter>
+{
+        new FilterParameter(nameof(Model.Diagnosis), Html.DisplayNameFor(value => Model.Diagnosis)),
+        new FilterParameter(nameof(Model.DoctorPositions), Model.DoctorPositions, Html.DisplayNameFor(value => Model.DoctorPositions)),
+        new FilterParameter(nameof(Model.DateRange), Model.DateRange, Html.DisplayNameFor(value => Model.DateRange)),
+        new FilterParameter(nameof(Model.PatientId), Model.PatientId, typeof(int))
+                                };
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @await Html.PartialAsync("_Filters", _filters)
+
+        <form method="post" action="~/Records">
+            <div class="form-group">
+                <input type="submit" value="Reset Filters" class="btn btn-secondary btn btn-block" />
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-10">
+        <table id="table" class="table table-sm table-striped table-bordered h-auto" style="width:100%">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(value => _model.Id)</th>
+                    <th>@Html.DisplayNameFor(value => _model.Diagnosis)</th>
+                    <th>@Html.DisplayNameFor(value => _model.Doctor)</th>
+                    <th>@Html.DisplayNameFor(value => _model.DoctorPosition)</th>
+                    <th>@Html.DisplayNameFor(value => _model.ModifiedDate)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@{
+    var gridModel = new DataTablesModel
+    {
+        StateSave = false, //save state
+        AutoWidth = true,
+        Processing = true,
+        ServerSide = true,
+        Paging = true,
+        Searching = true,
+        Order = "0, 'desc'",
+        LengthMenu = "12, 24, 100, 500",
+        PageLength = 12,
+        Name = "table",
+        Url = "/Records/LoadTable",
+        Filters = _filters
+    };
+
+    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id)));
+    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Diagnosis)));
+    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Doctor)));
+    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.DoctorPosition)));
+    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.ModifiedDate))
+    {
+        Render = new RenderDate()
+    }
+);
+    string button = " <a href =\"/Records/Details?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"far fa-eye\"></i></a>" +
+                    " <a href=\"/Records/AddOrEdit?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-edit\"></i></a>" +
+                    " <a href=\"/Records/Delete?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-trash\"></i></a>";
+
+    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id))
+    {
+        Orderable = false,
+        Render = new RenderRandom(button)
+    }
+);
+
+}
+@await Html.PartialAsync("Table", gridModel)
