@@ -34,7 +34,7 @@ namespace EMR.Business.Services
             , IRepository<User> user
             , IRepository<Position> position
             , IRepository<Doctor> doctor
-            , IRepository<Patient> patient
+            , IPatientRepository patient
             , IRepository<Record> record
             , IRepository<RecordTreatment> recordTreatment
             , IDbRepository dbRepository)

@@ -7,10 +7,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using RandomGen;
+using EMR.Business.Repositories;
 
 namespace EMR.Data.Repositories
 {
-    public class RecordTreatmentsRepository : BaseRepository<RecordTreatment>
+    public class RecordTreatmentsRepository : BaseRepository<RecordTreatment>, IRepository<RecordTreatment>
     {
         public RecordTreatmentsRepository(string conn) : base (conn)
         {

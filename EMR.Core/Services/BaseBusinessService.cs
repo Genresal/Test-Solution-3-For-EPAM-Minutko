@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EMR.Business.Services
 {
-    public abstract class BaseBusinessService<T> : IBusinessService<T> where T : BaseModel
+    public abstract class BaseBusinessService<T> where T : BaseModel
     {
         protected IRepository<T> _mainRepository;
         protected BaseBusinessService(IRepository<T> r)

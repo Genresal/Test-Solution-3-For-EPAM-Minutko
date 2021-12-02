@@ -24,5 +24,6 @@ namespace EMR.ViewModels
         public FilterRange DateRange { get; set; }
 
         public int PatientId { get; set; }
+        public int DoctorId { get; set; }
     }
 }

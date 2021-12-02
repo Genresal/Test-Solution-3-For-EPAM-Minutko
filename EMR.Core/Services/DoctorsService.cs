@@ -6,10 +6,12 @@ using System.Linq;
 
 namespace EMR.Business.Services
 {
-    public class DoctorService : BaseBusinessService<Doctor>
+    public class DoctorService : BaseBusinessService<Doctor>, IDoctorService
     {
-        public DoctorService(IRepository<Doctor> r) : base (r)
+        private readonly IPatientRepository _patientRepository;
+        public DoctorService(IRepository<Doctor> doctorRepository, IPatientRepository patientRepository) : base (doctorRepository)
         {
+            _patientRepository = patientRepository;
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace EMR.Data.Repositories
 {
-    public abstract class BaseRepository<T> : IRepository<T> where T : BaseModel
+    public abstract class BaseRepository<T> where T : BaseModel
     {
         protected string connectionString = null;
         protected BaseRepository(string conn)

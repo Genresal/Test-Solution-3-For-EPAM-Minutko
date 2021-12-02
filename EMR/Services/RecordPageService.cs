@@ -12,14 +12,14 @@ namespace EMR.Services
     public class RecordPageService : BaseTableService, IRecordPageService
     {
         IBusinessService<Record> _recordService;
-        IBusinessService<Doctor> _doctorService;
-        IBusinessService<Patient> _patientService;
+        IDoctorService _doctorService;
+        IPatientService _patientService;
         IBusinessService<Position> _positionService;
         ITreatmentService _treatmentService;
 
         public RecordPageService(IBusinessService<Record> sr
-            , IBusinessService<Doctor> d
-            , IBusinessService<Patient> p
+            , IDoctorService d
+            , IPatientService p
             , IBusinessService<Position> sp
             , ITreatmentService t)
         {

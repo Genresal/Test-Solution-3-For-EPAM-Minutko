@@ -37,6 +37,7 @@ namespace EMR
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/User/Login");
                     options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/User/Login");
                 });
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllersWithViews().AddJsonOptions(options =>
             {
@@ -55,14 +56,14 @@ namespace EMR
             services.AddTransient<IRepository<User>, UserRepository>(provider => new UserRepository(conectionString));
             services.AddTransient<IRepository<Position>, PositionRepository>(provider => new PositionRepository(conectionString));
             services.AddTransient<IRepository<Doctor>, DoctorsRepository>(provider => new DoctorsRepository(conectionString));
-            services.AddTransient<IRepository<Patient>, PatientsRepository>(provider => new PatientsRepository(conectionString));
+            services.AddTransient<IPatientRepository, PatientsRepository>(provider => new PatientsRepository(conectionString));
             services.AddTransient<IRepository<Record>, RecordsRepository>(provider => new RecordsRepository(conectionString));
             services.AddTransient<IRepository<RecordTreatment>, RecordTreatmentsRepository>(provider => new RecordTreatmentsRepository(conectionString));
 
             services.AddTransient<IBusinessService<Position>, PositionService>();
             services.AddTransient<IBusinessService<Record>, RecordService>();
-            services.AddTransient<IBusinessService<Doctor>, DoctorService>();
-            services.AddTransient<IBusinessService<Patient>, PatientService>();
+            services.AddTransient<IDoctorService, DoctorService>();
+            services.AddTransient<IPatientService, PatientService>();
             services.AddTransient<ITreatmentService, RecordTreatmentService>();
             services.AddTransient<IBusinessService<Drug>, DrugService>();
             services.AddTransient<IBusinessService<Procedure>, ProcedureService>();
@@ -70,6 +71,7 @@ namespace EMR
 
             services.AddTransient<IRecordPageService, RecordPageService>();
             services.AddTransient<IPatientPageService, PatientPageService>();
+            services.AddTransient<IDoctorPageService, DoctorPageService>();
             services.AddTransient<IUserPageService, UserPageService>();
             services.AddTransient<IHomePageService, HomePageService>();
 

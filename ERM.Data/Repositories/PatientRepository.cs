@@ -7,10 +7,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using RandomGen;
+using EMR.Business.Repositories;
 
 namespace EMR.Data.Repositories
 {
-    public class PatientsRepository : BaseRepository<Patient>
+    public class PatientsRepository : BaseRepository<Patient>, IPatientRepository
     {
         private readonly string baseQuery;
         public PatientsRepository(string conn) : base (conn)
@@ -40,6 +41,12 @@ namespace EMR.Data.Repositories
         {
             string sqlExpression = $"{baseQuery} WHERE [{column}] = @value";
             return ExecuteReader(sqlExpression, new SqlParameter("@value", value));
+        }
+
+        public IEnumerable<Patient> GetByDoctorId(int doctorId)
+        {
+            string sqlExpression = $"{baseQuery} WHERE p.[Id] IN (SELECT PatientId from tRecord where DoctorId = @doctorId)";
+            return ExecuteReader(sqlExpression, new SqlParameter("@doctorId", doctorId));
         }
 
         public override Patient GetById(int id)

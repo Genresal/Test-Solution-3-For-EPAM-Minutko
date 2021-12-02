@@ -23,14 +23,18 @@
             {
                 @User.Identity.Name
 
-                @User.IsInRole("Admin")
+                @if (User.IsInRole("Admin"))
                 {
-                    <text>nhhh</text>
+                    <text>Admin</text>
                 }
-                <a asp-controller="User" asp-action="Logout">LogOut</a> }
+                @if (User.IsInRole("User"))
+                {
+                    <text>User</text>
+                }
+                <a asp-controller="Account" asp-action="Logout">LogOut</a> }
             else
             {
-                <a asp-controller="User" asp-action="Login">LogIn</a>}
+                <a asp-controller="Account" asp-action="Login">LogIn</a>}
         </div>
 
     <!-- SidebarSearch Form -->
@@ -47,6 +51,8 @@
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
+            @if (User.Identity.IsAuthenticated)
+            {
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
     with font-awesome or any other icon font library -->
@@ -76,8 +82,18 @@
                         </p>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Doctors" asp-action="Details">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>
+                            Doctors page
+                        </p>
+                    </a>
+                </li>
             </ul>
-        </nav>
+            }
+            </nav>
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

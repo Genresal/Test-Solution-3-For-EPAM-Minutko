@@ -9,13 +9,47 @@ using System.Threading.Tasks;
 
 namespace EMR.Services
 {
-    public class PatientPageService : IPatientPageService
+    public class PatientPageService : BaseTableService, IPatientPageService
     {
-        readonly IBusinessService<Patient> _patientService;
+        readonly IPatientService _patientService;
 
-        public PatientPageService(IBusinessService<Patient> p)
+        public PatientPageService(IPatientService p)
         {
             _patientService = p;
+        }
+
+        public IQueryable<PatientViewModel> LoadTable(PatientSearchModel searchParameters)
+        {
+            IQueryable<PatientViewModel> result;
+
+            if (searchParameters.DoctorId > 0)
+            {
+                result = _patientService.GetByDoctorId(searchParameters.DoctorId)
+                                        .Select(x => x.ToViewModel())
+                                        .AsQueryable();
+            }
+            else
+            {
+                result = _patientService.GetAll()
+                                        .Select(x => x.ToViewModel())
+                                        .AsQueryable();
+            }
+
+            var searchBy = searchParameters.Search?.Value;
+
+            if (!string.IsNullOrEmpty(searchBy))
+            {
+                result = result.Where(r => r.FullName != null && r.FullName.ToString().ToUpper().Contains(searchBy.ToUpper()));
+            }
+
+            result = Order(searchParameters, result);
+
+            return result;
+        }
+
+        public IEnumerable<Patient> GetByDoctorId(int doctorid)
+        {
+            return _patientService.GetByDoctorId(doctorid);
         }
 
         public Patient GetByLogin(string login)

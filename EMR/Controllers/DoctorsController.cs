@@ -14,61 +14,48 @@ using EMR.Business.Services;
 using EMR.Services;
 using Microsoft.Extensions.Logging;
 using EMR.Mapper;
+using AutoMapper;
 
 namespace EMR.Controllers
 {
-    public class PatientsController : Controller
+    public class DoctorsController : Controller
     {
-        private readonly IPatientPageService _pageService;
-        private readonly ILogger<PatientsController> _logger;
+        private readonly IDoctorPageService _pageService;
+        private readonly ILogger<DoctorsController> _logger;
+        private readonly IMapper _mapper;
 
-        public PatientsController(IPatientPageService s, ILogger<PatientsController> logger)
+        public DoctorsController(IDoctorPageService s, ILogger<DoctorsController> logger, IMapper mapper)
         {
             _pageService = s;
             _logger = logger;
-        }
-
-        [HttpPost]
-        public IActionResult LoadTable([FromBody] PatientSearchModel SearchParameters)
-        {
-            var result = _pageService.LoadTable(SearchParameters);
-
-            var filteredResultsCount = result.Count();
-            var totalResultsCount = result.Count();
-            return Json(new
-            {
-                draw = SearchParameters.Draw,
-                recordsTotal = totalResultsCount,
-                recordsFiltered = filteredResultsCount,
-                data = result
-                .Skip(SearchParameters.Start)
-                .Take(SearchParameters.Length)
-                .ToList()
-            });
+            _mapper = mapper;
         }
 
         public IActionResult Details(int id = 0)
         {
+            DoctorViewModel viewModel;
             if (id ==  0 && HttpContext.User.Identity.IsAuthenticated)
             {
                 string login = HttpContext.User.Identity.Name;
-                return View(_pageService.GetByLogin(login).ToViewModel());
+                viewModel = _mapper.Map<DoctorViewModel>(_pageService.GetByLogin(login));
+                return View(viewModel);
             }
 
-            return View(_pageService.GetById(id).ToViewModel());
+            viewModel = _mapper.Map<DoctorViewModel>(_pageService.GetById(id));
+            return View(viewModel);
         }
 
         public IActionResult AddOrEdit(int id = 0)
         {
             if (id == 0)
             {
-                var model = new Patient();
+                var model = new Doctor();
                 model.Id = 0;
                 return View(model);
             }
             else
             {
-                var model = _pageService.GetById(id).ToViewModel();
+                var model = _mapper.Map<DoctorViewModel>(_pageService.GetById(id));
                 if (model == null)
                 {
                     return NotFound();
@@ -78,21 +65,21 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddOrEdit(int id, [Bind("Id,Job,Login,Password,UserId,RoleId,FirstName,LastName,Birthday,PhoneNumber,Email,PhotoUrl")] PatientViewModel model)
+        public IActionResult AddOrEdit(int id, DoctorViewModel model)
         {
             if (ModelState.IsValid)
             {
                 //Insert
                 if (id == 0)
                 {
-                    _pageService.Create(model.ToModel());
+                    _pageService.Create(_mapper.Map<Doctor>(model));
                 }
                 //Update
                 else
                 {
                     try
                     {
-                        _pageService.Update(model.ToModel());
+                        _pageService.Update(_mapper.Map<Doctor>(model));
                     }
                     catch (Exception)
                     {

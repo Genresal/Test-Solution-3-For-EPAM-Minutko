@@ -6,24 +6,51 @@ using System.Linq;
 
 namespace EMR.Business.Services
 {
-    public class PatientService : BaseBusinessService<Patient>
+    public class PatientService : IPatientService
     {
-        IRepository<User> _userRepository;
-        public PatientService(IRepository<Patient> r, IRepository<User> u) : base (r)
+        private readonly IRepository<User> _userRepository;
+        private readonly IPatientRepository _patientRepository;
+        public PatientService(IPatientRepository r, IRepository<User> u)
         {
             _userRepository = u;
+            _patientRepository = r;
         }
 
-        public override void Create(Patient model)
+        public IEnumerable<Patient> GetByDoctorId(int doctorId)
+        {
+            return _patientRepository.GetByDoctorId(doctorId);
+        }
+
+        public void Create(Patient model)
         {
             _userRepository.Create(model.User);
-            _mainRepository.Create(model);
+            _patientRepository.Create(model);
         }
 
-        public override void Update(Patient model)
+        public void Update(Patient model)
         {
             _userRepository.Update(model.User);
-            _mainRepository.Update(model);
+            _patientRepository.Update(model);
+        }
+
+        public IEnumerable<Patient> GetAll()
+        {
+            return _patientRepository.GetAll();
+        }
+
+        public IEnumerable<Patient> GetByColumn(string column, string value)
+        {
+            return _patientRepository.GetByColumn(column, value);
+        }
+
+        public Patient GetById(int id)
+        {
+            return _patientRepository.GetById(id);
+        }
+
+        public void Delete(int id)
+        {
+            _patientRepository.Delete(id);
         }
     }
 }

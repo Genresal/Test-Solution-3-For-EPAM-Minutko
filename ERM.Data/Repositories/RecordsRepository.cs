@@ -7,10 +7,11 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using EMR.Business.Repositories;
 
 namespace EMR.Data.Repositories
 {
-    public class RecordsRepository : BaseRepository<Record>
+    public class RecordsRepository : BaseRepository<Record>, IRepository<Record>
     {
         private readonly string baseQuery;
         public RecordsRepository(string conn) : base (conn)
