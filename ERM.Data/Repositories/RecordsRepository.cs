@@ -86,7 +86,7 @@ namespace EMR.Data.Repositories
             ExecuteNonQuery(sqlExpression, new SqlParameter("@parId", id));
         }
 
-        public override void SetDefaultData()
+        public void SetDefaultData()
         {
             string sqlExpression = $@"INSERT INTO [dbo].[{nameof(Record).ConvertToTableName()}](
                                                          [{nameof(Record.DiagnosisId)}]

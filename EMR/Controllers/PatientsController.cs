@@ -14,6 +14,7 @@ using EMR.Business.Services;
 using EMR.Services;
 using Microsoft.Extensions.Logging;
 using EMR.Mapper;
+using AutoMapper;
 
 namespace EMR.Controllers
 {
@@ -21,8 +22,9 @@ namespace EMR.Controllers
     {
         private readonly IPatientPageService _pageService;
         private readonly ILogger<PatientsController> _logger;
+        private readonly IMapper _mapper;
 
-        public PatientsController(IPatientPageService s, ILogger<PatientsController> logger)
+        public PatientsController(IPatientPageService s, ILogger<PatientsController> logger, IMapper mapper)
         {
             _pageService = s;
             _logger = logger;
@@ -35,6 +37,24 @@ namespace EMR.Controllers
 
             var filteredResultsCount = result.Count();
             var totalResultsCount = result.Count();
+            return Json(new
+            {
+                draw = SearchParameters.Draw,
+                recordsTotal = totalResultsCount,
+                recordsFiltered = filteredResultsCount,
+                data = result
+                .Skip(SearchParameters.Start)
+                .Take(SearchParameters.Length)
+                .ToList()
+            });
+        }
+
+        public IActionResult LoadPatientInfoTable([FromBody] PatientSearchModel SearchParameters)
+        {
+            var result = _mapper.Map<List<PatientInfo>, List<PatientInfoViewModel>>(_pageService.LoadPatientInfoTable(SearchParameters).ToList());
+
+            var filteredResultsCount = result.Count;
+            var totalResultsCount = result.Count;
             return Json(new
             {
                 draw = SearchParameters.Draw,

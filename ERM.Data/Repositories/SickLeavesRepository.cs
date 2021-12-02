@@ -22,7 +22,7 @@ namespace EMR.Data.Repositories
             return new List<SickLeave>();
         }
 
-        public override void SetDefaultData()
+        public void SetDefaultData()
         {
             string sqlExpression = $@"INSERT INTO [dbo].[{nameof(SickLeave).ConvertToTableName()}](
                                                          [{nameof(SickLeave.Number)}]

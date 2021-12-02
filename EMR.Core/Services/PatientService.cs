@@ -10,15 +10,22 @@ namespace EMR.Business.Services
     {
         private readonly IRepository<User> _userRepository;
         private readonly IPatientRepository _patientRepository;
-        public PatientService(IPatientRepository r, IRepository<User> u)
+        private readonly IPatientInfoRepository _patientInfoRepository;
+        public PatientService(IPatientRepository r, IRepository<User> u, IPatientInfoRepository patientInfoRepository)
         {
             _userRepository = u;
             _patientRepository = r;
+            _patientInfoRepository = patientInfoRepository;
         }
 
         public IEnumerable<Patient> GetByDoctorId(int doctorId)
         {
             return _patientRepository.GetByDoctorId(doctorId);
+        }
+
+        public IEnumerable<PatientInfo> GetPatientsInfo(int doctorId)
+        {
+            return _patientInfoRepository.GetPatientsInfo(doctorId);
         }
 
         public void Create(Patient model)

@@ -17,7 +17,7 @@ namespace EMR.Data.Repositories
         {
         }
 
-        public override void SetDefaultData()
+        public void SetDefaultData()
         {
             string sqlExpression = $@"INSERT INTO [dbo].[{nameof(Procedure).ConvertToTableName()}](
                                                          [{nameof(Procedure.Name)}]

@@ -47,6 +47,25 @@ namespace EMR.Services
             return result;
         }
 
+        public IQueryable<PatientInfo> LoadPatientInfoTable(PatientSearchModel searchParameters)
+        {
+            IQueryable<PatientInfo> result;
+
+                result = _patientService.GetPatientsInfo(searchParameters.DoctorId).AsQueryable();
+
+            var searchBy = searchParameters.Search?.Value;
+
+            if (!string.IsNullOrEmpty(searchBy))
+            {
+                result = result.Where(r => r.FirstName != null && r.FirstName.ToString().ToUpper().Contains(searchBy.ToUpper()) ||
+                                          r.LastName != null && r.LastName.ToString().ToUpper().Contains(searchBy.ToUpper()));
+            }
+
+            result = Order(searchParameters, result);
+
+            return result;
+        }
+
         public IEnumerable<Patient> GetByDoctorId(int doctorid)
         {
             return _patientService.GetByDoctorId(doctorid);

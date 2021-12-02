@@ -51,7 +51,7 @@ namespace EMR.Data.Repositories
             return ExecuteReader(sqlExpression, new SqlParameter("@id", id)).FirstOrDefault();
         }
 
-        public override void SetDefaultData()
+        public void SetDefaultData()
         {
             string sqlExpression = $@"INSERT INTO [dbo].[{nameof(Doctor).ConvertToTableName()}](
                                                          [{nameof(Doctor.UserId)}]

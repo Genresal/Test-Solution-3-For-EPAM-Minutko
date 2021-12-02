@@ -56,6 +56,7 @@ namespace EMR
             services.AddTransient<IRepository<User>, UserRepository>(provider => new UserRepository(conectionString));
             services.AddTransient<IRepository<Position>, PositionRepository>(provider => new PositionRepository(conectionString));
             services.AddTransient<IRepository<Doctor>, DoctorsRepository>(provider => new DoctorsRepository(conectionString));
+            services.AddTransient<IPatientInfoRepository, PatientInfoRepository>(provider => new PatientInfoRepository(conectionString));
             services.AddTransient<IPatientRepository, PatientsRepository>(provider => new PatientsRepository(conectionString));
             services.AddTransient<IRepository<Record>, RecordsRepository>(provider => new RecordsRepository(conectionString));
             services.AddTransient<IRepository<RecordTreatment>, RecordTreatmentsRepository>(provider => new RecordTreatmentsRepository(conectionString));

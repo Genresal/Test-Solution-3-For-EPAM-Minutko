@@ -96,7 +96,10 @@ namespace EMR.Business.Services
         {
             foreach(var repo in repositories)
             {
-                repo.CreateDefaultDate();
+                    if (!repo.IsTableHasRecords())
+                    {
+                        repo.SetDefaultData();
+                    }
             }
         }
         public void CreateDb()

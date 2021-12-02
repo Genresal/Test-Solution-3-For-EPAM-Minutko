@@ -6,7 +6,7 @@ namespace EMR.Business.Repositories
 {
     public interface IRepository
     {
-        public void CreateDefaultDate();
+        public void SetDefaultData();
         void DropTable();
         bool IsTableExist();
         bool IsTableHasRecords();

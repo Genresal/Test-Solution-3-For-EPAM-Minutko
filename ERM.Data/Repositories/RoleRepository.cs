@@ -22,7 +22,7 @@ namespace EMR.Data.Repositories
             return new List<Role>();
         }
 
-        public override void SetDefaultData()
+        public void SetDefaultData()
         {
             string sqlExpression = $@"INSERT INTO [dbo].[{nameof(Role).ConvertToTableName()}](
                                                         [{nameof(Role.Name)}])

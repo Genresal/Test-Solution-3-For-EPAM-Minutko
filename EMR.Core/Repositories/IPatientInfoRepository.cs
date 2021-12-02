@@ -1,16 +1,15 @@
 ﻿using EMR.Business.Models;
-using EMR.Business.Repositories;
 using System;
 using System.Collections.Generic;
 
-namespace EMR.Business.Services
+namespace EMR.Business.Repositories
 {
     /// <summary>
     /// Base repository
     /// </summary>
-    public interface IPatientService : IBusinessService<Patient>
+    /// <typeparam name="T">Business Model class</typeparam>
+    public interface IPatientInfoRepository
     {
-        IEnumerable<Patient> GetByDoctorId(int doctorId);
         IEnumerable<PatientInfo> GetPatientsInfo(int doctorId);
     }
 

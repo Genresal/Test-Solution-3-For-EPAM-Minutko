@@ -145,15 +145,6 @@ namespace EMR.Data.Repositories
         #endregion
 
         #region Table Service
-
-        public void CreateDefaultDate()
-        {
-            if (!IsTableHasRecords())
-            {
-                SetDefaultData();
-            }
-        }
-
         public void DropTable()
         {
             string sqlExpression = $@"DROP TABLE [{typeof(T).Name.ConvertToTableName()}];";
@@ -183,7 +174,6 @@ namespace EMR.Data.Repositories
 
         #region Abstract Methods
         protected abstract T Map(SqlDataReader reader);
-        public abstract void SetDefaultData();
 
         #endregion
 
