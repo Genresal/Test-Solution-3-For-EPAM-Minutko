@@ -44,6 +44,12 @@ namespace EMR.Services
                                         .Select(x => x.ToViewModel())
                                         .AsQueryable();
             }
+            else if (searchParameters.DoctorId > 0)
+            {
+                result = _recordService.GetByColumn(nameof(searchParameters.DoctorId), searchParameters.DoctorId.ToString())
+                                        .Select(x => x.ToViewModel())
+                                        .AsQueryable();
+            }
             else
             {
                 result = _recordService.GetAll()
