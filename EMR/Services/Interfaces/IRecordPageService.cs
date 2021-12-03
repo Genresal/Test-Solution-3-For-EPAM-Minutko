@@ -16,5 +16,10 @@ namespace EMR.Services
         public IEnumerable<Patient> GetPatients();
         public Patient GetPatient(int id);
         public IEnumerable<Position> GetDoctorPositions();
+
+        public RecordDetailsViewModel Details(int id);
+
+        public Record GetById(int id);
+
     }
 }

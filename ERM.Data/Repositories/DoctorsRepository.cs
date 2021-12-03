@@ -47,7 +47,7 @@ namespace EMR.Data.Repositories
 
         public override Doctor GetById(int id)
         {
-            string sqlExpression = $"{baseQuery} WHERE p.Id = @id";
+            string sqlExpression = $"{baseQuery} WHERE d.Id = @id";
             return ExecuteReader(sqlExpression, new SqlParameter("@id", id)).FirstOrDefault();
         }
 

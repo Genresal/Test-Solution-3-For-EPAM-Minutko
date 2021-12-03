@@ -124,10 +124,12 @@ namespace EMR.Data.Repositories
             model.DoctorId = (int)reader[nameof(model.DoctorId)];
             model.PatientId = (int)reader[nameof(model.PatientId)];
             model.ModifiedDate = (DateTime)reader[nameof(model.ModifiedDate)];
+            model.Doctor.Id = model.DoctorId;
             model.Diagnosis.Name = (string)reader[$"{nameof(Diagnosis)}{nameof(Diagnosis.Name)}"];
             model.Doctor.PositionId = (int)reader[$"{nameof(Doctor)}{nameof(model.Doctor.PositionId)}"];
             model.Doctor.Position.Name = (string)reader[$"{nameof(Doctor)}{nameof(model.Doctor.Position.Name)}"];
             model.Doctor.UserId = (int)reader[$"{nameof(Doctor)}{nameof(model.Doctor.UserId)}"];
+            model.Patient.Id = model.PatientId;
             model.Patient.Job = (string)reader[$"{nameof(Patient)}{nameof(model.Patient.Job)}"];
             model.Patient.UserId = (int)reader[$"{nameof(Patient)}{nameof(model.Patient.UserId)}"];
             model.Doctor.User.FirstName = (string)reader[$"{nameof(Doctor)}{nameof(model.Doctor.User.FirstName)}"];

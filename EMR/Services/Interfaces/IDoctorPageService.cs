@@ -10,5 +10,6 @@ namespace EMR.Services
     public interface IDoctorPageService : IBasePageService<Doctor>
     {
         public Doctor GetByLogin(string login);
+        public Doctor GetById(int id);
     }
 }

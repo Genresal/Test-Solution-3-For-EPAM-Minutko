@@ -1,4 +1,4 @@
-﻿@model EMR.Business.Models.SickLeave
+﻿@model SickLeaveViewModel
 
 <h3 class="profile-username text-center">
     <span>№ </span>
@@ -7,12 +7,8 @@
 
 <hr>
 
-<strong><i class="fas fa-briefcase-medical mr-1"></i> Position</strong>
+<strong><i class="far fa-calendar-alt"></i> Validity</strong>
 
-<p class="text-muted">@Model.StartDate</p>
-
-<hr>
-
-<strong><i class="fas fa-phone mr-1"></i> Phone number</strong>
-
-<p class="text-muted">@Model.FinalDate</p>
+<p class="text-muted">
+    @Model.StartDate.ToString("MM/dd/yyyy") - @Model.FinalDate.ToString("MM/dd/yyyy")
+</p>

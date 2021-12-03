@@ -12,5 +12,7 @@ namespace EMR.Services
     {
         public bool IsLoginExist(string login);
         public User GetUserByLogin(string login);
+
+        public User GetById(int id);
     }
 }

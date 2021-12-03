@@ -1,5 +1,4 @@
-﻿@using EMR.Business.Models;
-@model Record
+﻿@model RecordDetailsViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -9,7 +8,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">Patient</h3>
@@ -17,12 +16,12 @@
             <!-- /.card-header -->
             <div class="card-body">
                 @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model.Patient)
-                <a href="/PatientsController/Details?id=@Model.Patient.Id" class="btn btn-primary btn-block"><b>View patient profile</b></a>
-                <a href="/PatientsController/Update?id=@Model.Patient.Id" class="btn btn-primary btn-block"><b>Edit Patient</b></a>
+                <a href="/Patients/Details?id=@Model.Patient.Id" class="btn btn-primary btn-block"><b>View profile</b></a>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
+
+    <div class="col-md-4">
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">Doctor</h3>
@@ -30,32 +29,7 @@
             <!-- /.card-header -->
             <div class="card-body">
                 @await Html.PartialAsync("~/Views/Doctors/_DoctorDetailsPartialView.cshtml", Model.Doctor)
-                <a href="/DoctorsController/Details?id=@Model.Doctor.Id" class="btn btn-primary btn-block"><b>View doctor profile</b></a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title">Used drugs for the case</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-                @await Html.PartialAsync("~/Views/Drugs/_DrugsTable.cshtml", new DrugSearchModel() { RecordId = Model.Id })
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title">Procedures</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-                @await Html.PartialAsync("~/Views/Procedures/_ProceduresTable.cshtml", new ProcedureSearchModel() { RecordId = Model.Id })
+                <a href="/Doctors/Details?id=@Model.Doctor.Id" class="btn btn-primary btn-block"><b>View profile</b></a>
             </div>
         </div>
     </div>
@@ -71,6 +45,32 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Used drugs for the case</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                @await Html.PartialAsync("~/Views/Drugs/_DrugsTable.cshtml", new DrugSearchModel() { RecordId = Model.Id })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Procedures</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                @await Html.PartialAsync("~/Views/Procedures/_ProceduresTable.cshtml", new ProcedureSearchModel() { RecordId = Model.Id })
+            </div>
+        </div>
+    </div>
+
 </div>
 
 

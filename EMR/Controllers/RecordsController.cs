@@ -135,7 +135,7 @@ namespace EMR.Controllers
         // GET: HomeController/Details/5
         public IActionResult Details(int id)
         {
-            return View(_pageService.GetById(id));
+            return View(_pageService.Details(id));
         }
     }
 }

@@ -12,5 +12,7 @@ namespace EMR.Services
         public IEnumerable<PatientViewModel> LoadTable(PatientSearchModel searchParameters);
         public IEnumerable<PatientInfoViewModel> LoadPatientInfoTable(PatientInfoSearchModel searchParameters);
         public Patient GetByLogin(string login);
+
+        public Patient GetById(int id);
     }
 }

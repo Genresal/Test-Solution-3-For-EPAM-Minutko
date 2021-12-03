@@ -105,10 +105,17 @@ namespace EMR.Services
             return result;
         }
 
+        public RecordDetailsViewModel Details(int id)
+        {
+            var rawResult = _recordService.GetById(id);
+            var result = _mapper.Map<Record, RecordDetailsViewModel>(rawResult);
+
+            return result;
+        }
+
         public Record GetById(int id)
         {
-            Record result = _recordService.GetById(id);
-            return result;
+            return _recordService.GetById(id);
         }
 
         public void Create(Record item)
