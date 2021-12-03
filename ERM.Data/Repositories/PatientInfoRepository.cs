@@ -21,7 +21,8 @@ namespace EMR.Data.Repositories
                 string sqlExpression = $"SELECT [PatientId], " +
                     $"COUNT(t.Id) as {nameof(PatientInfo.RecordsNumber)}, " +
                     $"MAX([ModifiedDate]) as {nameof(PatientInfo.LastRecordModified)}, " +
-                    $"(SELECT CONCAT([FirstName], ' ', [LastName]) FROM [tUser] WHERE [Id] = MAX(p.UserId)) as {nameof(PatientInfo.FullName)} " +
+                    $"(SELECT [FirstName] FROM [tUser] WHERE [Id] = MAX(p.UserId)) as {nameof(PatientInfo.FirstName)}, " +
+                    $"(SELECT [LastName] FROM [tUser] WHERE [Id] = MAX(p.UserId)) as {nameof(PatientInfo.LastName)} " +
                     $"FROM [tRecord] as t " +
                     $"LEFT JOIN [tPatient] as p on p.Id = t.PatientId " +
                     $"WHERE [DoctorId] = @doctorId " +
@@ -37,7 +38,8 @@ namespace EMR.Data.Repositories
             model.PatientId = (int)reader[nameof(model.PatientId)];
             model.RecordsNumber = (int)reader[nameof(model.RecordsNumber)];
             model.LastRecordModified = (DateTime)reader[nameof(model.LastRecordModified)];
-            model.FullName = (string)reader[nameof(model.FullName)];
+            model.FirstName = (string)reader[nameof(model.FirstName)];
+            model.LastName = (string)reader[nameof(model.LastName)];
 
             return model;
         }

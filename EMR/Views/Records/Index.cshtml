@@ -33,7 +33,7 @@
                     <th>@Html.DisplayNameFor(value => _model.Id)</th>
                     <th>@Html.DisplayNameFor(value => _model.Diagnosis)</th>
                     <th>@Html.DisplayNameFor(value => _model.PatientName)</th>
-                    <th>@Html.DisplayNameFor(value => _model.Doctor)</th>
+                    <th>@Html.DisplayNameFor(value => _model.DoctorName)</th>
                     <th>@Html.DisplayNameFor(value => _model.DoctorPosition)</th>
                     <th>@Html.DisplayNameFor(value => _model.ModifiedDate)</th>
                     <th>Actions</th>
@@ -48,7 +48,7 @@
 @{
     var gridModel = new DataTablesModel
     {
-        StateSave = false, //save state
+        StateSave = true,
         AutoWidth = true,
         Processing = true,
         ServerSide = true,
@@ -65,7 +65,7 @@
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id)));
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Diagnosis)));
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.PatientName)));
-    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Doctor)));
+    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.DoctorName)));
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.DoctorPosition)));
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.ModifiedDate))
     {

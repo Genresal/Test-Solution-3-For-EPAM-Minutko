@@ -27,9 +27,12 @@
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">Records</h3>
+                <div class="card-tools">
+                    <a asp-action="LastRecords"><button class="btn btn-sm btn-info btn-flat margin-r-5">Last show records</button></a>
+                </div>
             </div>
             <div class="card-body">
-                @await Html.PartialAsync("~/Views/Patients/_PatientsInfoTable.cshtml", new EMR.ViewModels.PatientSearchModel() { DoctorId = Model.Id })
+                @await Html.PartialAsync("~/Views/Patients/_PatientsInfoTable.cshtml", new EMR.ViewModels.PatientInfoSearchModel() { DoctorId = Model.Id })
             </div>
         </div>
     </div>

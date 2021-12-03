@@ -22,13 +22,13 @@ namespace EMR.Controllers
     {
         private readonly IPatientPageService _pageService;
         private readonly ILogger<PatientsController> _logger;
-        private readonly IMapper _mapper;
 
-        public PatientsController(IPatientPageService s, ILogger<PatientsController> logger, IMapper mapper)
+
+        public PatientsController(IPatientPageService s, ILogger<PatientsController> logger)
         {
             _pageService = s;
             _logger = logger;
-            _mapper = mapper;
+
         }
 
         [HttpPost]
@@ -46,17 +46,15 @@ namespace EMR.Controllers
                 data = result
                 .Skip(SearchParameters.Start)
                 .Take(SearchParameters.Length)
-                .ToList()
             });
         }
 
-        public IActionResult LoadPatientInfoTable([FromBody] PatientSearchModel SearchParameters)
+        public IActionResult LoadPatientInfoTable([FromBody] PatientInfoSearchModel SearchParameters)
         {
-            var rawResults = _pageService.LoadPatientInfoTable(SearchParameters).ToList();
-            var result = _mapper.Map<List<PatientInfo>, List<PatientInfoViewModel>>(rawResults);
+            var result = _pageService.LoadPatientInfoTable(SearchParameters);
 
-            var filteredResultsCount = result.Count;
-            var totalResultsCount = result.Count;
+            var filteredResultsCount = result.Count();
+            var totalResultsCount = result.Count();
             return Json(new
             {
                 draw = SearchParameters.Draw,
@@ -65,7 +63,6 @@ namespace EMR.Controllers
                 data = result
                 .Skip(SearchParameters.Start)
                 .Take(SearchParameters.Length)
-                .ToList()
             });
         }
 

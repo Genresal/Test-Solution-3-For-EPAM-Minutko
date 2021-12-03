@@ -1,4 +1,5 @@
-﻿using EMR.Business.Models;
+﻿using AutoMapper;
+using EMR.Business.Models;
 using EMR.Business.Services;
 using EMR.Mapper;
 using EMR.ViewModels;
@@ -12,28 +13,29 @@ namespace EMR.Services
     public class PatientPageService : BaseTableService, IPatientPageService
     {
         readonly IPatientService _patientService;
+        private readonly IMapper _mapper;
 
-        public PatientPageService(IPatientService p)
+
+        public PatientPageService(IPatientService p, IMapper mapper)
         {
             _patientService = p;
+            _mapper = mapper;
         }
 
-        public IQueryable<PatientViewModel> LoadTable(PatientSearchModel searchParameters)
+        public IEnumerable<PatientViewModel> LoadTable(PatientSearchModel searchParameters)
         {
-            IQueryable<PatientViewModel> result;
+            IEnumerable<Patient> rawResult;
 
             if (searchParameters.DoctorId > 0)
             {
-                result = _patientService.GetByDoctorId(searchParameters.DoctorId)
-                                        .Select(x => x.ToViewModel())
-                                        .AsQueryable();
+                rawResult = _patientService.GetByDoctorId(searchParameters.DoctorId);
             }
             else
             {
-                result = _patientService.GetAll()
-                                        .Select(x => x.ToViewModel())
-                                        .AsQueryable();
+                rawResult = _patientService.GetAll();
             }
+
+            var result = _mapper.Map<IEnumerable<Patient>, IEnumerable<PatientViewModel>>(rawResult);
 
             var searchBy = searchParameters.Search?.Value;
 
@@ -47,14 +49,35 @@ namespace EMR.Services
             return result;
         }
 
-        public IQueryable<PatientInfo> LoadPatientInfoTable(PatientSearchModel searchParameters)
+        public IEnumerable<PatientInfoViewModel> LoadPatientInfoTable(PatientInfoSearchModel searchParameters)
         {
-            IQueryable<PatientInfo> result;
+            var rawResult = _patientService.GetPatientsInfo(searchParameters.DoctorId);
+            var result = _mapper.Map<IEnumerable<PatientInfo>, IEnumerable<PatientInfoViewModel>>(rawResult);
 
-                result = _patientService.GetPatientsInfo(searchParameters.DoctorId).AsQueryable();
+            DateTime startDate = new DateTime();
+            DateTime endDate = new DateTime();
+
+            if (!string.IsNullOrEmpty(searchParameters.DateRange.Start))
+            {
+                startDate = DateTime.Parse(searchParameters.DateRange.Start);
+            }
+
+            if (!string.IsNullOrEmpty(searchParameters.DateRange.End))
+            {
+                endDate = DateTime.Parse(searchParameters.DateRange.End);
+            }
+
+            if (startDate != DateTime.MinValue)
+            {
+                result = result.Where(u => u.LastRecordModified >= startDate);
+            }
+
+            if (endDate != DateTime.MinValue)
+            {
+                result = result.Where(u => u.LastRecordModified <= endDate);
+            }
 
             var searchBy = searchParameters.Search?.Value;
-
             if (!string.IsNullOrEmpty(searchBy))
             {
                 result = result.Where(r => r.FullName != null && r.FullName.ToString().ToUpper().Contains(searchBy.ToUpper()));

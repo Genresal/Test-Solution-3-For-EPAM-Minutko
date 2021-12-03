@@ -9,11 +9,11 @@ namespace EMR.Services
 {
     public interface IRecordPageService : IBasePageService<Record>
     {
-        public IQueryable<RecordViewModel> LoadTable(RecordSearchModel searchParameters);
-        public IQueryable<Drug> LoadDrugTable(DrugSearchModel searchParameters);
-        public IQueryable<Procedure> LoadProcedureTable(ProcedureSearchModel searchParameters);
-        public List<Doctor> GetDoctors();
-        public List<Patient> GetPatients();
+        public IEnumerable<RecordViewModel> LoadTable(RecordSearchModel searchParameters);
+        public IEnumerable<Drug> LoadDrugTable(DrugSearchModel searchParameters);
+        public IEnumerable<Procedure> LoadProcedureTable(ProcedureSearchModel searchParameters);
+        public IEnumerable<Doctor> GetDoctors();
+        public IEnumerable<Patient> GetPatients();
         public Patient GetPatient(int id);
         public IEnumerable<Position> GetDoctorPositions();
     }

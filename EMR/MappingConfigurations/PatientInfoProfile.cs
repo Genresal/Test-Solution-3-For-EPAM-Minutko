@@ -8,7 +8,8 @@ namespace EMR.MappingConfigurations
     {
         public PatientInfoProfile()
         {
-            CreateMap<PatientInfo, PatientInfoViewModel>();
+            CreateMap<PatientInfo, PatientInfoViewModel>()
+                .ForMember(dest => dest.FullName, act => act.MapFrom(src => $"{src.FirstName} {src.LastName}"));
         }
     }
 }

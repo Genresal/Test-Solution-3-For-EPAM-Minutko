@@ -1,19 +1,20 @@
-﻿@model EMR.ViewModels.PatientSearchModel
+﻿@model EMR.ViewModels.PatientInfoSearchModel
 @using EMR.DataTables
 @{
 
     var _model = new EMR.ViewModels.PatientInfoViewModel();
     var _filters = new List<FilterParameter>
 {
-        new FilterParameter(nameof(Model.DoctorId), Model.DoctorId, typeof(int))
-                                };
+        new FilterParameter(nameof(Model.DoctorId), Model.DoctorId, typeof(int)),
+        new FilterParameter(nameof(Model.DateRange), Model.DateRange, Html.DisplayNameFor(value => Model.DateRange))
+};
 }
 
 <div class="row">
     <div class="col-md-2">
         @await Html.PartialAsync("_Filters", _filters)
 
-        <form method="post" action="~/Patients/Details">
+        <form method="post" action="~/Doctors/Details">
             <div class="form-group">
                 <input type="submit" value="Reset Filters" class="btn btn-secondary btn btn-block" />
             </div>
@@ -21,7 +22,7 @@
     </div>
 
     <div class="col-md-10">
-        <table id="table" class="table table-sm table-striped table-bordered h-auto" style="width:100%">
+        <table id="patientsInfoTable" class="table table-sm table-striped table-bordered h-auto" style="width:100%">
             <thead>
                 <tr>
                     <th>@Html.DisplayNameFor(value => _model.PatientId)</th>
@@ -44,10 +45,10 @@
         ServerSide = true,
         Paging = true,
         Searching = true,
-        Order = "0, 'desc'",
+        Order = "3, 'desc'",
         LengthMenu = "12, 24, 100, 500",
         PageLength = 12,
-        Name = "table",
+        Name = "patientsInfoTable",
         Url = "/Patients/LoadPatientInfoTable",
         Filters = _filters
     };

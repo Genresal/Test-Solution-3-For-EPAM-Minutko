@@ -20,13 +20,6 @@ namespace EMR.ViewModels
         public string Email { get; set; }
         public string Job { get; set; }
         public string PhotoUrl { get; set; }
-
-        public string FullName
-        {
-            get
-            {
-                return $"{FirstName} {LastName}";
-            }
-        }
+        public string FullName { get; set; }
     }
 }
