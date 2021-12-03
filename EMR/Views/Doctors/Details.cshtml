@@ -29,21 +29,11 @@
                 <h3 class="card-title">Records</h3>
             </div>
             <div class="card-body">
-                @await Html.PartialAsync("~/Views/Patients/_DoctorPatientsTable.cshtml", new EMR.ViewModels.PatientSearchModel() { DoctorId = Model.Id })
+                @await Html.PartialAsync("~/Views/Patients/_PatientsInfoTable.cshtml", new EMR.ViewModels.PatientSearchModel() { DoctorId = Model.Id })
             </div>
         </div>
     </div>
 </div>
 
-<div class="col-md-10">
-    <div class="card card-primary card-outline">
-        <div class="card-header">
-            <h3 class="card-title">Records</h3>
-        </div>
-        <div class="card-body">
-            @await Html.PartialAsync("~/Views/Records/_DoctorRecordsTable.cshtml", new EMR.ViewModels.RecordSearchModel() { DoctorId = Model.Id })
-        </div>
-    </div>
-</div>
 
 

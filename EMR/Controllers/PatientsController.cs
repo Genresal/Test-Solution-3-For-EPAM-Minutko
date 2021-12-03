@@ -28,6 +28,7 @@ namespace EMR.Controllers
         {
             _pageService = s;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -51,7 +52,8 @@ namespace EMR.Controllers
 
         public IActionResult LoadPatientInfoTable([FromBody] PatientSearchModel SearchParameters)
         {
-            var result = _mapper.Map<List<PatientInfo>, List<PatientInfoViewModel>>(_pageService.LoadPatientInfoTable(SearchParameters).ToList());
+            var rawResults = _pageService.LoadPatientInfoTable(SearchParameters).ToList();
+            var result = _mapper.Map<List<PatientInfo>, List<PatientInfoViewModel>>(rawResults);
 
             var filteredResultsCount = result.Count;
             var totalResultsCount = result.Count;

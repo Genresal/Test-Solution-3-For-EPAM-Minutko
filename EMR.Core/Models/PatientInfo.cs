@@ -11,7 +11,6 @@ namespace EMR.Business.Models
         public int PatientId { get; set; }
         public int RecordsNumber { get; set; }
         public DateTime LastRecordModified { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string FullName { get; set; }
     }
 }

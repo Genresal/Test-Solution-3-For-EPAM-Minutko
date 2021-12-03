@@ -57,8 +57,7 @@ namespace EMR.Services
 
             if (!string.IsNullOrEmpty(searchBy))
             {
-                result = result.Where(r => r.FirstName != null && r.FirstName.ToString().ToUpper().Contains(searchBy.ToUpper()) ||
-                                          r.LastName != null && r.LastName.ToString().ToUpper().Contains(searchBy.ToUpper()));
+                result = result.Where(r => r.FullName != null && r.FullName.ToString().ToUpper().Contains(searchBy.ToUpper()));
             }
 
             result = Order(searchParameters, result);
