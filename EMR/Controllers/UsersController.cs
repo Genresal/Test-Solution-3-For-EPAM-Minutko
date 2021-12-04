@@ -4,17 +4,43 @@ using EMR.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 
 namespace EMR.Controllers
 {
-    public class UserController : Controller
+    public class UsersController : Controller
     {
         private readonly IUserPageService _pageService;
         private readonly ILogger<PatientsController> _logger;
-        public UserController(IUserPageService s, ILogger<PatientsController> logger)
+        public UsersController(IUserPageService s, ILogger<PatientsController> logger)
         {
             _pageService = s;
             _logger = logger;
+        }
+
+        public IActionResult Index()
+        {
+            UserSearchModel searchModel = new UserSearchModel();
+
+            return View(searchModel);
+        }
+
+        public IActionResult LoadTable([FromBody] UserSearchModel SearchParameters)
+        {
+            var result = _pageService.LoadTable(SearchParameters);
+
+            var filteredResultsCount = result.Count();
+            var totalResultsCount = result.Count();
+            return Json(new
+            {
+                draw = SearchParameters.Draw,
+                recordsTotal = totalResultsCount,
+                recordsFiltered = filteredResultsCount,
+                data = result
+                .Skip(SearchParameters.Start)
+                .Take(SearchParameters.Length)
+                .ToList()
+            });
         }
 
         public IActionResult AddOrEdit(int id = 0)
@@ -63,7 +89,7 @@ namespace EMR.Controllers
             return View(model);
         }
 
-        public IActionResult Details(int id = 3)
+        public IActionResult Details(int id)
         {
             return View(_pageService.GetById(id));
         }

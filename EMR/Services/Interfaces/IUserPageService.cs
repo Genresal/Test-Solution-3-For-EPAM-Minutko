@@ -10,6 +10,7 @@ namespace EMR.Services
 {
     public interface IUserPageService : IBasePageService<UserViewModel>
     {
+        public IEnumerable<UserViewModel> LoadTable(UserSearchModel searchParameters);
         public bool IsLoginExist(string login);
         public User GetUserByLogin(string login);
 
