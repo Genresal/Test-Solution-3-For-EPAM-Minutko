@@ -1,20 +1,11 @@
-﻿using EMR.Helpers;
-using EMR.DataTables;
-using EMR.Business.Models;
+﻿using EMR.Business.Models;
+using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Threading.Tasks;
-using EMR.Business.Services;
-using EMR.Services;
 using Microsoft.Extensions.Logging;
-using EMR.Mapper;
-using AutoMapper;
+using System;
+using System.Linq;
 
 namespace EMR.Controllers
 {
@@ -68,13 +59,13 @@ namespace EMR.Controllers
 
         public IActionResult Details(int id = 0)
         {
-            if (id ==  0 && HttpContext.User.Identity.IsAuthenticated)
+            if (id == 0 && HttpContext.User.Identity.IsAuthenticated)
             {
                 string login = HttpContext.User.Identity.Name;
-                return View(_pageService.GetByLogin(login).ToViewModel());
+                return View(_pageService.GetByLogin(login));
             }
 
-            return View(_pageService.GetById(id).ToViewModel());
+            return View(_pageService.GetById(id));
         }
 
         public IActionResult AddOrEdit(int id = 0)
@@ -87,7 +78,7 @@ namespace EMR.Controllers
             }
             else
             {
-                var model = _pageService.GetById(id).ToViewModel();
+                var model = _pageService.GetById(id);
                 if (model == null)
                 {
                     return NotFound();
@@ -97,21 +88,21 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddOrEdit(int id, [Bind("Id,Job,Login,Password,UserId,RoleId,FirstName,LastName,Birthday,PhoneNumber,Email,PhotoUrl")] PatientViewModel model)
+        public IActionResult AddOrEdit(int id, PatientViewModel model)
         {
             if (ModelState.IsValid)
             {
                 //Insert
                 if (id == 0)
                 {
-                    _pageService.Create(model.ToModel());
+                    _pageService.Create(model);
                 }
                 //Update
                 else
                 {
                     try
                     {
-                        _pageService.Update(model.ToModel());
+                        _pageService.Update(model);
                     }
                     catch (Exception)
                     {
@@ -123,11 +114,11 @@ namespace EMR.Controllers
             return View(model);
         }
 
-                // GET: HomeController/Delete/5
+        // GET: HomeController/Delete/5
         public IActionResult Delete(int id)
         {
             _pageService.Delete(id);
             return RedirectToAction(nameof(Index));
-        }      
+        }
     }
 }

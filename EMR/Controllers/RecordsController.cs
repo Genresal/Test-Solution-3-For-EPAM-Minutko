@@ -81,7 +81,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddOrEdit(int id, [Bind("Id,PatientId,Diagnosis,DoctorId,SickLeaveId,ModifyData")] Record model)
+        public IActionResult AddOrEdit(int id, RecordViewModel model)
         {
             if (ModelState.IsValid)
             {

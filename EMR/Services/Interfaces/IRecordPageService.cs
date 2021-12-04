@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EMR.Services
 {
-    public interface IRecordPageService : IBasePageService<Record>
+    public interface IRecordPageService : IBasePageService<RecordViewModel>
     {
         public IEnumerable<RecordViewModel> LoadTable(RecordSearchModel searchParameters);
         public IEnumerable<Doctor> GetDoctors();

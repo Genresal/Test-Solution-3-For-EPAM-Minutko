@@ -1,29 +1,19 @@
-﻿using EMR.Business.Models;
+﻿using AutoMapper;
+using EMR.Business.Models;
 using EMR.Business.Services;
-using EMR.Mapper;
+using EMR.Helpers;
 using EMR.ViewModels;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
-using EMR.Helpers;
 
 namespace EMR.Services
 {
-    public class DrugPageService : BasePageService<Drug>, IDrugPageService
+    public class DrugPageService : BasePageService<Drug, DrugViewModel>, IDrugPageService
     {
         private readonly IDrugService _drugService;
-        private readonly IMapper _mapper;
-        public DrugPageService(IDrugService drugService, IMapper mapper) : base(drugService)
+        public DrugPageService(IDrugService drugService, IMapper mapper) : base(drugService, mapper)
         {
             _drugService = drugService;
-            _mapper = mapper;
         }
 
         public IEnumerable<DrugViewModel> LoadTable(DrugSearchModel searchParameters)

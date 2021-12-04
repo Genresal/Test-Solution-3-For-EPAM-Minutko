@@ -9,28 +9,23 @@ using EMR.Helpers;
 
 namespace EMR.Services
 {
-    public class RecordPageService : BasePageService<Record>, IRecordPageService
+    public class RecordPageService : BasePageService<Record, RecordViewModel>, IRecordPageService
     {
         private readonly IBusinessService<Record> _recordService;
         private readonly IDoctorService _doctorService;
         private readonly IPatientService _patientService;
         private readonly IBusinessService<Position> _positionService;
-        private readonly ITreatmentService _treatmentService;
-        private readonly IMapper _mapper;
 
-        public RecordPageService(IBusinessService<Record> sr
-            , IDoctorService d
-            , IPatientService p
-            , IBusinessService<Position> sp
-            , ITreatmentService t
-            , IMapper mapper) : base(sr)
+        public RecordPageService(IBusinessService<Record> recordService
+            , IDoctorService doctorService
+            , IPatientService patientService
+            , IBusinessService<Position> positionService
+            , IMapper mapper) : base(recordService, mapper)
         {
-            _recordService = sr;
-            _doctorService = d;
-            _patientService = p;
-            _positionService = sp;
-            _treatmentService = t;
-            _mapper = mapper;
+            _recordService = recordService;
+            _doctorService = doctorService;
+            _patientService = patientService;
+            _positionService = positionService;
         }
 
         public IEnumerable<Position> GetDoctorPositions()

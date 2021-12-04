@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+﻿using EMR.Business.Models;
+using EMR.Services;
+using EMR.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using EMR.ViewModels;
-using EMR.Services;
-using Microsoft.Extensions.Logging;
-using EMR.Business.Models;
-using EMR.Mapper;
-using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace EMR.Controllers
 {
@@ -74,11 +72,12 @@ namespace EMR.Controllers
             {
                 if (!_pageService.IsLoginExist(model.Login))
                 {
+                    
                     return model.RoleId switch
                     {
-                        1 => RedirectToAction("Patient", "AddOrEdit", model.ToPatient()),
-                        2 => RedirectToAction("Doctor", "AddOrEdit", model.ToDoctor()),
-                        _ => RedirectToAction("User", "AddOrEdit", model.ToServiceUser()),
+                        1 => RedirectToAction("Patients", "Details"),
+                        2 => RedirectToAction("Doctors", "Details"),
+                        _ => RedirectToAction("Home", "Index"),
                     };
                 }
                 else
@@ -108,17 +107,6 @@ namespace EMR.Controllers
                 ClaimsIdentity.DefaultRoleClaimType);
             // установка аутентификационных куки
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
-        }
-
-        public IActionResult Details(int id = 3)
-        {
-            return View(_pageService.GetById(id).ToViewModel());
-        }
-
-        public IActionResult Delete(int id)
-        {
-            _pageService.Delete(id);
-            return RedirectToAction(nameof(Index));
         }
     }
 }

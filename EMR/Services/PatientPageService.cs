@@ -1,25 +1,21 @@
 ﻿using AutoMapper;
 using EMR.Business.Models;
 using EMR.Business.Services;
-using EMR.Mapper;
+using EMR.Helpers;
 using EMR.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using EMR.Helpers;
 
 namespace EMR.Services
 {
-    public class PatientPageService : BasePageService<Patient>, IPatientPageService
+    public class PatientPageService : BasePageService<Patient, PatientViewModel>, IPatientPageService
     {
         readonly IPatientService _patientService;
-        private readonly IMapper _mapper;
 
-        public PatientPageService(IPatientService p, IMapper mapper) : base(p)
+        public PatientPageService(IPatientService patientService, IMapper mapper) : base(patientService, mapper)
         {
-            _patientService = p;
-            _mapper = mapper;
+            _patientService = patientService;
         }
 
         public IEnumerable<PatientViewModel> LoadTable(PatientSearchModel searchParameters)

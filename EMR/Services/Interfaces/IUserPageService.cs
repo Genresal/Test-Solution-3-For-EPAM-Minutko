@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace EMR.Services
 {
-    public interface IUserPageService : IBasePageService<User>
+    public interface IUserPageService : IBasePageService<UserViewModel>
     {
         public bool IsLoginExist(string login);
         public User GetUserByLogin(string login);
 
-        public User GetById(int id);
     }
 }

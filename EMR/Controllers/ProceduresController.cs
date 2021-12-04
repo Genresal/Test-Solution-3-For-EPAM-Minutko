@@ -60,7 +60,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddOrEdit(int id, Procedure model)
+        public IActionResult AddOrEdit(int id, ProcedureViewModel model)
         {
             if (ModelState.IsValid)
             {

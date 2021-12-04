@@ -1,23 +1,21 @@
-﻿using EMR.Business.Models;
+﻿using AutoMapper;
+using EMR.Business.Models;
 using EMR.Business.Services;
-using EMR.Mapper;
 using EMR.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace EMR.Services
 {
-    public class DoctorPageService : BasePageService<Doctor>, IDoctorPageService
+    public class DoctorPageService : BasePageService<Doctor, DoctorViewModel>, IDoctorPageService
     {
-        public DoctorPageService(IDoctorService doctorService) : base(doctorService)
+        public DoctorPageService(IDoctorService doctorService, IMapper mapper) : base(doctorService, mapper)
         {
         }
 
-        public Doctor GetByLogin(string login)
+        public DoctorViewModel GetByLogin(string login)
         {
-            return _mainService.GetByColumn(nameof(User.Login), login).FirstOrDefault();
+            var model = _mainService.GetByColumn(nameof(User.Login), login).FirstOrDefault();
+            return _mapper.Map<Doctor, DoctorViewModel>(model);
         }
     }
 }

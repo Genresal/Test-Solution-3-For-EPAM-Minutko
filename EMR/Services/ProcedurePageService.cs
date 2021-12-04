@@ -1,30 +1,20 @@
-﻿using EMR.Business.Models;
+﻿using AutoMapper;
+using EMR.Business.Models;
 using EMR.Business.Services;
-using EMR.Mapper;
+using EMR.Helpers;
 using EMR.ViewModels;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using EMR.Helpers;
-using AutoMapper;
 
 namespace EMR.Services
 {
-    public class ProcedurePageService : BasePageService<Procedure>, IProcedurePageService
+    public class ProcedurePageService : BasePageService<Procedure, ProcedureViewModel>, IProcedurePageService
     {
         private readonly IProcedureService _procedureService;
-        private readonly IMapper _mapper;
 
-        public ProcedurePageService(IProcedureService procedureService, IMapper mapper) : base(procedureService)
+        public ProcedurePageService(IProcedureService procedureService, IMapper mapper) : base(procedureService, mapper)
         {
             _procedureService = procedureService;
-            _mapper = mapper;
         }
 
         public IEnumerable<ProcedureViewModel> LoadTable(ProcedureSearchModel searchParameters)

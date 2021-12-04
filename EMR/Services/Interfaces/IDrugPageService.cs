@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EMR.Services
 {
-    public interface IDrugPageService : IBasePageService<Drug>
+    public interface IDrugPageService : IBasePageService<DrugViewModel>
     {
         public IEnumerable<DrugViewModel> LoadTable(DrugSearchModel searchParameters);
     }

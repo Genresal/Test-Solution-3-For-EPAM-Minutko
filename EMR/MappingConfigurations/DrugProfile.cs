@@ -8,7 +8,8 @@ namespace EMR.MappingConfigurations
     {
         public DrugProfile()
         {
-            CreateMap<Drug, DrugViewModel>();
+            CreateMap<Drug, DrugViewModel>()
+                .ReverseMap();
         }
     }
 }

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace EMR.Services
 {
-    public interface IDoctorPageService : IBasePageService<Doctor>
+    public interface IDoctorPageService : IBasePageService<DoctorViewModel>
     {
-        public Doctor GetByLogin(string login);
-        public Doctor GetById(int id);
+        public DoctorViewModel GetByLogin(string login);
     }
 }

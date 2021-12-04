@@ -1,14 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using EMR.ViewModels;
+﻿using EMR.Business.Models;
 using EMR.Services;
+using EMR.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using EMR.Business.Models;
-using EMR.Mapper;
 using System;
 
 namespace EMR.Controllers
@@ -33,7 +27,7 @@ namespace EMR.Controllers
             }
             else
             {
-                var model = _pageService.GetById(id).ToViewModel();
+                var model = _pageService.GetById(id);
                 if (model == null)
                 {
                     return NotFound();
@@ -43,21 +37,21 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddOrEdit(int id, [Bind("Id,RoleId,FirstName,LastName,Birthday,PhoneNumber,Email,PhotoUrl")] ServiceUserViewModel model)
+        public IActionResult AddOrEdit(int id, UserViewModel model)
         {
             if (ModelState.IsValid)
             {
                 //Insert
                 if (id == 0)
                 {
-                    _pageService.Create(model.ToModel());
+                    _pageService.Create(model);
                 }
                 //Update
                 else
                 {
                     try
                     {
-                    _pageService.Update(model.ToModel());
+                        _pageService.Update(model);
                     }
                     catch (Exception)
                     {
@@ -71,7 +65,7 @@ namespace EMR.Controllers
 
         public IActionResult Details(int id = 3)
         {
-            return View(_pageService.GetById(id).ToViewModel());
+            return View(_pageService.GetById(id));
         }
 
         public IActionResult Delete(int id)

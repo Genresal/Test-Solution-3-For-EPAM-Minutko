@@ -1,53 +1,28 @@
-﻿using EMR.Business.Models;
+﻿using AutoMapper;
+using EMR.Business.Models;
 using EMR.Business.Services;
-using EMR.Mapper;
 using EMR.ViewModels;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace EMR.Services
 {
-    public class UserPageService : IUserPageService
+    public class UserPageService : BasePageService<User, UserViewModel>, IUserPageService
     {
-        readonly IBusinessService<User> _service;
+        readonly IBusinessService<User> _pageService;
 
-        public UserPageService(IBusinessService<User> s)
+        public UserPageService(IBusinessService<User> userService, IMapper mapper) : base(userService, mapper)
         {
-            _service = s;
+            _pageService = userService;
         }
 
         public bool IsLoginExist(string login)
         {
-            return _service.GetByColumn(nameof(User.Login), login).Any();
+            return _pageService.GetByColumn(nameof(User.Login), login).Any();
         }
 
         public User GetUserByLogin(string login)
         {
-            return _service.GetByColumn(nameof(User.Login), login).FirstOrDefault();
-        }
-
-        public User GetById(int id)
-        {
-            return _service.GetById(id);
-        }
-        public void Create(User item)
-        {
-            _service.Create(item);
-        }
-        public void Update(User item)
-        {
-            _service.Update(item);
-        }
-        public void Delete(int id)
-        {
-            _service.Delete(id);
+            return _pageService.GetByColumn(nameof(User.Login), login).FirstOrDefault();
         }
     }
 }

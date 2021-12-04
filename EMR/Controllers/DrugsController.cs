@@ -44,7 +44,7 @@ namespace EMR.Controllers
         {
             if (id == 0)
             {
-                var model = new Drug();
+                var model = new DrugViewModel();
                 model.Id = 0;
                 return View(model);
             }
@@ -60,7 +60,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddOrEdit(int id, Drug model)
+        public IActionResult AddOrEdit(int id, DrugViewModel model)
         {
             if (ModelState.IsValid)
             {
