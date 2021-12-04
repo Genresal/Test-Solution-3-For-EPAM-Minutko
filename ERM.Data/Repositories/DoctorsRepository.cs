@@ -31,7 +31,7 @@ namespace EMR.Data.Repositories
   $"dp.{nameof(Position.Name)} as {nameof(Position)}{nameof(Position.Name)} " +
   $"FROM {nameof(Doctor).ConvertToTableName()} as d " +
   $"LEFT JOIN {nameof(User).ConvertToTableName()} as up ON up.{nameof(User.Id)} = d.{nameof(Patient.UserId)} " +
-  $"LEFT JOIN {nameof(Position).ConvertToTableName()} as dp ON dp.{nameof(Position.Id)} = d.{nameof(Patient.Id)}";
+  $"LEFT JOIN {nameof(Position).ConvertToTableName()} as dp ON dp.{nameof(Position.Id)} = d.{nameof(Doctor.PositionId)}";
         }
 
         public override IEnumerable<Doctor> GetAll()

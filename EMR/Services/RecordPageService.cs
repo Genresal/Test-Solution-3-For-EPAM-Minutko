@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using EMR.Business.Models;
 using EMR.Business.Services;
-using EMR.Mapper;
 using EMR.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using EMR.Helpers;
 
 namespace EMR.Services
 {
-    public class RecordPageService : BaseTableService, IRecordPageService
+    public class RecordPageService : BasePageService<Record>, IRecordPageService
     {
         private readonly IBusinessService<Record> _recordService;
         private readonly IDoctorService _doctorService;
@@ -24,7 +23,7 @@ namespace EMR.Services
             , IPatientService p
             , IBusinessService<Position> sp
             , ITreatmentService t
-            , IMapper mapper)
+            , IMapper mapper) : base(sr)
         {
             _recordService = sr;
             _doctorService = d;
@@ -95,14 +94,12 @@ namespace EMR.Services
             var searchBy = searchParameters.Search?.Value;
             if (!string.IsNullOrEmpty(searchBy))
             {
-                result = result.Where(r => r.PatientName != null && r.PatientName.ToString().ToUpper().Contains(searchBy.ToUpper())  ||
+                result = result.Where(r => r.PatientName != null && r.PatientName.ToString().ToUpper().Contains(searchBy.ToUpper()) ||
                 r.DoctorName != null && r.DoctorName.ToString().ToUpper().Contains(searchBy.ToUpper()) ||
                 r.Diagnosis != null && r.Diagnosis.ToString().ToUpper().Contains(searchBy.ToUpper()));
             }
 
-            result = Order(searchParameters, result);
-
-            return result;
+            return result.Order(searchParameters);
         }
 
         public RecordDetailsViewModel Details(int id)
@@ -113,71 +110,21 @@ namespace EMR.Services
             return result;
         }
 
-        public Record GetById(int id)
-        {
-            return _recordService.GetById(id);
-        }
-
-        public void Create(Record item)
-        {
-            _recordService.Create(item);
-        }
-        public void Update(Record item)
-        {
-            _recordService.Update(item);
-        }
-        public void Delete(int id)
-        {
-            _recordService.Delete(id);
-        }
-
         public IEnumerable<Doctor> GetDoctors()
         {
             var result = _doctorService.GetAll();
-            return result.ToList();
+            return result;
         }
 
         public IEnumerable<Patient> GetPatients()
         {
             var result = _patientService.GetAll();
-            return result.ToList();
+            return result;
         }
 
         public Patient GetPatient(int id)
         {
             var result = _patientService.GetById(id);
-            return result;
-        }
-
-        public IEnumerable<Drug> LoadDrugTable(DrugSearchModel searchParameters)
-        {
-            var result = _treatmentService.GetAllDrugs(searchParameters.RecordId);
-
-            var searchBy = searchParameters.Search?.Value;
-
-            if (!string.IsNullOrEmpty(searchBy))
-            {
-                result = result.Where(r => r.Name != null && r.Name.ToString().ToUpper().Contains(searchBy.ToUpper()));
-            }
-
-            result = Order(searchParameters, result);
-
-            return result;
-        }
-
-        public IEnumerable<Procedure> LoadProcedureTable(ProcedureSearchModel searchParameters)
-        {
-            var result = _treatmentService.GetAllProcedures(searchParameters.RecordId);
-
-            var searchBy = searchParameters.Search?.Value;
-
-            if (!string.IsNullOrEmpty(searchBy))
-            {
-                result = result.Where(r => r.Name != null && r.Name.ToString().ToUpper().Contains(searchBy.ToUpper()));
-            }
-
-            result = Order(searchParameters, result);
-
             return result;
         }
     }

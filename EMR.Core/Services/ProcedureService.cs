@@ -6,10 +6,22 @@ using System.Linq;
 
 namespace EMR.Business.Services
 {
-    public class ProcedureService : BaseBusinessService<Procedure>, IBusinessService<Procedure>
+    public class ProcedureService : BaseBusinessService<Procedure>, IProcedureService
     {
-        public ProcedureService(IRepository<Procedure> r) : base (r)
+        private readonly IRepository<RecordTreatment> _treatmentRepository;
+        public ProcedureService(IRepository<Procedure> r, IRepository<RecordTreatment> treatmentRepository) : base (r)
         {
+            _treatmentRepository = treatmentRepository;
+        }
+
+        public IEnumerable<Procedure> GetProceduresForRecord(int RecordId)
+        {
+            var relations = _treatmentRepository.GetByColumn(nameof(RecordTreatment.RecordId), RecordId.ToString());
+            if (!relations.Any())
+            {
+                return new List<Procedure>();
+            }
+            return _mainRepository.GetByColumn("Id", relations.Select(x => x.DrugId.ToString()).ToList());
         }
     }
 }

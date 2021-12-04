@@ -28,7 +28,7 @@ namespace EMR.Controllers
         {
             return View();
         }
-
+        /*
         [HttpPost]
         public IActionResult LoadDrugTable([FromBody] DrugSearchModel SearchParameters)
         {
@@ -66,7 +66,7 @@ namespace EMR.Controllers
                 .ToList()
             });
         }
-
+        */
         /*
         public IActionResult AddOrEdit(int id = 0)
         {

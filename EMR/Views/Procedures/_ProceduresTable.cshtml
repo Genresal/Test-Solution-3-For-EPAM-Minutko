@@ -1,7 +1,7 @@
 ﻿@model EMR.ViewModels.ProcedureSearchModel
 @using EMR.DataTables
 @{
-    var _model = new EMR.Business.Models.Procedure();
+    var _model = new ProcedureViewModel();
     var _filters = new List<FilterParameter>
     {
     new FilterParameter(nameof(Model.RecordId), Model.RecordId, typeof(int))
@@ -34,7 +34,7 @@
             LengthMenu = "22, 50, 100, 500",
             PageLength = 22,
             Name = "proceduresTable",
-            Url = "/Treatment/LoadProcedureTable",
+            Url = "/Procedures/LoadTable",
             Filters = _filters
         };
 

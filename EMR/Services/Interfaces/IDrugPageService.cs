@@ -1,4 +1,5 @@
 ﻿using EMR.Business.Models;
+using EMR.Business.Services;
 using EMR.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -7,11 +8,8 @@ using System.Threading.Tasks;
 
 namespace EMR.Services
 {
-    public interface IBasePageService<T>
+    public interface IDrugPageService : IBasePageService<Drug>
     {
-        public T GetById(int id);
-        public void Create(T item);
-        public void Update(T item);
-        public void Delete(int id);
+        public IEnumerable<DrugViewModel> LoadTable(DrugSearchModel searchParameters);
     }
 }

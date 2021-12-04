@@ -7,9 +7,8 @@ namespace EMR.Business.Services
     /// <summary>
     /// Base repository
     /// </summary>
-    public interface ITreatmentService : IBusinessService<RecordTreatment>
-    {
+    public interface IDrugService : IBusinessService<Drug>
+    { 
+        IEnumerable<Drug> GetDrugsForRecord(int RecordId);
     }
-
-
 }

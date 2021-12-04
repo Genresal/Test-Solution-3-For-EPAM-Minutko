@@ -1,7 +1,7 @@
-﻿@model EMR.ViewModels.DrugSearchModel
+﻿@model DrugSearchModel
 @using EMR.DataTables
 @{
-    var _model = new EMR.Business.Models.Drug();
+    var _model = new DrugViewModel();
     var _filters = new List<FilterParameter>
     {
     new FilterParameter(nameof(Model.RecordId), Model.RecordId, typeof(int))
@@ -24,7 +24,7 @@
     @{
         var gridModel = new DataTablesModel
         {
-            StateSave = false,
+            StateSave = true,
             AutoWidth = true,
             Processing = true,
             ServerSide = true,
@@ -34,16 +34,15 @@
             LengthMenu = "22, 50, 100, 500",
             PageLength = 22,
             Name = "drugsTable",
-            Url = "/Treatment/LoadDrugTable",
+            Url = "/Drugs/LoadTable",
             Filters = _filters
         };
 
         gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id)));
         gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Name)));
         gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Description)));
-        string buttons = " <a href=\"/Records/Details?id =' + row.id + ' \" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"far fa-eye\"></i></a>" +
-        " <a href=\"/Records/AddOrEdit?id =' + row.id + ' \" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-edit\"></i></a>" +
-        " <a href=\"/Records/Delete?id =' + row.id + ' \" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-trash\"></i></a>";
+        string buttons = " <a href=\"/Drugs/AddOrEdit?id =' + row.id + ' \" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-edit\"></i></a>" +
+        " <a href=\"/Drugs/Delete?id =' + row.id + ' \" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-trash\"></i></a>";
 
         gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id))
         {

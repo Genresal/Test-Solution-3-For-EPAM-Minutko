@@ -7,8 +7,9 @@ namespace EMR.Business.Services
     /// <summary>
     /// Base repository
     /// </summary>
-    public interface ITreatmentService : IBusinessService<RecordTreatment>
+    public interface IProcedureService : IBusinessService<Procedure>
     {
+        IEnumerable<Procedure> GetProceduresForRecord(int RecordId);
     }
 
 

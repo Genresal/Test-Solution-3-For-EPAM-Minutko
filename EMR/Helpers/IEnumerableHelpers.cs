@@ -1,17 +1,17 @@
-﻿using EMR.Business.Models;
-using EMR.Helpers;
-using EMR.DataTables;
-using Microsoft.AspNetCore.Mvc;
+﻿using EMR.DataTables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 
-namespace EMR.Services
+namespace EMR.Helpers
 {
-    public abstract class BaseTableService
+    public static class IEnumerableHelpers
     {
-        public IEnumerable<M> Order<M, S>(S searchParameters, IEnumerable<M> data) where S : DataTablesParameters
+
+        public static IEnumerable<M> Order<M, S>(this IEnumerable<M> data, S searchParameters) where S : DataTablesParameters
         {
             var orderCriteria = "Id";
             var orderAscendingDirection = true;

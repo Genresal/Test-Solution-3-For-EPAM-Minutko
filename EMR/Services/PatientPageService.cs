@@ -7,16 +7,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EMR.Helpers;
 
 namespace EMR.Services
 {
-    public class PatientPageService : BaseTableService, IPatientPageService
+    public class PatientPageService : BasePageService<Patient>, IPatientPageService
     {
         readonly IPatientService _patientService;
         private readonly IMapper _mapper;
 
-
-        public PatientPageService(IPatientService p, IMapper mapper)
+        public PatientPageService(IPatientService p, IMapper mapper) : base(p)
         {
             _patientService = p;
             _mapper = mapper;
@@ -44,9 +44,7 @@ namespace EMR.Services
                 result = result.Where(r => r.FullName != null && r.FullName.ToString().ToUpper().Contains(searchBy.ToUpper()));
             }
 
-            result = Order(searchParameters, result);
-
-            return result;
+            return result.Order(searchParameters);
         }
 
         public IEnumerable<PatientInfoViewModel> LoadPatientInfoTable(PatientInfoSearchModel searchParameters)
@@ -83,9 +81,7 @@ namespace EMR.Services
                 result = result.Where(r => r.FullName != null && r.FullName.ToString().ToUpper().Contains(searchBy.ToUpper()));
             }
 
-            result = Order(searchParameters, result);
-
-            return result;
+            return result.Order(searchParameters);
         }
 
         public IEnumerable<Patient> GetByDoctorId(int doctorid)
@@ -96,26 +92,6 @@ namespace EMR.Services
         public Patient GetByLogin(string login)
         {
             return _patientService.GetByColumn("Login", login).FirstOrDefault();
-        }
-
-        public Patient GetById(int id)
-        {
-            return _patientService.GetById(id);
-        }
-
-        public void Create(Patient item)
-        {
-            _patientService.Create(item);
-        }
-
-        public void Update(Patient item)
-        {
-            _patientService.Update(item);
-        }
-
-        public void Delete(int id)
-        {
-            _patientService.Delete(id);
         }
     }
 }
