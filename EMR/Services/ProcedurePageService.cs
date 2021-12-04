@@ -11,10 +11,12 @@ namespace EMR.Services
     public class ProcedurePageService : BasePageService<Procedure, ProcedureViewModel>, IProcedurePageService
     {
         private readonly IProcedureService _procedureService;
+        private readonly ITreatmentService _treatmentService;
 
-        public ProcedurePageService(IProcedureService procedureService, IMapper mapper) : base(procedureService, mapper)
+        public ProcedurePageService(IProcedureService procedureService, ITreatmentService treatmentService, IMapper mapper) : base(procedureService, mapper)
         {
             _procedureService = procedureService;
+            _treatmentService = treatmentService;
         }
 
         public IEnumerable<ProcedureViewModel> LoadTable(ProcedureSearchModel searchParameters)
@@ -31,6 +33,11 @@ namespace EMR.Services
             }
 
             return result.Order(searchParameters);
+        }
+
+        public int GetRecordId(int procedureId)
+        {
+            return _treatmentService.GetDrugRecordId(procedureId);
         }
     }
 }

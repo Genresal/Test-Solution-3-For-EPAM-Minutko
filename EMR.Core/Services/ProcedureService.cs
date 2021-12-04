@@ -21,7 +21,7 @@ namespace EMR.Business.Services
             {
                 return new List<Procedure>();
             }
-            return _mainRepository.GetByColumn("Id", relations.Select(x => x.DrugId.ToString()).ToList());
+            return _mainRepository.GetByColumn("Id", relations.Select(x => x.ProcedureId.ToString()).ToList());
         }
     }
 }

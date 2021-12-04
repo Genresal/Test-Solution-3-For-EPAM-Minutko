@@ -87,10 +87,10 @@ namespace EMR.Controllers
         }
 
         // GET: HomeController/Delete/5
-        public IActionResult Delete(int id)
-        {
+        public IActionResult Delete(int id, int recordId)
+        { 
             _pageService.Delete(id);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Records", new { id = recordId });
         }
     }
 }

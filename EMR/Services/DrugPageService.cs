@@ -11,9 +11,11 @@ namespace EMR.Services
     public class DrugPageService : BasePageService<Drug, DrugViewModel>, IDrugPageService
     {
         private readonly IDrugService _drugService;
-        public DrugPageService(IDrugService drugService, IMapper mapper) : base(drugService, mapper)
+        private readonly ITreatmentService _treatmentService;
+        public DrugPageService(IDrugService drugService, ITreatmentService treatmentService, IMapper mapper) : base(drugService, mapper)
         {
             _drugService = drugService;
+            _treatmentService = treatmentService;
         }
 
         public IEnumerable<DrugViewModel> LoadTable(DrugSearchModel searchParameters)
@@ -30,6 +32,11 @@ namespace EMR.Services
             }
 
             return result.Order(searchParameters);
+        }
+
+        public int GetRecordId(int drugId)
+        {
+            return _treatmentService.GetDrugRecordId(drugId);
         }
     }
 }

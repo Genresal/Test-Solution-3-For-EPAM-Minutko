@@ -9,6 +9,8 @@ namespace EMR.Business.Services
     /// </summary>
     public interface ITreatmentService : IBusinessService<RecordTreatment>
     {
+        public int GetDrugRecordId(int drugId);
+        public int GetProcedureRecordId(int procedureId);
     }
 
 

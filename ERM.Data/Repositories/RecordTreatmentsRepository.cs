@@ -24,12 +24,16 @@ namespace EMR.Data.Repositories
                                                         ,[{nameof(RecordTreatment.DrugId)}]
                                                         ,[{nameof(RecordTreatment.ProcedureId)}])
                                                     VALUES";
-            int dataCount = 300;
+            int dataCount = 700;
             for (int i = 1; i <= dataCount; i++)
             {
+                string randomNumString = Gen.Random.Numbers.Integers(1, 80)().ToString();
+                string drugId =  i % 2 == 0 ? "null" : randomNumString;
+                string procedureId = drugId.Equals("null") ? randomNumString : "null";
+
                 sqlExpression = $"{sqlExpression}('{Gen.Random.Numbers.Integers(1, 200)()}'" +
-                    $",'{Gen.Random.Numbers.Integers(1, 80)()}'" +
-                    $",'{Gen.Random.Numbers.Integers(1, 80)()}')";
+                    $",{drugId}" +
+                    $",{procedureId})";
                 if (i != dataCount)
                 {
                     sqlExpression = $"{sqlExpression},";
@@ -45,8 +49,9 @@ namespace EMR.Data.Repositories
 
             model.Id = (int)reader[nameof(model.Id)];
             model.RecordId = (int)reader[nameof(model.RecordId)];
-            model.DrugId = (int)reader[nameof(model.DrugId)];
-            model.ProcedureId = (int)reader[nameof(model.ProcedureId)];
+            model.DrugId = Convert.IsDBNull(reader[nameof(model.DrugId)]) ? null : (int?)reader[nameof(model.DrugId)];
+            model.ProcedureId = Convert.IsDBNull(reader[nameof(model.ProcedureId)]) ? null : (int?)reader[nameof(model.ProcedureId)];
+
 
             return model;
         }

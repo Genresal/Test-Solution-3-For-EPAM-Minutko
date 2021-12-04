@@ -8,32 +8,20 @@ namespace EMR.Business.Services
 {
     public class RecordTreatmentService : BaseBusinessService<RecordTreatment>, ITreatmentService
     {
-        IRepository<Drug> _drugRepository;
-        IRepository<Procedure> _procedureRepository;
-        public RecordTreatmentService(IRepository<RecordTreatment> r, IRepository<Drug> d, IRepository<Procedure> p) : base (r)
+        public RecordTreatmentService(IRepository<RecordTreatment> r) : base (r)
         {
-            _drugRepository = d;
-            _procedureRepository = p;
         }
 
-        public IEnumerable<Drug> GetAllDrugs(int RecordId)
+        public int GetDrugRecordId(int drugId)
         {
-            var relations = _mainRepository.GetByColumn("RecordId", RecordId.ToString());
-            if (!relations.Any())
-            {
-                return new List<Drug>();
-            }
-            return _drugRepository.GetByColumn("Id", relations.Select(x => x.DrugId.ToString()).ToList());
+            int recordId = _mainRepository.GetByColumn(nameof(RecordTreatment.DrugId), drugId.ToString()).FirstOrDefault().RecordId;
+            return recordId;
         }
 
-        public IEnumerable<Procedure> GetAllProcedures(int RecordId)
+        public int GetProcedureRecordId(int procedureId)
         {
-            var relations = _mainRepository.GetByColumn("RecordId", RecordId.ToString());
-            if (!relations.Any())
-            {
-                return new List<Procedure>();
-            }
-            return _procedureRepository.GetByColumn("Id", relations.Select(x => x.ProcedureId.ToString()).ToList());
+            int recordId = _mainRepository.GetByColumn(nameof(RecordTreatment.ProcedureId), procedureId.ToString()).FirstOrDefault().RecordId;
+            return recordId;
         }
     }
 }

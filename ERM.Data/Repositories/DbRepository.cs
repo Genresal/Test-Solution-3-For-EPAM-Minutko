@@ -174,15 +174,18 @@ CREATE TABLE [dbo].[tRecord](
 CREATE TABLE [dbo].[tRecordTreatment](
   [Id] [int] IDENTITY(1,1) NOT NULL,
   [RecordId] [int] NOT NULL,
-  [DrugId] [int] NOT NULL,
-  [ProcedureId] [int] NOT NULL,
+  [DrugId] [int],
+  [ProcedureId] [int],
   PRIMARY KEY ([Id]),
         FOREIGN KEY ([RecordId])
-      REFERENCES [tRecord]([Id]),
+      REFERENCES [tRecord]([Id]) 
+ON DELETE CASCADE,
 	        FOREIGN KEY ([DrugId])
-      REFERENCES [tDrug]([Id]),
+      REFERENCES [tDrug]([Id]) 
+ON DELETE CASCADE,
 	        FOREIGN KEY ([ProcedureId])
       REFERENCES [tProcedure]([Id])
+ON DELETE CASCADE
   );";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
