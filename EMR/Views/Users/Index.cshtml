@@ -70,9 +70,9 @@
     );
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.PhoneNumber)));
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Email)));
-    string button = " <a href =\"/Records/Details?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"far fa-eye\"></i></a>" +
-    " <a href=\"/Records/AddOrEdit?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-edit\"></i></a>" +
-    " <a href=\"/Records/Delete?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-trash\"></i></a>";
+    string button = " <a href =\"/Users/Details?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"far fa-eye\"></i></a>" +
+    " <a href=\"/Users/AddOrEdit?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-edit\"></i></a>" +
+    " <a href=\"/Users/Delete?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-trash\"></i></a>";
 
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id))
     {

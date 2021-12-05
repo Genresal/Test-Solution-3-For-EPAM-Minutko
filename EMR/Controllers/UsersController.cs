@@ -1,4 +1,5 @@
 ﻿using EMR.Business.Models;
+using EMR.DataTables;
 using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,9 @@ namespace EMR.Controllers
         public IActionResult Index()
         {
             UserSearchModel searchModel = new UserSearchModel();
+            searchModel.Roles = _pageService.GetRoles()
+                                .Select(x => new FilterCondition(x.Id, x.Name))
+                                .ToList();
 
             return View(searchModel);
         }

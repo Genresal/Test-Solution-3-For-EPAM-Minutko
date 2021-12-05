@@ -11,10 +11,12 @@ namespace EMR.Services
     public class UserPageService : BasePageService<User, UserViewModel>, IUserPageService
     {
         readonly IBusinessService<User> _pageService;
+        readonly IBusinessService<Role> _roleService;
 
-        public UserPageService(IBusinessService<User> userService, IMapper mapper) : base(userService, mapper)
+        public UserPageService(IBusinessService<User> userService, IBusinessService<Role> roleService, IMapper mapper) : base(userService, mapper)
         {
             _pageService = userService;
+            _roleService = roleService;
         }
 
         public IEnumerable<UserViewModel> LoadTable(UserSearchModel searchParameters)
@@ -28,6 +30,12 @@ namespace EMR.Services
                 result = result.Where(r => r.FullName != null && r.FullName.ToString().ToUpper().Contains(searchParameters.FullName.ToUpper()));
             }
 
+            if (searchParameters.Roles.Count > 0)
+            {
+                var filterParams = searchParameters.Roles.Select(r => r.Id);
+                result = result.Where(r => filterParams.Contains(r.RoleId));
+            }
+
             var searchBy = searchParameters.Search?.Value;
             if (!string.IsNullOrEmpty(searchBy))
             {
@@ -35,6 +43,11 @@ namespace EMR.Services
             }
 
             return result.Order(searchParameters);
+        }
+
+        public IEnumerable<Role> GetRoles()
+        {
+            return _roleService.GetAll();
         }
 
         public bool IsLoginExist(string login)

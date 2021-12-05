@@ -62,6 +62,7 @@ namespace EMR
             services.AddTransient<IRepository<RecordTreatment>, RecordTreatmentsRepository>(provider => new RecordTreatmentsRepository(conectionString));
 
             services.AddTransient<IBusinessService<Position>, PositionService>();
+            services.AddTransient<IBusinessService<Role>, RoleService>();
             services.AddTransient<IBusinessService<Record>, RecordService>();
             services.AddTransient<IDoctorService, DoctorService>();
             services.AddTransient<IPatientService, PatientService>();
