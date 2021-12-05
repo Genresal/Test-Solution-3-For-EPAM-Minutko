@@ -4,6 +4,7 @@ using EMR.Data.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace EMR.Data.Repositories
 {
@@ -69,6 +70,8 @@ namespace EMR.Data.Repositories
             return result == 1;
         }
 
+        //File.ReadAllText(@"C:\Users\genre\source\repos\Test-Solution-3-For-EPAM-Minutko\EMR.Database\bin\Debug\EMR.Database_1.publish.sql").Replace("GO", "");
+
         public void CreateTables()
         {//USE [EMR] GO
             string sqlExpression = $@" USE [EMR] 
@@ -85,9 +88,7 @@ CREATE TABLE [dbo].[tDiagnosis](
   [Name] [nvarchar](255) NOT NULL,
   PRIMARY KEY ([Id]),
   );
-/*
- Treatment
-*/
+
 CREATE TABLE [dbo].[tDrug](
   [Id] [int] IDENTITY(1,1) NOT NULL,
   [Name] [nvarchar](255) NOT NULL,
@@ -102,9 +103,7 @@ CREATE TABLE [dbo].[tProcedure](
   PRIMARY KEY ([Id]),
   );
 
-/*
- Users section
-*/
+
 CREATE TABLE [dbo].[tRole](
   [Id] [int] IDENTITY(1,1) NOT NULL,
   [Name] [nvarchar](255) NOT NULL,
@@ -187,6 +186,11 @@ ON DELETE CASCADE,
       REFERENCES [tProcedure]([Id])
 ON DELETE CASCADE
   );";
+
+                
+
+
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -196,30 +200,5 @@ ON DELETE CASCADE
                 connection.Close();
             }
         }
-        /*
-        public void DropTables()
-        {
-            string sqlExpression =// $@"USE [EMR] GO " +
-
-$"DROP TABLE [tRecordTreatment];" +
-$"DROP TABLE [tRecord];" +
-$"DROP TABLE [tPatient];" +
-$"DROP TABLE [tDoctor];" +
-$"DROP TABLE [tPosition];" +
-$"DROP TABLE [tUser];" +
-$"DROP TABLE [tRole];" +
-$"DROP TABLE [tProcedure];" +
-$"DROP TABLE [tDrug];" +
-$"DROP TABLE [tDiagnosis];" +
-$"DROP TABLE [tSickLeave];";
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand(sqlExpression, connection);
-                command.ExecuteNonQuery();
-
-                connection.Close();
-            }
-        }*/
     }
 }
