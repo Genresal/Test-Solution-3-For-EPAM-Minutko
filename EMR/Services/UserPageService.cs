@@ -55,9 +55,10 @@ namespace EMR.Services
             return _pageService.GetByColumn(nameof(User.Login), login).Any();
         }
 
-        public User GetUserByLogin(string login)
+        public UserViewModel GeByLogin(string login)
         {
-            return _pageService.GetByColumn(nameof(User.Login), login).FirstOrDefault();
+            var rawResult = _pageService.GetByColumn(nameof(User.Login), login).FirstOrDefault();
+            return _mapper.Map<UserViewModel>(rawResult);
         }
     }
 }

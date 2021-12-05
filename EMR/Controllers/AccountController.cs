@@ -1,4 +1,5 @@
-﻿using EMR.Business.Models;
+﻿using AutoMapper;
+using EMR.Business.Models;
 using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authentication;
@@ -6,8 +7,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -15,12 +18,19 @@ namespace EMR.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUserPageService _pageService;
+        private readonly IUserPageService _userService;
+        private readonly IAccountPageService _accountService;
         private readonly ILogger<PatientsController> _logger;
-        public AccountController(IUserPageService s, ILogger<PatientsController> logger)
+        private readonly IMapper _mapper;
+        public AccountController(IUserPageService s
+            , ILogger<PatientsController> logger
+            , IAccountPageService accountPageService
+            , IMapper mapper)
         {
-            _pageService = s;
+            _userService = s;
             _logger = logger;
+            _mapper = mapper;
+            _accountService = accountPageService;
         }
 
         [HttpGet]
@@ -38,7 +48,7 @@ namespace EMR.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = _pageService.GetUserByLogin(model.Login);
+                UserViewModel user = _userService.GeByLogin(model.Login);
 
                 if (user != null)
                 {
@@ -59,8 +69,20 @@ namespace EMR.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
         public IActionResult Register()
         {
+            List<SelectListItem> roles = new List<SelectListItem>();
+            roles.AddRange(_userService.GetRoles()
+                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList());
+
+            ViewBag.Roles = new SelectList(roles, "Value", "Text");
             return View();
         }
 
@@ -70,14 +92,13 @@ namespace EMR.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!_pageService.IsLoginExist(model.Login))
+                if (!_accountService.IsLoginExist(model.Login))
                 {
-                    
                     return model.RoleId switch
                     {
-                        1 => RedirectToAction("Patients", "Details"),
-                        2 => RedirectToAction("Doctors", "Details"),
-                        _ => RedirectToAction("Home", "Index"),
+                        1 => RedirectToAction("Create", "Patients", new { Login = model.Login, Password = model.Password, RoleId = model.RoleId }),
+                        2 => RedirectToAction("Create", "Doctors", new { Login = model.Login, Password = model.Password, RoleId = model.RoleId }),
+                        _ => RedirectToAction("Create", "Users", new { Login = model.Login, Password = model.Password, RoleId = model.RoleId }),
                     };
                 }
                 else
@@ -86,20 +107,13 @@ namespace EMR.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
-
-        private async Task Authenticate(User user)
+        private async Task Authenticate(UserViewModel user)
         {
             // создаем один claim
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role),
                 new Claim("FullName", $"{user.FirstName} {user.LastName}")
             };
             // создаем объект ClaimsIdentity

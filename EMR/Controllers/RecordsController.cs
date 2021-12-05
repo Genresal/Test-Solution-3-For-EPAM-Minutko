@@ -117,7 +117,6 @@ namespace EMR.Controllers
 
         private void PrepareViewBagForAddOrEdit()
         {
-            
             List<SelectListItem> doctors = new List<SelectListItem>();
             List<SelectListItem> patients = new List<SelectListItem>();
             doctors.AddRange(_pageService.GetDoctors()

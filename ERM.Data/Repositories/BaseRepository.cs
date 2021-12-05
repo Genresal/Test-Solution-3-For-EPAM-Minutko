@@ -71,32 +71,32 @@ namespace EMR.Data.Repositories
         {
             var properties = item.GetType()
                                   .GetProperties()
-                                  .Where(x => x.PropertyType != typeof(BaseModel));
-
-            string sqlExpression = $@"INSERT INTO {typeof(T).Name.ConvertToTableName()} (";
-
-            foreach (var prop in properties)
-            {
-                sqlExpression = $"{sqlExpression}[{prop.Name}],";
-            }
-
-            sqlExpression = $"{sqlExpression})VALUES (";
-            foreach (var prop in properties)
-            {
-                sqlExpression = $"{sqlExpression}[@{prop.Name}],";
-            }
-
-            sqlExpression += ")";
+                                  .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
+                                  .Where(x => x.Name != "Id")
+                                  .ToList();
 
             List<SqlParameter> parameters = new List<SqlParameter>();
+            string colums = string.Empty;
+            string values = string.Empty;
 
-            foreach (var prop in properties)
+            int lastArrayIndex = properties.Count - 1;
+            for (int i = 0; i <= lastArrayIndex; i++)
             {
-                if (prop.PropertyType != typeof(BaseModel))
+                colums = $"{colums}[{properties[i].Name}]";
+                values = $"{values}@{properties[i].Name}";
+
+                if (i < lastArrayIndex)
                 {
-                    parameters.Add(new SqlParameter($"@{prop.Name}", item.GetType().GetProperty(prop.Name).GetValue(item, null)));
+                    colums = $"{colums}, ";
+                    values = $"{values}, ";
                 }
+
+                parameters.Add(new SqlParameter($"@{properties[i].Name}", item.GetType().GetProperty(properties[i].Name).GetValue(item, null)));
             }
+
+            string sqlExpression = $@"INSERT INTO {typeof(T).Name.ConvertToTableName()} " +
+                $"({colums})" +
+                $"VALUES ({values})";
 
             ExecuteNonQuery(sqlExpression, parameters);
         }

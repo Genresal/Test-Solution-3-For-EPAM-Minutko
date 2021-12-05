@@ -33,23 +33,28 @@ namespace EMR.Controllers
             return View(viewModel);
         }
 
-        public IActionResult AddOrEdit(int id = 0)
+        public IActionResult Create(DoctorViewModel model = null)
         {
-            if (id == 0)
+            if (model == null)
             {
-                var model = new Doctor();
-                model.Id = 0;
-                return View(model);
+                model = new DoctorViewModel();
             }
-            else
+            return AddOrEdit(model);
+        }
+
+        public IActionResult Update(int id)
+        {
+            var model = _pageService.GetById(id);
+            return AddOrEdit(model);
+        }
+
+        public IActionResult AddOrEdit(DoctorViewModel model)
+        {
+            if (model == null)
             {
-                var model = _pageService.GetById(id);
-                if (model == null)
-                {
-                    return NotFound();
-                }
-                return View(model);
+                return NotFound();
             }
+            return View("AddOrEdit", model);
         }
 
         [HttpPost]

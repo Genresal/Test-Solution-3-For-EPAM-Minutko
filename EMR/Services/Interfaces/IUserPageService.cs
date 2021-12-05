@@ -12,8 +12,6 @@ namespace EMR.Services
     {
         public IEnumerable<UserViewModel> LoadTable(UserSearchModel searchParameters);
         public IEnumerable<Role> GetRoles();
-        public bool IsLoginExist(string login);
-        public User GetUserByLogin(string login);
-
+        public UserViewModel GeByLogin(string login);
     }
 }
