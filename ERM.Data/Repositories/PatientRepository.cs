@@ -144,7 +144,7 @@ namespace EMR.Data.Repositories
             model.User.Birthday = (DateTime)reader[$"{nameof(Patient)}{nameof(model.User.Birthday)}"];
             model.User.Email = (string)reader[$"{nameof(Patient)}{nameof(model.User.Email)}"];
             model.User.PhoneNumber = (string)reader[$"{nameof(Patient)}{nameof(model.User.PhoneNumber)}"];
-            model.User.PhotoUrl = (string)reader[$"{nameof(Patient)}{nameof(model.User.PhotoUrl)}"];
+            model.User.PhotoUrl = Convert.IsDBNull(reader[$"{nameof(Patient)}{nameof(model.User.PhotoUrl)}"]) ? null : (string)reader[$"{nameof(Patient)}{nameof(model.User.PhotoUrl)}"];
 
             return model;
         }

@@ -1,6 +1,7 @@
 ﻿using EMR.Business.Models;
 using EMR.Services;
 using EMR.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -22,6 +23,15 @@ namespace EMR.Controllers
 
         }
 
+        public IActionResult Index()
+        {
+            if (!HttpContext.User.IsInRole("User"))
+            {
+                return RedirectToAction(nameof(Index), "Users");
+            }
+            return View("Details");
+        }
+
         [HttpPost]
         public IActionResult LoadPatientInfoTable([FromBody] PatientInfoSearchModel SearchParameters)
         {
@@ -40,9 +50,10 @@ namespace EMR.Controllers
             });
         }
 
+        [Authorize]
         public IActionResult Details(int id = 0)
         {
-            if (id == 0 && HttpContext.User.Identity.IsAuthenticated)
+            if (id == 0)
             {
                 string login = HttpContext.User.Identity.Name;
                 return View(_pageService.GetByLogin(login));
@@ -93,7 +104,7 @@ namespace EMR.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Details), model.Id);
+                return RedirectToAction(nameof(Index));
             }
 
             return View(model);

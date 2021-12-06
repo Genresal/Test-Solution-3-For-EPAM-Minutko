@@ -1,6 +1,7 @@
 ﻿using EMR.Business.Models;
 using EMR.Services;
 using EMR.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,19 +22,25 @@ namespace EMR.Controllers
             _pageService = s;
             _logger = logger;
         }
+        public IActionResult Index()
+        {
+            if (!HttpContext.User.IsInRole("Doctor"))
+            {
+                return RedirectToAction(nameof(Index), "Users");
+            }
+            return View("Details");
+        }
 
+        [Authorize]
         public IActionResult Details(int id = 0)
         {
-            DoctorViewModel viewModel;
-            if (id == 0 && HttpContext.User.Identity.IsAuthenticated)
+            if (id == 0)
             {
                 string login = HttpContext.User.Identity.Name;
-                viewModel = _pageService.GetByLogin(login);
-                return View(viewModel);
+                return View(_pageService.GetByLogin(login));
             }
 
-            viewModel = _pageService.GetById(id);
-            return View(viewModel);
+            return View(_pageService.GetById(id));
         }
 
         public IActionResult Create(DoctorViewModel model = null)
@@ -77,7 +84,7 @@ namespace EMR.Controllers
                         return NotFound();
                     }
                 }
-                return RedirectToAction(nameof(Details), model.Id);
+                return RedirectToAction(nameof(Index));
             }
             PrepareViewBag();
             return View(model);
