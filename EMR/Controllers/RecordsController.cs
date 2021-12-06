@@ -61,7 +61,7 @@ namespace EMR.Controllers
         
         public IActionResult AddOrEdit(int id = 0)
         {
-            PrepareViewBagForAddOrEdit();
+            PrepareViewBag();
 
             if (id == 0)
             {
@@ -104,7 +104,7 @@ namespace EMR.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            PrepareViewBagForAddOrEdit();
+            PrepareViewBag();
             return View(model);
         }
 
@@ -115,7 +115,13 @@ namespace EMR.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private void PrepareViewBagForAddOrEdit()
+        // GET: HomeController/Details/5
+        public IActionResult Details(int id)
+        {
+            return View(_pageService.Details(id));
+        }
+
+        private void PrepareViewBag()
         {
             List<SelectListItem> doctors = new List<SelectListItem>();
             List<SelectListItem> patients = new List<SelectListItem>();
@@ -127,14 +133,6 @@ namespace EMR.Controllers
 
             ViewBag.Doctors = new SelectList(doctors, "Value", "Text");
             ViewBag.Patients = new SelectList(patients, "Value", "Text");
-            
-        }
-        
-
-        // GET: HomeController/Details/5
-        public IActionResult Details(int id)
-        {
-            return View(_pageService.Details(id));
         }
     }
 }

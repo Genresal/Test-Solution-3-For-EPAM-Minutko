@@ -98,7 +98,7 @@ namespace EMR.Data.Repositories
             model.Birthday = (DateTime)reader[nameof(model.Birthday)];
             model.Email = (string)reader[nameof(model.Email)];
             model.PhoneNumber = (string)reader[nameof(model.PhoneNumber)];
-            model.PhotoUrl = (string)reader[nameof(model.PhotoUrl)];
+            model.PhotoUrl = Convert.IsDBNull(reader[nameof(model.PhotoUrl)]) ? null : (string?)reader[nameof(model.PhotoUrl)];
             model.Role.Name = (string)reader[$"{nameof(Role)}{nameof(Role.Name)}"];
 
             return model;

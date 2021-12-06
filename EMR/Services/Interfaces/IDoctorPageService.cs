@@ -10,5 +10,6 @@ namespace EMR.Services
     public interface IDoctorPageService : IBasePageService<DoctorViewModel>
     {
         public DoctorViewModel GetByLogin(string login);
+        public IEnumerable<PositionViewModel> GetPositions();
     }
 }

@@ -16,9 +16,13 @@ namespace EMR.MappingConfigurations
             //https://www.generacodice.com/en/articolo/3119123/automapper-map-from-nested-class-to-single-(flatten)
             
             CreateMap<Doctor, DoctorViewModel>().IncludeMembers(x => x.User)
-                .ForMember(dest => dest.Position, act => act.MapFrom(src => src.Position.Name));
+                .ForMember(dest => dest.Position, act => act.MapFrom(src => src.Position.Name))
+                .ReverseMap()
+                    .ForMember(dest => dest.Position, act => act.Ignore());
 
-            CreateMap<User, DoctorViewModel>();
+            CreateMap<User, DoctorViewModel>()
+                .ReverseMap()
+                .ForMember(dest => dest.Role, act => act.Ignore());  
         }
     }
 }

@@ -6,11 +6,13 @@ namespace EMR.ViewModels
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessage = "Не указан логин")]
+        [Required(ErrorMessage = "Please enter your login")]
+        [Display(Name = "Login")]
         public string Login { get; set; }
 
-        [Required(ErrorMessage = "Не указан пароль")]
+        [Required(ErrorMessage = "Please enter your password")]
         [DataType(DataType.Password)]
+        [Display(Name = "Password")]
         public string Password { get; set; }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using EMR.Business.Models;
-using EMR.Business.Repositories;
 using EMR.Data.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 
 namespace EMR.Data.Repositories
 {
@@ -67,7 +67,7 @@ namespace EMR.Data.Repositories
             return ExecuteReader(sqlExpression, new SqlParameter("@Id", id)).FirstOrDefault();
         }
 
-        public void Create(T item)
+        public virtual void Create(T item)
         {
             var properties = item.GetType()
                                   .GetProperties()
@@ -90,8 +90,14 @@ namespace EMR.Data.Repositories
                     colums = $"{colums}, ";
                     values = $"{values}, ";
                 }
+                //nullCheck
+                var parameterValue = item.GetType().GetProperty(properties[i].Name).GetValue(item, null);
+                if (parameterValue == null)
+                {
+                    parameterValue = DBNull.Value;
+                }
 
-                parameters.Add(new SqlParameter($"@{properties[i].Name}", item.GetType().GetProperty(properties[i].Name).GetValue(item, null)));
+                parameters.Add(new SqlParameter($"@{properties[i].Name}", parameterValue));
             }
 
             string sqlExpression = $@"INSERT INTO {typeof(T).Name.ConvertToTableName()} " +
@@ -116,7 +122,7 @@ namespace EMR.Data.Repositories
             {
                 var prop = properties[i];
 
-                if (i > 0 )
+                if (i > 0)
                 {
                     sqlExpression = $"{sqlExpression}, ";
                 }
@@ -157,7 +163,7 @@ namespace EMR.Data.Repositories
             string sqlExpression = $@"IF OBJECT_ID('dbo.{typeof(T).Name.ConvertToTableName()}', 'U') IS NOT NULL " +
                                                                                         $"SELECT 1 as {valueName} " +
                                                                                         $"ELSE " +
-                      
+
                                                                                         $"SELECT 0 as {valueName}";
             return (int)ExecuteScalar(sqlExpression, valueName) == 1;
         }
@@ -310,6 +316,22 @@ namespace EMR.Data.Repositories
 
                 connection.Close();
             }
+        }
+
+        protected List<SqlParameter> ProrertiesToSqlParameters(BaseModel model, List<PropertyInfo> properties)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            foreach (var prop in properties)
+            {
+                var parameterValue = model.GetType().GetProperty(prop.Name).GetValue(model, null);
+                if (parameterValue == null)
+                {
+                    parameterValue = DBNull.Value;
+                }
+
+                parameters.Add(new SqlParameter($"@{prop.Name}", parameterValue));
+            }
+            return parameters;
         }
 
         #endregion

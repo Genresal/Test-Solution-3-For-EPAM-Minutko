@@ -6,19 +6,20 @@ namespace EMR.ViewModels
 {
     public class RegisterViewModel
     {
-        [Required(ErrorMessage = "Please Enter Login..")]
+        [Required(ErrorMessage = "Please enter login")]
         [Display(Name = "Login")]
         public string Login { get; set; }
 
-        [Required(ErrorMessage = "Please Choose User Role...")]
+        [Required(ErrorMessage = "Please choose user role")]
+        [Display(Name = "User role")]
         public int RoleId { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Password...")]
+        [Required(ErrorMessage = "Please enter password")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Please Enter the Confirm Password...")]
+        [Required(ErrorMessage = "Please enter the confirm password")]
         [DataType(DataType.Password)]
         [Display(Name = "Confirm Password")]
         [Compare("Password")]

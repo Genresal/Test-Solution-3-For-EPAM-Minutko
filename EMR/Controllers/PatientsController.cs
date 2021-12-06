@@ -114,7 +114,7 @@ namespace EMR.Controllers
                         return NotFound();
                     }
                 }
-                return RedirectToAction(nameof(Details), model);
+                return RedirectToAction(nameof(Details), model.Id);
             }
             return View(model);
         }

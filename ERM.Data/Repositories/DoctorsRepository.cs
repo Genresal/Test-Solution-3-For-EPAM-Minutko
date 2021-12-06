@@ -1,20 +1,18 @@
-﻿using EMR.Data.Helpers;
-using EMR.Business.Models;
+﻿using EMR.Business.Models;
+using EMR.Business.Repositories;
+using EMR.Data.Helpers;
+using RandomGen;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using RandomGen;
-using EMR.Business.Repositories;
 
 namespace EMR.Data.Repositories
 {
     public class DoctorsRepository : BaseRepository<Doctor>, IRepository<Doctor>
     {
         private readonly string baseQuery;
-        public DoctorsRepository(string conn) : base (conn)
+        public DoctorsRepository(string conn) : base(conn)
         {
             baseQuery = $"SELECT d.{nameof(Patient.Id)}, " +
   $"{nameof(Doctor.UserId)}, " +
@@ -37,6 +35,60 @@ namespace EMR.Data.Repositories
         public override IEnumerable<Doctor> GetAll()
         {
             return ExecuteReader(baseQuery);
+        }
+
+        public override void Create(Doctor doctor)
+        {
+            string sqlExpression = $"BEGIN TRY " +
+                $"BEGIN TRAN " +
+                $"INSERT INTO [dbo].[tUser]" +
+                $"([Login]" +
+                $",[Password]" +
+                $",[RoleId]" +
+                $",[FirstName]" +
+                $",[LastName]" +
+                $",[Birthday]" +
+                $",[Email]" +
+                $",[PhoneNumber]" +
+                $",[PhotoUrl])" +
+                $"VALUES" +
+                $"(@Login" +
+                $",@Password" +
+                $",@RoleId" +
+                $",@FirstName" +
+                $",@LastName" +
+                $",@Birthday" +
+                $",@Email" +
+                $",@PhoneNumber" +
+                $",@PhotoUrl) " +
+                $"INSERT INTO [dbo].[tDoctor]" +
+                $"([UserId]" +
+                $",[PositionId])" +
+                $"VALUES" +
+                $"(SCOPE_IDENTITY()" +
+                $",@PositionId) " +
+                $"COMMIT TRAN " +
+                $"END TRY " +
+                $"BEGIN CATCH " +
+                $"ROLLBACK TRAN " +
+                $"END CATCH";
+
+            var doctorProperties = doctor.GetType()
+                      .GetProperties()
+                      .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
+                      .Where(x => x.Name != "Id")
+                      .ToList();
+
+            var userProperties = doctor.User.GetType()
+                        .GetProperties()
+                        .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
+                        .Where(x => x.Name != "Id")
+                        .ToList();
+
+            var parameters = ProrertiesToSqlParameters(doctor, doctorProperties);
+            parameters.AddRange(ProrertiesToSqlParameters(doctor.User, userProperties));
+
+            ExecuteNonQuery(sqlExpression, parameters);
         }
 
         public override IEnumerable<Doctor> GetByColumn(string column, string value)

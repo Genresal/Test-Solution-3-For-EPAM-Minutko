@@ -52,7 +52,7 @@ namespace EMR.Controllers
 
                 if (user != null)
                 {
-                    await Authenticate(user); // аутентификация
+                    await Authenticate(user);
 
                     if (!string.IsNullOrEmpty(returnUrl))
                     {
@@ -63,7 +63,7 @@ namespace EMR.Controllers
                         return RedirectToAction("Index", "Home");
                     }
                 }
-                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                ModelState.AddModelError("", "Incorrect login or password");
             }
             return View(model);
         }
@@ -78,11 +78,7 @@ namespace EMR.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            List<SelectListItem> roles = new List<SelectListItem>();
-            roles.AddRange(_userService.GetRoles()
-                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList());
-
-            ViewBag.Roles = new SelectList(roles, "Value", "Text");
+            PrepareViewBag();
             return View();
         }
 
@@ -102,8 +98,9 @@ namespace EMR.Controllers
                     };
                 }
                 else
-                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                    ModelState.AddModelError("", "Choose another login");
             }
+            PrepareViewBag();
             return View(model);
         }
 
@@ -121,6 +118,14 @@ namespace EMR.Controllers
                 ClaimsIdentity.DefaultRoleClaimType);
             // установка аутентификационных куки
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
+
+        private void PrepareViewBag()
+        {
+            List<SelectListItem> roles = new List<SelectListItem>();
+            roles.AddRange(_userService.GetRoles()
+                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList());
+            ViewBag.Roles = new SelectList(roles, "Value", "Text");
         }
     }
 }

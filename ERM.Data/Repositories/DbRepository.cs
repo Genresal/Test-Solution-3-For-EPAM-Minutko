@@ -120,7 +120,7 @@ CREATE TABLE [dbo].[tUser](
   [Birthday] [datetime] NOT NULL,
   [Email] [nvarchar](255) NOT NULL,
   [PhoneNumber] [nvarchar](255) NOT NULL,
-  [PhotoUrl] [nvarchar](255) NOT NULL,
+  [PhotoUrl] [nvarchar](255),
   PRIMARY KEY ([Id]),
   );
 

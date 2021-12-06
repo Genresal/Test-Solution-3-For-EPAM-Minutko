@@ -3,8 +3,11 @@ using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EMR.Controllers
 {
@@ -39,35 +42,30 @@ namespace EMR.Controllers
             {
                 model = new DoctorViewModel();
             }
-            return AddOrEdit(model);
+            PrepareViewBag();
+            return View("AddOrEdit", model);
         }
 
         public IActionResult Update(int id)
         {
             var model = _pageService.GetById(id);
-            return AddOrEdit(model);
-        }
-
-        public IActionResult AddOrEdit(DoctorViewModel model)
-        {
             if (model == null)
             {
                 return NotFound();
             }
+            PrepareViewBag();
             return View("AddOrEdit", model);
         }
 
         [HttpPost]
-        public IActionResult AddOrEdit(int id, DoctorViewModel model)
+        public IActionResult AddOrEdit(DoctorViewModel model)
         {
             if (ModelState.IsValid)
             {
-                //Insert
-                if (id == 0)
+                if (model.Id == 0)
                 {
                     _pageService.Create(model);
                 }
-                //Update
                 else
                 {
                     try
@@ -79,8 +77,9 @@ namespace EMR.Controllers
                         return NotFound();
                     }
                 }
-                return RedirectToAction(nameof(Details), model);
+                return RedirectToAction(nameof(Details), model.Id);
             }
+            PrepareViewBag();
             return View(model);
         }
 
@@ -89,6 +88,14 @@ namespace EMR.Controllers
         {
             _pageService.Delete(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        private void PrepareViewBag()
+        {
+            List<SelectListItem> positions = new List<SelectListItem>();
+            positions.AddRange(_pageService.GetPositions()
+                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList());
+            ViewBag.Positions = new SelectList(positions, "Value", "Text");
         }
     }
 }
