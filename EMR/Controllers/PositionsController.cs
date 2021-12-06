@@ -1,39 +1,27 @@
-﻿using EMR.Business.Models;
-using EMR.Services;
+﻿using EMR.Services;
 using EMR.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Linq;
 
 namespace EMR.Controllers
 {
-    public class PatientsController : Controller
+    public class PositionsController : Controller
     {
-        private readonly IPatientPageService _pageService;
-        private readonly ILogger<PatientsController> _logger;
+        private readonly IPositionPageService _pageService;
 
 
-        public PatientsController(IPatientPageService s, ILogger<PatientsController> logger)
+        public PositionsController(IPositionPageService pageService)
         {
-            _pageService = s;
-            _logger = logger;
-
+            _pageService = pageService;
         }
 
         public IActionResult Index()
         {
-            if (!HttpContext.User.IsInRole("User"))
-            {
-                return RedirectToAction(nameof(Index), "Users");
-            }
-            return View("Details");
+            return View();
         }
 
         [HttpPost]
-        public IActionResult LoadPatientInfoTable([FromBody] PatientInfoSearchModel SearchParameters)
+        public IActionResult LoadTable([FromBody] PositionSearchModel SearchParameters)
         {
             var result = _pageService.LoadTable(SearchParameters);
 
@@ -50,23 +38,11 @@ namespace EMR.Controllers
             });
         }
 
-        [Authorize]
-        public IActionResult Details(int id = 0)
-        {
-            if (id == 0)
-            {
-                string login = HttpContext.User.Identity.Name;
-                return View(_pageService.GetByLogin(login));
-            }
-
-            return View(_pageService.GetById(id));
-        }
-
-        public IActionResult Create(PatientViewModel model = null)
+        public IActionResult Create(PositionViewModel model = null)
         {
             if (model == null)
             {
-                model = new PatientViewModel();
+                model = new PositionViewModel();
             }
 
             return View("AddOrEdit", model);
@@ -84,7 +60,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddOrEdit(PatientViewModel model)
+        public IActionResult AddOrEdit(PositionViewModel model, int id = 0)
         {
             if (ModelState.IsValid)
             {
@@ -96,7 +72,7 @@ namespace EMR.Controllers
                 {
                     //try
                     //{
-                        _pageService.Update(model);
+                    _pageService.Update(model);
                     //}
                     //catch (Exception)
                     //{
@@ -113,8 +89,14 @@ namespace EMR.Controllers
         // GET: HomeController/Delete/5
         public IActionResult Delete(int id)
         {
+            if (_pageService.IsPositionInUse(id))
+            {
+                ViewBag.Message = "Cannot be deleted, remove the position at doctors first!";
+                return View(nameof(Index));
+            }
+
             _pageService.Delete(id);
-            return RedirectToAction(nameof(Index));
+            return View(nameof(Index));
         }
     }
 }

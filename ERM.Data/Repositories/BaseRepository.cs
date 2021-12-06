@@ -25,6 +25,11 @@ namespace EMR.Data.Repositories
             return ExecuteReader(sqlExpression);
         }
 
+        public virtual IEnumerable<T> GetByColumn(string column, int value)
+        {
+            return GetByColumn(column, value.ToString());
+        }
+
         public virtual IEnumerable<T> GetByColumn(string column, string value)
         {
             string sqlExpression = $"SELECT * " +
@@ -107,16 +112,21 @@ namespace EMR.Data.Repositories
             ExecuteNonQuery(sqlExpression, parameters);
         }
 
-        public void Update(T model)
+        public virtual void Update(T model)
         {
             var properties = model.GetType()
                                   .GetProperties()
                                   .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
                                   .Where(x => x.Name != "Id")
                                   .ToList();
+
+            Update(model, properties);
+        }
+
+        public void Update(T model, List<PropertyInfo> properties)
+        {
             string sqlExpression = $@"UPDATE {typeof(T).Name.ConvertToTableName()} SET ";
 
-            List<SqlParameter> parameters = new List<SqlParameter>();
             int lastArrayIndex = properties.Count - 1;
             for (int i = 0; i <= lastArrayIndex; i++)
             {
@@ -128,13 +138,12 @@ namespace EMR.Data.Repositories
                 }
 
                 sqlExpression = $"{sqlExpression}[{prop.Name}] = @{prop.Name}";
-
-                parameters.Add(new SqlParameter($"@{prop.Name}", model.GetType().GetProperty(prop.Name).GetValue(model, null)));
             }
 
-            parameters.Add(new SqlParameter($"@Id", model.Id));
-
             sqlExpression += " WHERE Id = @Id";
+
+            List<SqlParameter> parameters = ProrertiesToSqlParameters(model, properties);
+            parameters.Add(new SqlParameter($"@Id", model.Id));
 
             ExecuteNonQuery(sqlExpression, parameters);
         }

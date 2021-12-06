@@ -6,10 +6,16 @@ using System.Linq;
 
 namespace EMR.Business.Services
 {
-    public class PositionService : BaseBusinessService<Position>, IBusinessService<Position>
+    public class PositionService : BaseBusinessService<Position>, IPositionService
     {
-        public PositionService(IRepository<Position> r) : base (r)
+        private readonly IRepository<Doctor> _doctorRepository;
+        public PositionService(IRepository<Position> positionRepository, IRepository<Doctor> doctorRepository) : base (positionRepository)
         {
+            _doctorRepository = doctorRepository;
+        }
+        public bool IsPositionInUse(int positionId)
+        {
+            return _doctorRepository.GetByColumn(nameof(Doctor.PositionId), positionId).Any();
         }
     }
 }

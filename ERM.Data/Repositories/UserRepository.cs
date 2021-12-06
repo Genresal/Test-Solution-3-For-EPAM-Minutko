@@ -44,7 +44,7 @@ namespace EMR.Data.Repositories
 
         public override User GetById(int id)
         {
-            string sqlExpression = $"{baseQuery} WHERE p.Id = @id";
+            string sqlExpression = $"{baseQuery} WHERE u.Id = @id";
             return ExecuteReader(sqlExpression, new SqlParameter("@id", id)).FirstOrDefault();
         }
 

@@ -14,12 +14,12 @@ namespace EMR.Services
         private readonly IBusinessService<Record> _recordService;
         private readonly IDoctorService _doctorService;
         private readonly IPatientService _patientService;
-        private readonly IBusinessService<Position> _positionService;
+        private readonly IPositionService _positionService;
 
         public RecordPageService(IBusinessService<Record> recordService
             , IDoctorService doctorService
             , IPatientService patientService
-            , IBusinessService<Position> positionService
+            , IPositionService positionService
             , IMapper mapper) : base(recordService, mapper)
         {
             _recordService = recordService;

@@ -1,0 +1,68 @@
+﻿@model PositionSearchModel
+@using EMR.DataTables
+@{
+    ViewData["Title"] = "Positions";
+
+    var _model = new PositionViewModel();
+    var _filters = new List<FilterParameter>();
+}
+
+<span class="text-danger">@ViewBag.Message</span>
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">@ViewData["Title"]</h3>
+                <div class="card-tools">
+                    <a asp-action="Create"><button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add new position</button></a>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="positionsTable" class="table table-sm table-striped table-bordered h-auto" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(value => _model.Id)</th>
+                            <th>@Html.DisplayNameFor(value => _model.Name)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <partial name="_TableScriptsAndStyles" />
+
+        @{
+            var gridModel = new DataTablesModel
+            {
+                StateSave = true,
+                AutoWidth = true,
+                Processing = true,
+                ServerSide = true,
+                Paging = true,
+                Searching = true,
+                Order = "0, 'desc'",
+                LengthMenu = "12, 24, 100, 500",
+                PageLength = 12,
+                Name = "positionsTable",
+                Url = "/Positions/LoadTable",
+                Filters = _filters
+            };
+
+            gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id)));
+            gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Name)));
+            string button = " <a href=\"/Positions/Update?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-edit\"></i></a>" +
+            " <a href=\"/Positions/Delete?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-trash\"></i></a>";
+
+            gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id))
+            {
+                Orderable = false,
+                Render = new RenderRandom(button)
+            }
+        );
+
+        }
+        @await Html.PartialAsync("Table", gridModel)

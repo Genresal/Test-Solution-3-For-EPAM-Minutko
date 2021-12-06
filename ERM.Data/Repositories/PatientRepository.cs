@@ -1,20 +1,18 @@
-﻿using EMR.Data.Helpers;
-using EMR.Business.Models;
+﻿using EMR.Business.Models;
+using EMR.Business.Repositories;
+using EMR.Data.Helpers;
+using RandomGen;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using RandomGen;
-using EMR.Business.Repositories;
 
 namespace EMR.Data.Repositories
 {
     public class PatientsRepository : BaseRepository<Patient>, IPatientRepository
     {
         private readonly string baseQuery;
-        public PatientsRepository(string conn) : base (conn)
+        public PatientsRepository(string conn) : base(conn)
         {
             baseQuery = $"SELECT p.{nameof(Patient.Id)}, " +
               $"{nameof(Patient.UserId)}, " +
@@ -37,7 +35,7 @@ namespace EMR.Data.Repositories
             return ExecuteReader(baseQuery);
         }
 
-        public override void Create(Patient patient)
+        public override void Create(Patient model)
         {
             string sqlExpression = $"BEGIN TRY " +
                 $"BEGIN TRAN " +
@@ -73,20 +71,20 @@ namespace EMR.Data.Repositories
                 $"ROLLBACK TRAN " +
                 $"END CATCH";
 
-            var doctorProperties = patient.GetType()
+            var patientProperties = model.GetType()
                       .GetProperties()
                       .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
                       .Where(x => x.Name != "Id")
                       .ToList();
 
-            var userProperties = patient.User.GetType()
+            var userProperties = model.User.GetType()
                         .GetProperties()
                         .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
                         .Where(x => x.Name != "Id")
                         .ToList();
 
-            var parameters = ProrertiesToSqlParameters(patient, doctorProperties);
-            parameters.AddRange(ProrertiesToSqlParameters(patient.User, userProperties));
+            var parameters = ProrertiesToSqlParameters(model, patientProperties);
+            parameters.AddRange(ProrertiesToSqlParameters(model.User, userProperties));
 
             ExecuteNonQuery(sqlExpression, parameters);
         }
@@ -95,6 +93,50 @@ namespace EMR.Data.Repositories
         {
             string sqlExpression = $"{baseQuery} WHERE [{column}] = @value";
             return ExecuteReader(sqlExpression, new SqlParameter("@value", value));
+        }
+
+        public override void Update(Patient model)
+        {
+            string sqlExpression = $"BEGIN TRY " +
+            $"BEGIN TRAN " +
+            $"UPDATE [dbo].[tUser] " +
+            $"SET " +
+            $"[Login] = @Login" +
+            $",[Password] = @Password" +
+            $",[RoleId] = @RoleId" +
+            $",[FirstName] = @FirstName" +
+            $",[LastName] = @LastName" +
+            $",[Birthday] = @Birthday" +
+            $",[Email] = @Email" +
+            $",[PhoneNumber] = @PhoneNumber" +
+            $",[PhotoUrl] = @PhotoUrl " +
+            $"WHERE Id = @UserId " +
+            $"UPDATE [dbo].[tPatient] " +
+            $"SET " +
+            $"[UserId] = @UserId" +
+            $",[Job] = @Job " +
+            $"WHERE Id = @Id " +
+            $"COMMIT TRAN " +
+            $"END TRY " +
+            $"BEGIN CATCH " +
+            $"ROLLBACK TRAN " +
+            $"END CATCH";
+
+            var patientProperties = model.GetType()
+                        .GetProperties()
+                        .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
+                        .ToList();
+
+            var userProperties = model.User.GetType()
+                        .GetProperties()
+                        .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
+                        .Where(x => x.Name != "Id")
+                        .ToList();
+
+            var parameters = ProrertiesToSqlParameters(model, patientProperties);
+            parameters.AddRange(ProrertiesToSqlParameters(model.User, userProperties));
+
+            ExecuteNonQuery(sqlExpression, parameters);
         }
 
         public IEnumerable<Patient> GetByDoctorId(int doctorId)

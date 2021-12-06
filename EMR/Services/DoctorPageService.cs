@@ -9,8 +9,8 @@ namespace EMR.Services
 {
     public class DoctorPageService : BasePageService<Doctor, DoctorViewModel>, IDoctorPageService
     {
-        private readonly IBusinessService<Position> _positionService;
-        public DoctorPageService(IDoctorService doctorService, IBusinessService<Position> positionService, IMapper mapper) : base(doctorService, mapper)
+        private readonly IPositionService _positionService;
+        public DoctorPageService(IDoctorService doctorService, IPositionService positionService, IMapper mapper) : base(doctorService, mapper)
         {
             _positionService = positionService;
         }

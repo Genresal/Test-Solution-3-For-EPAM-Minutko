@@ -8,7 +8,8 @@ namespace EMR.MappingConfigurations
     {
         public PositionProfile()
         {
-            CreateMap<Position, PositionViewModel>();
+            CreateMap<Position, PositionViewModel>()
+                .ReverseMap();
         }
     }
 }

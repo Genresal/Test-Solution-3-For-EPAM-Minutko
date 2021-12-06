@@ -63,10 +63,15 @@ namespace EMR.Controllers
                 return NotFound();
             }
 
-            return View("AddOrEdit", model);
+            return model.RoleId switch
+            {
+                1 => RedirectToAction("Update", "Patients", new {id = _pageService.GePatientByUserId(id).Id }),
+                2 => RedirectToAction("Update", "Doctors", new { id = _pageService.GeDoctorByUserId(id).Id }),
+                _ => View("AddOrEdit", model),
+            };
         }
 
-            [HttpPost]
+        [HttpPost]
         public IActionResult AddOrEdit(UserViewModel model)
         {
             if (ModelState.IsValid)

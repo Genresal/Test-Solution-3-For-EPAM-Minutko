@@ -8,12 +8,10 @@ namespace EMR.Business.Services
 {
     public class PatientService : BaseBusinessService<Patient>, IPatientService
     {
-        private readonly IRepository<User> _userRepository;
         private readonly IPatientRepository _patientRepository;
         private readonly IPatientInfoRepository _patientInfoRepository;
         public PatientService(IPatientRepository r, IRepository<User> u, IPatientInfoRepository patientInfoRepository) : base(r)
         {
-            _userRepository = u;
             _patientRepository = r;
             _patientInfoRepository = patientInfoRepository;
         }
@@ -26,12 +24,6 @@ namespace EMR.Business.Services
         public IEnumerable<PatientInfo> GetPatientsInfo(int doctorId)
         {
             return _patientInfoRepository.GetPatientsInfo(doctorId);
-        }
-
-        public void Update(Patient model)
-        {
-            _userRepository.Update(model.User);
-            _patientRepository.Update(model);
         }
     }
 }

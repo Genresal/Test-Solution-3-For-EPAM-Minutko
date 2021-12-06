@@ -19,6 +19,7 @@ namespace EMR.Business.Repositories
     public interface IRepository<T> : IRepository where T : BaseModel
     {
         IEnumerable<T> GetAll();
+        IEnumerable<T> GetByColumn(string column, int value);
         IEnumerable<T> GetByColumn(string column, string value);
         IEnumerable<T> GetByColumn(string column, List<string> values);
         T GetById(int id);

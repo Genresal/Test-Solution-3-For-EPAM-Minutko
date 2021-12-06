@@ -11,12 +11,20 @@ namespace EMR.Services
     public class UserPageService : BasePageService<User, UserViewModel>, IUserPageService
     {
         readonly IBusinessService<User> _pageService;
+        readonly IDoctorService _doctorService;
+        readonly IPatientService _patientService;
         readonly IBusinessService<Role> _roleService;
 
-        public UserPageService(IBusinessService<User> userService, IBusinessService<Role> roleService, IMapper mapper) : base(userService, mapper)
+        public UserPageService(IBusinessService<User> userService
+            , IBusinessService<Role> roleService
+            , IDoctorService doctorService
+            , IPatientService patientService
+            , IMapper mapper) : base(userService, mapper)
         {
             _pageService = userService;
             _roleService = roleService;
+            _doctorService = doctorService;
+            _patientService = patientService;
         }
 
         public IEnumerable<UserViewModel> LoadTable(UserSearchModel searchParameters)
@@ -59,6 +67,18 @@ namespace EMR.Services
         {
             var rawResult = _pageService.GetByColumn(nameof(User.Login), login).FirstOrDefault();
             return _mapper.Map<UserViewModel>(rawResult);
+        }
+
+        public DoctorViewModel GeDoctorByUserId(int userId)
+        {
+            var rawResult = _doctorService.GetByColumn(nameof(Doctor.UserId), userId.ToString()).FirstOrDefault();
+            return _mapper.Map<DoctorViewModel>(rawResult);
+        }
+
+        public PatientViewModel GePatientByUserId(int userId)
+        {
+            var rawResult = _patientService.GetByColumn(nameof(Patient.UserId), userId.ToString()).FirstOrDefault();
+            return _mapper.Map<PatientViewModel>(rawResult);
         }
     }
 }
