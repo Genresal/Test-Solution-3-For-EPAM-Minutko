@@ -9,6 +9,8 @@ namespace EMR.ViewModels
     public class RecordViewModel
     {
         public int Id { get; set; }
+        public int DoctorId { get; set; }
+        public int PatientId { get; set; }
         public string Diagnosis { get; set; }
         public string PatientName { get; set; }
         public string DoctorName { get; set; }

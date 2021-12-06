@@ -55,14 +55,10 @@ namespace EMR.Services
             return result.Order(searchParameters);
         }
 
-        public IEnumerable<Patient> GetByDoctorId(int doctorid)
+        public PatientViewModel GetByLogin(string login)
         {
-            return _patientService.GetByDoctorId(doctorid);
-        }
-
-        public Patient GetByLogin(string login)
-        {
-            return _patientService.GetByColumn("Login", login).FirstOrDefault();
+            var rawResult = _patientService.GetByColumn("Login", login).FirstOrDefault();
+            return _mapper.Map<PatientViewModel>(rawResult);
         }
     }
 }

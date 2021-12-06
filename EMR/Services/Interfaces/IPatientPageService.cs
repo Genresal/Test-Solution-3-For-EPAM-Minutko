@@ -10,6 +10,6 @@ namespace EMR.Services
     public interface IPatientPageService : IBasePageService<PatientViewModel>
     {
         public IEnumerable<PatientInfoViewModel> LoadTable(PatientInfoSearchModel searchParameters);
-        public Patient GetByLogin(string login);
+        public PatientViewModel GetByLogin(string login);
     }
 }
