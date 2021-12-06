@@ -111,7 +111,8 @@ namespace EMR.Controllers
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role),
-                new Claim("FullName", $"{user.FirstName} {user.LastName}")
+                new Claim("FullName", $"{user.FirstName} {user.LastName}"),
+                new Claim("PhotoUrl", user.PhotoUrl)
             };
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
