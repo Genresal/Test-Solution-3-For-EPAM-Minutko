@@ -10,18 +10,18 @@ namespace EMR.Services
 {
     public class UserPageService : BasePageService<User, UserViewModel>, IUserPageService
     {
-        readonly IBusinessService<User> _pageService;
+        readonly IUserService _userService;
         readonly IDoctorService _doctorService;
         readonly IPatientService _patientService;
         readonly IBusinessService<Role> _roleService;
 
-        public UserPageService(IBusinessService<User> userService
+        public UserPageService(IUserService userService
             , IBusinessService<Role> roleService
             , IDoctorService doctorService
             , IPatientService patientService
             , IMapper mapper) : base(userService, mapper)
         {
-            _pageService = userService;
+            _userService = userService;
             _roleService = roleService;
             _doctorService = doctorService;
             _patientService = patientService;
@@ -29,7 +29,7 @@ namespace EMR.Services
 
         public IEnumerable<UserViewModel> LoadTable(UserSearchModel searchParameters)
         {
-            IEnumerable<User> rawResult = _pageService.GetAll();
+            IEnumerable<User> rawResult = _userService.GetAll();
 
             var result = _mapper.Map<IEnumerable<User>, IEnumerable<UserViewModel>>(rawResult);
 
@@ -58,14 +58,20 @@ namespace EMR.Services
             return _roleService.GetAll();
         }
 
+        public UserViewModel GetRandomAccount(int roleId)
+        {
+            var rawResult = _userService.GetRandomAccount(roleId);
+            return _mapper.Map<UserViewModel>(rawResult);
+        }
+
         public bool IsLoginExist(string login)
         {
-            return _pageService.GetByColumn(nameof(User.Login), login).Any();
+            return _userService.GetByColumn(nameof(User.Login), login).Any();
         }
 
         public UserViewModel GeByLogin(string login)
         {
-            var rawResult = _pageService.GetByColumn(nameof(User.Login), login).FirstOrDefault();
+            var rawResult = _userService.GetByColumn(nameof(User.Login), login).FirstOrDefault();
             return _mapper.Map<UserViewModel>(rawResult);
         }
 

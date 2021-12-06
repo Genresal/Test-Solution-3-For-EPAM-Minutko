@@ -15,5 +15,6 @@ namespace EMR.Services
         public UserViewModel GeByLogin(string login);
         public DoctorViewModel GeDoctorByUserId(int userId);
         public PatientViewModel GePatientByUserId(int userId);
+        public UserViewModel GetRandomAccount(int roleId);
     }
 }

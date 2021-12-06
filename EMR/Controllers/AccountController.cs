@@ -41,6 +41,19 @@ namespace EMR.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginRandom(int roleId)
+        {
+            var user = _userService.GetRandomAccount(roleId);
+            if (user != null)
+            {
+                await Authenticate(user);
+            }
+
+            return RedirectToAction("Index", "Home");
+
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -69,6 +82,7 @@ namespace EMR.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
@@ -76,6 +90,7 @@ namespace EMR.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Register()
         {
             PrepareViewBag();
@@ -83,6 +98,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public IActionResult Register(RegisterViewModel model)
         {

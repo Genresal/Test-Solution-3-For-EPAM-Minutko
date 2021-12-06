@@ -14,13 +14,13 @@ namespace EMR.Services
 {
     public class AccountPageService :  IAccountPageService
     {
-        readonly IBusinessService<User> _pageService;
+        readonly IUserService _userService;
         readonly IBusinessService<Role> _roleService;
         private readonly IMapper _mapper;
 
-        public AccountPageService(IBusinessService<User> userService, IBusinessService<Role> roleService, IMapper mapper)
+        public AccountPageService(IUserService userService, IBusinessService<Role> roleService, IMapper mapper)
         {
-            _pageService = userService;
+            _userService = userService;
             _roleService = roleService;
             _mapper = mapper;
         }
@@ -32,7 +32,7 @@ namespace EMR.Services
 
         public bool IsLoginExist(string login)
         {
-            return _pageService.GetByColumn(nameof(User.Login), login).Any();
+            return _userService.GetByColumn(nameof(User.Login), login).Any();
         }
     }
 }

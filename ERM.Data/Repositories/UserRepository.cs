@@ -82,6 +82,28 @@ namespace EMR.Data.Repositories
                     sqlExpression = $"{sqlExpression},";
                 }
             }
+
+            sqlExpression = $"{sqlExpression}," +
+    $"('{Gen.Random.Text.Words()().MakeFirstCharUppercase()}'" +
+    $",'{Gen.Random.Text.Words()()}'" +
+    $",'{3}'" +
+    $",'{Gen.Random.Names.Male()()}'" +
+    $",'{Gen.Random.Names.Surname()()}'" +
+    $",'{Gen.Random.Time.Dates(DateTime.Now.AddYears(-100), DateTime.Now)()}'" +
+    $",'{Gen.Random.Internet.EmailAddresses()()}'" +
+    $",'{Gen.Random.PhoneNumbers.WithRandomFormat()()}'" +
+    $",'{Gen.Random.Internet.Urls()()}')";
+
+            sqlExpression = $"{sqlExpression}," +
+$"('{Gen.Random.Text.Words()().MakeFirstCharUppercase()}'" +
+$",'{Gen.Random.Text.Words()()}'" +
+$",'{4}'" +
+$",'{Gen.Random.Names.Male()()}'" +
+$",'{Gen.Random.Names.Surname()()}'" +
+$",'{Gen.Random.Time.Dates(DateTime.Now.AddYears(-100), DateTime.Now)()}'" +
+$",'{Gen.Random.Internet.EmailAddresses()()}'" +
+$",'{Gen.Random.PhoneNumbers.WithRandomFormat()()}'" +
+$",'{Gen.Random.Internet.Urls()()}')";
             ExecuteNonQuery(sqlExpression);
         }
 

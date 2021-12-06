@@ -69,7 +69,7 @@ namespace EMR
             services.AddTransient<ITreatmentService, RecordTreatmentService>();
             services.AddTransient<IDrugService, DrugService>();
             services.AddTransient<IProcedureService, ProcedureService>();
-            services.AddTransient<IBusinessService<User>, UserService>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddTransient<IRecordPageService, RecordPageService>();
             services.AddTransient<IPatientPageService, PatientPageService>();
