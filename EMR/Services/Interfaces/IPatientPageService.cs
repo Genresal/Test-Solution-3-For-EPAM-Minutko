@@ -9,8 +9,7 @@ namespace EMR.Services
 {
     public interface IPatientPageService : IBasePageService<PatientViewModel>
     {
-        public IEnumerable<PatientViewModel> LoadTable(PatientSearchModel searchParameters);
-        public IEnumerable<PatientInfoViewModel> LoadPatientInfoTable(PatientInfoSearchModel searchParameters);
+        public IEnumerable<PatientInfoViewModel> LoadTable(PatientInfoSearchModel searchParameters);
         public Patient GetByLogin(string login);
     }
 }

@@ -9,9 +9,12 @@ namespace EMR.MappingConfigurations
         public PatientProfile()
         {
             CreateMap<Patient, PatientViewModel>().IncludeMembers(x => x.User)
-                .ForMember(dest => dest.FullName, act => act.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"));
+                .ForMember(dest => dest.FullName, act => act.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"))
+                .ReverseMap();
 
-            CreateMap<User, PatientViewModel>();
+            CreateMap<User, PatientViewModel>()
+                .ReverseMap()
+                .ForMember(dest => dest.Role, act => act.Ignore());
         }
     }
 }

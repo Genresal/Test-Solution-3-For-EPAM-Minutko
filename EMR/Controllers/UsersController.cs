@@ -52,35 +52,29 @@ namespace EMR.Controllers
             {
                 model = new UserViewModel();
             }
-            return AddOrEdit(model);
+            return View("AddOrEdit", model);
         }
 
         public IActionResult Update(int id)
         {
             var model = _pageService.GetById(id);
-            return AddOrEdit(model);
-        }
-
-        public IActionResult AddOrEdit(UserViewModel model)
-        {
             if (model == null)
             {
                 return NotFound();
             }
+
             return View("AddOrEdit", model);
         }
 
-        [HttpPost]
-        public IActionResult AddOrEdit(int id, UserViewModel model)
+            [HttpPost]
+        public IActionResult AddOrEdit(UserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                //Insert
-                if (id == 0)
+                if (model.Id == 0)
                 {
                     _pageService.Create(model);
                 }
-                //Update
                 else
                 {
                     try
@@ -94,6 +88,7 @@ namespace EMR.Controllers
                 }
                 return RedirectToAction(nameof(Details), model.Id);
             }
+
             return View(model);
         }
 

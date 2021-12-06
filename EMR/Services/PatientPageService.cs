@@ -18,32 +18,7 @@ namespace EMR.Services
             _patientService = patientService;
         }
 
-        public IEnumerable<PatientViewModel> LoadTable(PatientSearchModel searchParameters)
-        {
-            IEnumerable<Patient> rawResult;
-
-            if (searchParameters.DoctorId > 0)
-            {
-                rawResult = _patientService.GetByDoctorId(searchParameters.DoctorId);
-            }
-            else
-            {
-                rawResult = _patientService.GetAll();
-            }
-
-            var result = _mapper.Map<IEnumerable<Patient>, IEnumerable<PatientViewModel>>(rawResult);
-
-            var searchBy = searchParameters.Search?.Value;
-
-            if (!string.IsNullOrEmpty(searchBy))
-            {
-                result = result.Where(r => r.FullName != null && r.FullName.ToString().ToUpper().Contains(searchBy.ToUpper()));
-            }
-
-            return result.Order(searchParameters);
-        }
-
-        public IEnumerable<PatientInfoViewModel> LoadPatientInfoTable(PatientInfoSearchModel searchParameters)
+        public IEnumerable<PatientInfoViewModel> LoadTable(PatientInfoSearchModel searchParameters)
         {
             var rawResult = _patientService.GetPatientsInfo(searchParameters.DoctorId);
             var result = _mapper.Map<IEnumerable<PatientInfo>, IEnumerable<PatientInfoViewModel>>(rawResult);

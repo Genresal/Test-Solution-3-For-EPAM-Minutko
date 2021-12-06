@@ -21,12 +21,6 @@ namespace EMR.Services
             return _mapper.Map<Doctor, DoctorViewModel>(model);
         }
 
-        public override void Create (DoctorViewModel viewModel)
-        {
-            var doctorModel = _mapper.Map<DoctorViewModel, Doctor>(viewModel);
-            _mainService.Create(doctorModel);
-        }
-
         public IEnumerable<PositionViewModel> GetPositions()
         {
             var result = _positionService.GetAll();

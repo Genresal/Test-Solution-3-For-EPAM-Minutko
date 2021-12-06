@@ -23,26 +23,9 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
-        public IActionResult LoadTable([FromBody] PatientSearchModel SearchParameters)
-        {
-            var result = _pageService.LoadTable(SearchParameters);
-
-            var filteredResultsCount = result.Count();
-            var totalResultsCount = result.Count();
-            return Json(new
-            {
-                draw = SearchParameters.Draw,
-                recordsTotal = totalResultsCount,
-                recordsFiltered = filteredResultsCount,
-                data = result
-                .Skip(SearchParameters.Start)
-                .Take(SearchParameters.Length)
-            });
-        }
-
         public IActionResult LoadPatientInfoTable([FromBody] PatientInfoSearchModel SearchParameters)
         {
-            var result = _pageService.LoadPatientInfoTable(SearchParameters);
+            var result = _pageService.LoadTable(SearchParameters);
 
             var filteredResultsCount = result.Count();
             var totalResultsCount = result.Count();
@@ -74,35 +57,30 @@ namespace EMR.Controllers
             {
                 model = new PatientViewModel();
             }
-            return AddOrEdit(model);
+
+            return View("AddOrEdit", model);
         }
 
         public IActionResult Update(int id)
         {
             var model = _pageService.GetById(id);
-            return AddOrEdit(model);
-        }
-
-        public IActionResult AddOrEdit(PatientViewModel model)
-        {
             if (model == null)
             {
                 return NotFound();
             }
+
             return View("AddOrEdit", model);
         }
 
         [HttpPost]
-        public IActionResult AddOrEdit(int id, PatientViewModel model)
+        public IActionResult AddOrEdit(PatientViewModel model)
         {
             if (ModelState.IsValid)
             {
-                //Insert
-                if (id == 0)
+                if (model.Id == 0)
                 {
                     _pageService.Create(model);
                 }
-                //Update
                 else
                 {
                     try
@@ -114,8 +92,10 @@ namespace EMR.Controllers
                         return NotFound();
                     }
                 }
+
                 return RedirectToAction(nameof(Details), model.Id);
             }
+
             return View(model);
         }
 

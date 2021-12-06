@@ -37,6 +37,60 @@ namespace EMR.Data.Repositories
             return ExecuteReader(baseQuery);
         }
 
+        public override void Create(Patient patient)
+        {
+            string sqlExpression = $"BEGIN TRY " +
+                $"BEGIN TRAN " +
+                $"INSERT INTO [dbo].[tUser]" +
+                $"([Login]" +
+                $",[Password]" +
+                $",[RoleId]" +
+                $",[FirstName]" +
+                $",[LastName]" +
+                $",[Birthday]" +
+                $",[Email]" +
+                $",[PhoneNumber]" +
+                $",[PhotoUrl])" +
+                $"VALUES" +
+                $"(@Login" +
+                $",@Password" +
+                $",@RoleId" +
+                $",@FirstName" +
+                $",@LastName" +
+                $",@Birthday" +
+                $",@Email" +
+                $",@PhoneNumber" +
+                $",@PhotoUrl) " +
+                $"INSERT INTO [dbo].[tPatient]" +
+                $"([UserId]" +
+                $",[Job])" +
+                $"VALUES" +
+                $"(SCOPE_IDENTITY()" +
+                $",@Job) " +
+                $"COMMIT TRAN " +
+                $"END TRY " +
+                $"BEGIN CATCH " +
+                $"ROLLBACK TRAN " +
+                $"END CATCH";
+
+            var doctorProperties = patient.GetType()
+                      .GetProperties()
+                      .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
+                      .Where(x => x.Name != "Id")
+                      .ToList();
+
+            var userProperties = patient.User.GetType()
+                        .GetProperties()
+                        .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
+                        .Where(x => x.Name != "Id")
+                        .ToList();
+
+            var parameters = ProrertiesToSqlParameters(patient, doctorProperties);
+            parameters.AddRange(ProrertiesToSqlParameters(patient.User, userProperties));
+
+            ExecuteNonQuery(sqlExpression, parameters);
+        }
+
         public override IEnumerable<Patient> GetByColumn(string column, string value)
         {
             string sqlExpression = $"{baseQuery} WHERE [{column}] = @value";
