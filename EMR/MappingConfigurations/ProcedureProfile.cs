@@ -8,7 +8,8 @@ namespace EMR.MappingConfigurations
     {
         public ProcedureProfile()
         {
-            CreateMap<Procedure, ProcedureViewModel>();
+            CreateMap<Procedure, ProcedureViewModel>()
+                .ReverseMap();
         }
     }
 }

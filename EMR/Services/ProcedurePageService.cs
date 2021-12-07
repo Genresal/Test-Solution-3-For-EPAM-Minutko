@@ -39,5 +39,7 @@ namespace EMR.Services
         {
             return _treatmentService.GetDrugRecordId(procedureId);
         }
+
+
     }
 }

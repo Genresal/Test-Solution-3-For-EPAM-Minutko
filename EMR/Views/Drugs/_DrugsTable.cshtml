@@ -38,7 +38,10 @@
             Filters = _filters
         };
 
-        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id)));
+        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id))
+        {
+            Visible = false
+        });
         gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Name)));
         gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Description)));
         string buttons = $" <a href=\"/Drugs/AddOrEdit?id=' + row.id + '&recordId={@Model.RecordId} \" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-edit\"></i></a>" +
@@ -46,6 +49,7 @@
 
         gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id))
         {
+            Orderable = false,
             Render = new RenderRandom(buttons)
         }
         );

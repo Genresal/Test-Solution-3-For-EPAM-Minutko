@@ -15,7 +15,7 @@ namespace EMR.Controllers
         {
             _pageService = pageService;
         }
-        // GET: HomeController
+
         public IActionResult Index()
         {
             return View();
