@@ -1,7 +1,14 @@
-﻿CREATE PROCEDURE [dbo].[GetRecords]
+﻿CREATE PROCEDURE [dbo].[GetRecords] @COLUMN NVARCHAR(30), @OPERATOR NVARCHAR(30), @VALUE NVARCHAR(30)
 
 AS
-	SELECT rec.Id
+
+DECLARE @CONDITION NVARCHAR(128) = ''
+DECLARE @SQL_QUERY NVARCHAR (MAX)
+IF (@COLUMN is not null)
+BEGIN
+SET @CONDITION = 'WHERE ' + @COLUMN + ' ' + @OPERATOR + ' ' + @VALUE
+END
+SET @SQL_QUERY = 'SELECT rec.Id
 			,DiagnosisId
 			,SickLeaveId
 			,DoctorId
@@ -34,5 +41,7 @@ AS
 			LEFT JOIN tUser as userPat ON userPat.Id = pat.UserId 
 			LEFT JOIN tDiagnosis as diagnosis ON diagnosis.Id = rec.DiagnosisId 
 			LEFT JOIN tPosition as pos ON pos.Id = doc.PositionId 
-			LEFT JOIN tSickLeave as sick ON sick.Id = rec.SickLeaveId
+			LEFT JOIN tSickLeave as sick ON sick.Id = rec.SickLeaveId ' + @CONDITION
+
+			EXECUTE sp_executesql @SQL_QUERY
 RETURN 0

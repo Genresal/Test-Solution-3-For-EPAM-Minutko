@@ -70,5 +70,6 @@
     <Build Include="tRecord.sql" />
     <Build Include="tRecordTreatment.sql" />
     <Build Include="GetRecords.sql" />
+    <Build Include="DeleteRecord.sql" />
   </ItemGroup>
 </Project>

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using EMR.Business.Repositories;
+using System.Data;
 
 namespace EMR.Data.Repositories
 {
@@ -54,21 +55,34 @@ namespace EMR.Data.Repositories
         
         public override IEnumerable<Record> GetAll()
         {
-            return ExecuteReader("GetRecords", true);
+            /*List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@COLUMN", "rec.Id"));
+            parameters.Add(new SqlParameter("@OPERATOR", ">"));
+            parameters.Add(new SqlParameter("@VALUE", "90"));*/
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+parameters.Add(new SqlParameter("@COLUMN", DBNull.Value));
+parameters.Add(new SqlParameter("@OPERATOR", DBNull.Value));
+parameters.Add(new SqlParameter("@VALUE", DBNull.Value));
+            return ExecuteReader("GetRecords", true, parameters);
         }
 
         public override IEnumerable<Record> GetByColumn(string column, string value)
         {
-            string sqlExpression = $"{baseQuery} WHERE [{column}] = @value";
-            return ExecuteReader(sqlExpression, new SqlParameter("@value", value));
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@COLUMN", column));
+            parameters.Add(new SqlParameter("@OPERATOR", "="));
+            parameters.Add(new SqlParameter("@VALUE", value));
+            return ExecuteReader("GetRecords", true, parameters);
         }
 
         public override Record GetById(int id)
         {
-            string sqlExpression = $"{baseQuery} " +
-                                   $"WHERE r.[Id] = @Id";
-
-            return ExecuteReader(sqlExpression, new SqlParameter("@Id", id)).FirstOrDefault();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@COLUMN", "rec.Id"));
+            parameters.Add(new SqlParameter("@OPERATOR", "="));
+            parameters.Add(new SqlParameter("@VALUE", id));
+            return ExecuteReader("GetRecords", true, parameters).FirstOrDefault();
         }
 
         public override void Delete(int id)
@@ -77,6 +91,9 @@ namespace EMR.Data.Repositories
             string sqlExpression = $"BEGIN TRY " +
                 $"BEGIN TRAN " +
                 $"DECLARE @Id int = @parId " +
+                $"DELETE FROM [dbo].[tDrug] WHERE Id in (Select DrugId from tRecordTreatment where RecordId = @parId) " +
+                $"DELETE FROM [dbo].[tProcedure] WHERE Id in (Select ProcedureId from tRecordTreatment where RecordId = @parId) " +
+                $"DELETE FROM [dbo].[tDiagnosis] WHERE Id in (Select DiagnosisId from tRecord where Id = @parId) " +
                 $"DELETE FROM [dbo].[{nameof(RecordTreatment).ConvertToTableName()}] WHERE {nameof(RecordTreatment.RecordId)} = @Id " +
                 $"DELETE FROM {typeof(Record).Name.ConvertToTableName()} WHERE Id = @Id " +
                 $"COMMIT TRAN " +

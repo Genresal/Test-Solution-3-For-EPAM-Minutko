@@ -220,7 +220,7 @@ namespace EMR.Data.Repositories
             return result;
         }
 
-        protected List<T> ExecuteReader(string sqlExpression, bool stored = false)
+        protected List<T> ExecuteReader(string sqlExpression, bool stored = false, List<SqlParameter> parameters = null)
         {
             List<T> results = new List<T>();
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -231,6 +231,11 @@ namespace EMR.Data.Repositories
                 if(stored)
                 {
                     command.CommandType = CommandType.StoredProcedure;
+                }
+
+                if(parameters is not null)
+                {
+                    command.Parameters.AddRange(parameters.ToArray());
                 }
 
                 using (SqlDataReader reader = command.ExecuteReader())

@@ -13,5 +13,6 @@
     FOREIGN KEY ([SickLeaveId])
 	  REFERENCES [tSickLeave]([Id]),
     FOREIGN KEY ([DiagnosisId])
-      REFERENCES [tDiagnosis]([Id]),
+      REFERENCES [tDiagnosis]([Id])
+      ON DELETE CASCADE,
 );
