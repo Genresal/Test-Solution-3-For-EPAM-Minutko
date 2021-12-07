@@ -8,7 +8,8 @@ namespace EMR.MappingConfigurations
     {
         public SickLeaveProfile()
         {
-            CreateMap<SickLeave, SickLeaveViewModel>();
+            CreateMap<SickLeave, SickLeaveViewModel>()
+                .ReverseMap();
         }
     }
 }

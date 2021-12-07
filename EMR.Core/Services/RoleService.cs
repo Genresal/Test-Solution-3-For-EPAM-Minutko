@@ -8,7 +8,7 @@ namespace EMR.Business.Services
 {
     public class RoleService : BaseBusinessService<Role>, IBusinessService<Role>
     {
-        public RoleService(IRepository<Role> roleService) : base (roleService)
+        public RoleService(IRepository<Role> repository) : base (repository)
         {
         }
     }

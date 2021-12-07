@@ -38,6 +38,8 @@ namespace EMR.Data.Repositories
                          $"up.{nameof(User.Email)} as {nameof(Patient)}{nameof(User.Email)}, " +
                          $"up.{nameof(User.PhoneNumber)} as {nameof(Patient)}{nameof(User.PhoneNumber)}, " +
                          $"pos.{nameof(Position.Name)} as {nameof(Doctor)}{nameof(Position.Name)}, " +
+                         $"s.{nameof(SickLeave.Id)} as {nameof(SickLeave)}{nameof(SickLeave.Id)}, " +
+                         $"s.{nameof(SickLeave.Number)} as {nameof(SickLeave)}{nameof(SickLeave.Number)}, " +
                          $"s.{nameof(SickLeave.StartDate)} as {nameof(SickLeave)}{nameof(SickLeave.StartDate)}, " +
                          $"s.{nameof(SickLeave.FinalDate)} as {nameof(SickLeave)}{nameof(SickLeave.FinalDate)} " +
                          $"FROM {nameof(Record).ConvertToTableName()} as r " +
@@ -47,7 +49,7 @@ namespace EMR.Data.Repositories
                          $"LEFT JOIN {nameof(User).ConvertToTableName()} as up ON up.{nameof(User.Id)} = p.{nameof(Patient.UserId)} " +
                          $"LEFT JOIN {nameof(Diagnosis).ConvertToTableName()} as di ON di.{nameof(Diagnosis.Id)} = r.{nameof(Record.DiagnosisId)} " +
                          $"LEFT JOIN {nameof(Position).ConvertToTableName()} as pos ON pos.{nameof(Position.Id)} = d.{nameof(Doctor.PositionId)} " +
-                         $"LEFT JOIN {nameof(SickLeave).ConvertToTableName()} as s ON s.{nameof(SickLeave.Id)} = r.{nameof(SickLeave.Id)}";
+                         $"LEFT JOIN {nameof(SickLeave).ConvertToTableName()} as s ON s.{nameof(SickLeave.Id)} = r.{nameof(Record.SickLeaveId)}";
         }
         
         public override IEnumerable<Record> GetAll()
@@ -120,7 +122,7 @@ namespace EMR.Data.Repositories
 
             model.Id = (int)reader[nameof(model.Id)];
             model.DiagnosisId = (int)reader[nameof(model.DiagnosisId)];
-            model.SickLeaveId = (int)reader[nameof(model.SickLeaveId)];
+            model.SickLeaveId = Convert.IsDBNull(reader[nameof(model.SickLeaveId)]) ? null : (int?)reader[nameof(model.SickLeaveId)];
             model.DoctorId = (int)reader[nameof(model.DoctorId)];
             model.PatientId = (int)reader[nameof(model.PatientId)];
             model.ModifiedDate = (DateTime)reader[nameof(model.ModifiedDate)];
@@ -142,9 +144,12 @@ namespace EMR.Data.Repositories
             model.Patient.User.Birthday = (DateTime)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.Birthday)}"];
             model.Patient.User.Email = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.Email)}"];
             model.Patient.User.PhoneNumber = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.PhoneNumber)}"];
-            model.SickLeave.Id = model.SickLeaveId;
-            model.SickLeave.StartDate = (DateTime)reader[$"{nameof(SickLeave)}{nameof(SickLeave.StartDate)}"];
-            model.SickLeave.FinalDate = (DateTime)reader[$"{nameof(SickLeave)}{nameof(SickLeave.FinalDate)}"];
+            if (!Convert.IsDBNull(reader[$"{nameof(SickLeave)}{nameof(SickLeave.Id)}"]))
+            {
+                model.SickLeave.Id = (int)reader[$"{nameof(SickLeave)}{nameof(SickLeave.Id)}"];
+                model.SickLeave.StartDate = (DateTime)reader[$"{nameof(SickLeave)}{nameof(SickLeave.StartDate)}"];
+                model.SickLeave.FinalDate = (DateTime)reader[$"{nameof(SickLeave)}{nameof(SickLeave.FinalDate)}"];
+            }
 
             return model;
         }

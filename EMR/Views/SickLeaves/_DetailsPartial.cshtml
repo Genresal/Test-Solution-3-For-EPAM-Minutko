@@ -1,0 +1,32 @@
+﻿@model SickLeaveViewModel
+
+@{if (Model.Id != 0)
+    {
+        <h3 class="profile-username text-center">
+            <span>№ </span>
+            <span>@Model.Id</span>
+        </h3>
+
+        <hr>
+
+        <strong><i class="far fa-calendar-alt"></i> Validity</strong>
+
+        <p class="text-muted">
+            @Model.StartDate.ToString("MM/dd/yyyy") - @Model.FinalDate.ToString("MM/dd/yyyy")
+        </p>
+
+
+        <a href="/SickLeaves/AddOrEdit?id=@Model.Id" class="btn btn-primary btn-block"><b>Edit</b></a>
+        <a href="/SickLeaves/Delete?id=@Model.Id&recordId=@Model.RecordId" class="btn btn-primary btn-block"><b>Delete</b></a>
+    }
+    else
+    {
+<h3 class="profile-username text-center">
+    <span>No sick leave</span>
+</h3>
+
+        <a href="/SickLeaves/AddOrEdit?recordId=@Model.RecordId" class="btn btn-primary btn-block"><b>Add sick leave</b></a>
+    }
+}
+
+

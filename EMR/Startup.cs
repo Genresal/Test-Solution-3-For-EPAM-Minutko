@@ -63,6 +63,7 @@ namespace EMR
 
             services.AddTransient<IPositionService, PositionService>();
             services.AddTransient<IBusinessService<Role>, RoleService>();
+            services.AddTransient<ISickLeaveService, SickLeaveService>();
             services.AddTransient<IBusinessService<Record>, RecordService>();
             services.AddTransient<IDoctorService, DoctorService>();
             services.AddTransient<IPatientService, PatientService>();
@@ -80,6 +81,7 @@ namespace EMR
             services.AddTransient<IProcedurePageService, ProcedurePageService>();
             services.AddTransient<IPositionPageService, PositionPageService>();
             services.AddTransient<IAccountPageService, AccountPageService>();
+            services.AddTransient<ISickLeavePageService, SickLeavePageService>();
 
             services.AddSingleton<IDbService, DbService>();
         }

@@ -25,10 +25,15 @@ namespace EMR.MappingConfigurations
             CreateMap<Patient, RecordViewModel>();
             CreateMap<Diagnosis, RecordViewModel>();
 
-            CreateMap<Record, RecordDetailsViewModel>();
+            CreateMap<Record, RecordDetailsViewModel>()
+                .ForPath(dest => dest.SickLeave.Id, act => act.MapFrom(act => act.SickLeave.Id))
+                .ForPath(dest => dest.SickLeave.StartDate, act => act.MapFrom(act => act.SickLeave.StartDate))
+                .ForPath(dest => dest.SickLeave.FinalDate, act => act.MapFrom(act => act.SickLeave.FinalDate))
+                .ForPath(dest => dest.SickLeave.RecordId, act => act.MapFrom(act => act.Id));
             CreateMap<Doctor, RecordDetailsViewModel>();
             CreateMap<Patient, RecordDetailsViewModel>();
             CreateMap<SickLeave, RecordDetailsViewModel>();
+
         }
     }
 }

@@ -16,7 +16,7 @@ namespace EMR.Business.Models
             Patient = new Patient();
         }
         public int DiagnosisId { get; set; }
-        public int SickLeaveId { get; set; }
+        public int? SickLeaveId { get; set; }
         public int DoctorId { get; set; }
         public int PatientId { get; set; }
         public DateTime ModifiedDate { get; set; }

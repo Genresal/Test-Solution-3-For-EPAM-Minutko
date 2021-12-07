@@ -77,7 +77,7 @@ namespace EMR.Data.Repositories
             string sqlExpression = $@" USE [EMR] 
 CREATE TABLE [dbo].[tSickLeave](
   [Id] [int] IDENTITY(1,1) NOT NULL,
-  [Number] [nvarchar](255) NOT NULL,
+  [Number] [nvarchar](255),
   [StartDate] [datetime] NOT NULL,
   [FinalDate] [datetime] NOT NULL,
   PRIMARY KEY ([Id]),
@@ -155,7 +155,7 @@ CREATE TABLE [dbo].[tPatient](
 CREATE TABLE [dbo].[tRecord](
   [Id] [int] IDENTITY(1,1) NOT NULL,
   [DiagnosisId] [int] NOT NULL,
-  [SickLeaveId] [int] NOT NULL,
+  [SickLeaveId] [int],
   [DoctorId] [int] NOT NULL,
   [PatientId] [int] NOT NULL,
   [ModifiedDate] [datetime] NOT NULL,
