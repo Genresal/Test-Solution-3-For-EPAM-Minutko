@@ -72,6 +72,11 @@ namespace EMR.Data.Repositories
             return ExecuteReader(sqlExpression, new SqlParameter("@Id", id)).FirstOrDefault();
         }
 
+        public virtual void Create(T item, int relationId)
+        {
+            Create(item);
+        }
+
         public virtual void Create(T item)
         {
             var properties = item.GetType()

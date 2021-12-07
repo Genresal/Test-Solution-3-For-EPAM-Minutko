@@ -8,21 +8,26 @@ namespace EMR.Business.Services
 {
     public class DrugService : BaseBusinessService<Drug>, IDrugService
     {
-        private readonly IRepository<RecordTreatment> _drugRepository;
+        private readonly IRepository<RecordTreatment> _treatmentRepository;
         public DrugService(IRepository<Drug> r, IRepository<RecordTreatment> drugRepository) : base (r)
         {
-            _drugRepository = drugRepository;
+            _treatmentRepository = drugRepository;
         }
 
         public IEnumerable<Drug> GetDrugsForRecord(int RecordId)
         {
-            var relations = _drugRepository.GetByColumn(nameof(RecordTreatment.RecordId), RecordId.ToString());
+            var relations = _treatmentRepository.GetByColumn(nameof(RecordTreatment.RecordId), RecordId.ToString());
             if (!relations.Any())
             {
                 return new List<Drug>();
             }
 
             return _mainRepository.GetByColumn("Id", relations.Select(x => x.DrugId.ToString()).ToList());
+        }
+
+        public void Create(Drug model, int recordId)
+        {
+            _mainRepository.Create(model, recordId);
         }
     }
 }

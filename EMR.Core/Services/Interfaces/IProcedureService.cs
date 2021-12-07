@@ -10,6 +10,7 @@ namespace EMR.Business.Services
     public interface IProcedureService : IBusinessService<Procedure>
     {
         IEnumerable<Procedure> GetProceduresForRecord(int RecordId);
+        public void Create(Procedure model, int recordId);
     }
 
 

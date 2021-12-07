@@ -23,6 +23,7 @@ namespace EMR.Business.Repositories
         IEnumerable<T> GetByColumn(string column, string value);
         IEnumerable<T> GetByColumn(string column, List<string> values);
         T GetById(int id);
+        void Create(T item, int relationId);
         void Create(T item);
         void Update(T item);
         void Delete(int id);

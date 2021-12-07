@@ -40,6 +40,9 @@ namespace EMR.Services
             return _treatmentService.GetDrugRecordId(procedureId);
         }
 
-
+        public override void Create(ProcedureViewModel model)
+        {
+            _procedureService.Create(_mapper.Map<ProcedureViewModel, Procedure>(model), model.RecordId);
+        }
     }
 }

@@ -23,5 +23,10 @@ namespace EMR.Business.Services
             }
             return _mainRepository.GetByColumn("Id", relations.Select(x => x.ProcedureId.ToString()).ToList());
         }
+
+        public void Create(Procedure model, int recordId)
+        {
+            _mainRepository.Create(model, recordId);
+        }
     }
 }
