@@ -6,6 +6,7 @@
         <form asp-action="AddOrEdit" asp-route-id="@Model.Id">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="RecordId" />
 
             <div class="form-group">
                 <label asp-for="@Model.Name" class="control-label"></label>

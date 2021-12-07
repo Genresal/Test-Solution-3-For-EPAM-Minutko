@@ -93,14 +93,14 @@ namespace EMR.Controllers
                 //Update
                 else
                 {
-                    try
-                    {
+                    //try
+                    //{
                         _pageService.Update(model);
-                    }
-                    catch (Exception)
-                    {
-                        return NotFound();
-                    }
+                    //}
+                    //catch (Exception)
+                    //{
+                    //    return NotFound();
+                    //}
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -118,6 +118,10 @@ namespace EMR.Controllers
         // GET: HomeController/Details/5
         public IActionResult Details(int id)
         {
+            if (id == 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             return View(_pageService.Details(id));
         }
 

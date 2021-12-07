@@ -10,6 +10,7 @@ namespace EMR.ViewModels
     public class DrugViewModel
     {
         public int Id { get; set; }
+        public int RecordId { get; set; }
         [Required(ErrorMessage = "Add a name")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Add a description")]

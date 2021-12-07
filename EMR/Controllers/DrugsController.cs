@@ -40,12 +40,13 @@ namespace EMR.Controllers
             });
         }
 
-        public IActionResult AddOrEdit(int id = 0)
+        public IActionResult AddOrEdit(int id = 0, int recordId = 0)
         {
             if (id == 0)
             {
                 var model = new DrugViewModel();
                 model.Id = 0;
+                model.RecordId = recordId;
                 return View(model);
             }
             else
@@ -55,6 +56,7 @@ namespace EMR.Controllers
                 {
                     return NotFound();
                 }
+                model.RecordId = recordId;
                 return View(model);
             }
         }
@@ -64,12 +66,10 @@ namespace EMR.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Insert
                 if (id == 0)
                 {
                     _pageService.Create(model);
                 }
-                //Update
                 else
                 {
                     try
@@ -82,15 +82,19 @@ namespace EMR.Controllers
                     }
                 }
 
-                return RedirectToAction("Records", "Details");
+                return RedirectToAction("Details", "Records", new { id = model.RecordId});
             }
             return View(model);
         }
 
-        // GET: HomeController/Delete/5
         public IActionResult Delete(int id, int recordId)
         {
             _pageService.Delete(id);
+            if (recordId == 0)
+            {
+                return RedirectToAction("Index", "Records");
+            }
+
             return RedirectToAction("Details", "Records", new {id = recordId});
         }
     }

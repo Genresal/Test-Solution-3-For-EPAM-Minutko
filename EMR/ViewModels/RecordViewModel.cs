@@ -11,7 +11,10 @@ namespace EMR.ViewModels
         public int Id { get; set; }
         public int DoctorId { get; set; }
         public int PatientId { get; set; }
+        public int DiagnosisId { get; set; }
+        public int SickLeaveId { get; set; }
         public string Diagnosis { get; set; }
+        public string DiagnosisWithCode { get; set; }
         public string PatientName { get; set; }
         public string DoctorName { get; set; }
         public string DoctorPosition { get; set; }

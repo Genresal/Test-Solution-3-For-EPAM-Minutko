@@ -4,6 +4,8 @@
     <div class="col-md-6">
         <form asp-action="AddOrEdit" asp-route-id="@Model.Id">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="DiagnosisId" />
+            <input type="hidden" asp-for="SickLeaveId" />
             <input type="hidden" asp-for="ModifiedDate" />
             <div class="form-group">
                 <label asp-for="DoctorId" class="control-label"></label>
