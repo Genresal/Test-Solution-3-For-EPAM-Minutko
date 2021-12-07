@@ -1,4 +1,5 @@
 ﻿using EMR.Business.Models;
+using EMR.DataTables;
 using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -13,13 +14,14 @@ namespace EMR.Controllers
     public class PatientsController : Controller
     {
         private readonly IPatientPageService _pageService;
+        private readonly IRecordPageService _recordPageService;
         private readonly ILogger<PatientsController> _logger;
 
-
-        public PatientsController(IPatientPageService s, ILogger<PatientsController> logger)
+        public PatientsController(IPatientPageService s, IRecordPageService recordPageService, ILogger<PatientsController> logger)
         {
             _pageService = s;
             _logger = logger;
+            _recordPageService = recordPageService;
 
         }
 
@@ -53,13 +55,26 @@ namespace EMR.Controllers
         [Authorize]
         public IActionResult Details(int id = 0)
         {
+            PatientViewModel model;
             if (id == 0)
             {
                 string login = HttpContext.User.Identity.Name;
-                return View(_pageService.GetByLogin(login));
+                model = _pageService.GetByLogin(login);
+            }
+            else
+            {
+                model = _pageService.GetById(id);
             }
 
-            return View(_pageService.GetById(id));
+            RecordSearchModel searchModel = new RecordSearchModel();
+            searchModel.DoctorPositions = _recordPageService.GetDoctorPositions()
+                                            .Select(x => new FilterCondition(x.Id, x.Name))
+                                            .ToList();
+            searchModel.PatientId = model.Id;
+
+            ViewBag.SearchModel = searchModel;
+
+            return View(model);
         }
 
         public IActionResult Create(PatientViewModel model = null)
