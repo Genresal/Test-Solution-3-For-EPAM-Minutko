@@ -54,7 +54,7 @@ namespace EMR.Data.Repositories
         
         public override IEnumerable<Record> GetAll()
         {
-            return ExecuteReader(baseQuery);
+            return ExecuteReader("GetRecords", true);
         }
 
         public override IEnumerable<Record> GetByColumn(string column, string value)

@@ -2,6 +2,7 @@
 using EMR.Data.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
@@ -219,13 +220,18 @@ namespace EMR.Data.Repositories
             return result;
         }
 
-        protected List<T> ExecuteReader(string sqlExpression)
+        protected List<T> ExecuteReader(string sqlExpression, bool stored = false)
         {
             List<T> results = new List<T>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(sqlExpression, connection);
+
+                if(stored)
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                }
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {

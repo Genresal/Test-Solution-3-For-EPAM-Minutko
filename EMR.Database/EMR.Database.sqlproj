@@ -69,5 +69,6 @@
     <Build Include="tPatient.sql" />
     <Build Include="tRecord.sql" />
     <Build Include="tRecordTreatment.sql" />
+    <Build Include="GetRecords.sql" />
   </ItemGroup>
 </Project>
