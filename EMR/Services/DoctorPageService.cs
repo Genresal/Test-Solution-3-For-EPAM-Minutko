@@ -21,6 +21,12 @@ namespace EMR.Services
             return _mapper.Map<Doctor, DoctorViewModel>(model);
         }
 
+        public DoctorViewModel GetByUserId(int userId)
+        {
+            var model = _mainService.GetByColumn(nameof(Doctor.UserId), userId.ToString()).FirstOrDefault();
+            return _mapper.Map<Doctor, DoctorViewModel>(model);
+        }
+
         public IEnumerable<PositionViewModel> GetPositions()
         {
             var result = _positionService.GetAll();

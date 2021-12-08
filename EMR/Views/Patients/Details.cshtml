@@ -28,7 +28,12 @@
     <div class="col-md-10">
         <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title">Records1</h3>
+                <h3 class="card-title">Patients record</h3>
+                <div class="card-tools">
+                    <a asp-controller="Records" asp-action="AddOrEdit" asp-route-patientId="@Model.Id">
+                        <button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add record</button>
+                    </a>
+                </div>
             </div>
                 <div class="card-body">
                     @await Html.PartialAsync("~/Views/Records/_PatientRecordsTable.cshtml", (RecordSearchModel)ViewBag.SearchModel)

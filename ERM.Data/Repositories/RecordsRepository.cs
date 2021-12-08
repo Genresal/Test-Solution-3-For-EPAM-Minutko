@@ -45,6 +45,17 @@ namespace EMR.Data.Repositories
             return StoredExecuteReader("GetRecords", parameters).FirstOrDefault();
         }
 
+        public override void Create(Record model)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("DiagnosisName", model.Diagnosis.Name));
+            parameters.Add(new SqlParameter("DoctorId", model.DoctorId));
+            parameters.Add(new SqlParameter("PatientId", model.PatientId));
+            parameters.Add(new SqlParameter("ModifiedDate", model.ModifiedDate));
+
+            StoredExecuteNonQuery("CreateRecord", parameters);
+        }
+
         public override void Delete(int id)
         {
             StoredExecuteNonQuery("DeleteRecord", new SqlParameter("@Id", id));

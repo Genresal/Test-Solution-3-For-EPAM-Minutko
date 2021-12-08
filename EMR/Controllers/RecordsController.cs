@@ -19,10 +19,12 @@ namespace EMR.Controllers
     public class RecordsController : Controller
     {
         private readonly IRecordPageService _pageService;
+        private readonly IDoctorPageService _doctorService;
         private readonly ILogger<RecordsController> _logger;
 
-        public RecordsController(IRecordPageService s, ILogger<RecordsController> logger)
+        public RecordsController(IRecordPageService s, IDoctorPageService d, ILogger<RecordsController> logger)
         {
+            _doctorService = d;
             _pageService = s;
             _logger = logger;
         }
@@ -57,16 +59,26 @@ namespace EMR.Controllers
                 .ToList()
             });
         }
-
         
-        public IActionResult AddOrEdit(int id = 0)
+        public IActionResult AddOrEdit(int id = 0, int patientId = 0)
         {
             PrepareViewBag();
 
             if (id == 0)
             {
-                var model = new Record();
+                var model = new RecordViewModel();
                 model.Id = 0;
+                model.PatientId = patientId;
+                if (User.IsInRole("Doctor"))
+                {
+                    int doctorId = 0;
+                    if (Int32.TryParse(User.FindFirst("UserId")?.Value, out doctorId))
+                    {
+                        var doctor = _doctorService.GetByUserId(doctorId);
+                        model.DoctorId = doctor.Id;
+                    }
+                }
+
                 return View(model);
             }
             else
@@ -85,22 +97,21 @@ namespace EMR.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Insert
                 if (id == 0)
                 {
+                    model.ModifiedDate = DateTime.Now;
                     _pageService.Create(model);
                 }
-                //Update
                 else
                 {
-                    //try
-                    //{
+                    try
+                    {
                         _pageService.Update(model);
-                    //}
-                    //catch (Exception)
-                    //{
-                    //    return NotFound();
-                    //}
+                    }
+                    catch (Exception)
+                    {
+                        return NotFound();
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -108,14 +119,12 @@ namespace EMR.Controllers
             return View(model);
         }
 
-                // GET: HomeController/Delete/5
         public IActionResult Delete(int id)
         {
             _pageService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: HomeController/Details/5
         public IActionResult Details(int id)
         {
             if (id == 0)

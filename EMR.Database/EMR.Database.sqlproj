@@ -86,5 +86,6 @@
     <Build Include="GetPatientsInfo.sql" />
     <Build Include="CreateSickLeave.sql" />
     <Build Include="DeleteSickLeave.sql" />
+    <Build Include="CreateRecord.sql" />
   </ItemGroup>
 </Project>
