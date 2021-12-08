@@ -1,13 +1,9 @@
-﻿using EMR.Data.Helpers;
-using EMR.Business.Models;
-using System;
+﻿using EMR.Business.Models;
+using EMR.Business.Repositories;
+using EMR.Data.Helpers;
+using RandomGen;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using RandomGen;
-using EMR.Business.Repositories;
 
 namespace EMR.Data.Repositories
 {
@@ -30,9 +26,9 @@ namespace EMR.Data.Repositories
             int dataCount = 200;
             for (int i = 1; i <= dataCount; i++)
             {
-
                 sqlExpression = $"{sqlExpression}" +
-                    $"('{Gen.Random.Text.Short()().MakeFirstCharUppercase()}')";
+                $"('{Gen.Random.Text.Short()().MakeFirstCharUppercase()}')";
+
                 if (i != dataCount)
                 {
                     sqlExpression = $"{sqlExpression},";

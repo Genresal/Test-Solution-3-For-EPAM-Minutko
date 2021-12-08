@@ -20,15 +20,10 @@ namespace EMR.Data.Repositories
         
         public override IEnumerable<Record> GetAll()
         {
-            /*List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@COLUMN", "rec.Id"));
-            parameters.Add(new SqlParameter("@OPERATOR", ">"));
-            parameters.Add(new SqlParameter("@VALUE", "90"));*/
-
             List<SqlParameter> parameters = new List<SqlParameter>();
-parameters.Add(new SqlParameter("@COLUMN", DBNull.Value));
-parameters.Add(new SqlParameter("@OPERATOR", DBNull.Value));
-parameters.Add(new SqlParameter("@VALUE", DBNull.Value));
+            parameters.Add(new SqlParameter("@COLUMN", DBNull.Value));
+            parameters.Add(new SqlParameter("@OPERATOR", DBNull.Value));
+            parameters.Add(new SqlParameter("@VALUE", DBNull.Value));
             return StoredExecuteReader("GetRecords", parameters);
         }
 

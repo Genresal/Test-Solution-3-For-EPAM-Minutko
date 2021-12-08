@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[tRecord](
   [Id] [int] IDENTITY(1,1) NOT NULL,
   [DiagnosisId] [int] NOT NULL,
-  [SickLeaveId] [int] NOT NULL,
+  [SickLeaveId] [int],
   [DoctorId] [int] NOT NULL,
   [PatientId] [int] NOT NULL,
   [ModifiedDate] [datetime] NOT NULL,
