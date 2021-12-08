@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EMR.Business.Helpers;
 using EMR.Business.Models;
 using EMR.Business.Services;
 using EMR.ViewModels;
@@ -13,6 +14,13 @@ namespace EMR.Services
         public DoctorPageService(IDoctorService doctorService, IPositionService positionService, IMapper mapper) : base(doctorService, mapper)
         {
             _positionService = positionService;
+        }
+
+        public override void Create(DoctorViewModel viewModel)
+        {
+            var model = _mapper.Map<DoctorViewModel, Doctor>(viewModel);
+            model.User.Password = model.User.Password.HashString();
+            _mainService.Create(model);
         }
 
         public DoctorViewModel GetByLogin(string login)

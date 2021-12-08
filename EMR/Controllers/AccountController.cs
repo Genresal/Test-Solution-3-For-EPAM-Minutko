@@ -87,7 +87,7 @@ namespace EMR.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login");
         }
 
         [HttpGet]
@@ -146,7 +146,8 @@ namespace EMR.Controllers
             var user = _userService.GetByLogin(User.Identity.Name);
             if (user == null)
             {
-                throw new ApplicationException($"Unable to load user with Login '{User.Identity.Name}'.");
+                ViewBag.Message = $"Unable to load user with Login '{User.Identity.Name}'.";
+                return View(model);
             }
 
             var changePasswordResult = _userService.ChangePassword(model, User.Identity.Name);

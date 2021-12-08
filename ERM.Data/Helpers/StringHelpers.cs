@@ -28,13 +28,5 @@ namespace EMR.Data.Helpers
                 "" => input,
                 _ => input[0].ToString().ToUpper() + input[1..]
             };
-
-        public static string HashString(this string input)
-        {
-            byte[] data = Encoding.Default.GetBytes(input);
-            SHA1 sha = new SHA1CryptoServiceProvider();
-            byte[] result = sha.ComputeHash(data);
-            return Convert.ToBase64String(result);
-        }
     }
 }

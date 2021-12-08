@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using RandomGen;
 using EMR.Business.Repositories;
+using EMR.Business.Helpers;
 
 namespace EMR.Data.Repositories
 {

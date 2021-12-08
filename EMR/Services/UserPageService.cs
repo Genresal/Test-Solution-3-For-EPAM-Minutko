@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EMR.Business.Models;
 using EMR.Business.Services;
+using EMR.Business.Helpers;
 using EMR.Helpers;
 using EMR.ViewModels;
 using System.Collections.Generic;
@@ -53,6 +54,13 @@ namespace EMR.Services
             return result.Order(searchParameters);
         }
 
+        public override void Create(UserViewModel viewModel)
+        {
+            var model = _mapper.Map<UserViewModel, User>(viewModel);
+            model.Password = model.Password.HashString();
+            _mainService.Create(model);
+        }
+
         public IEnumerable<Role> GetRoles()
         {
             return _roleService.GetAll();
@@ -90,9 +98,9 @@ namespace EMR.Services
         public bool ChangePassword(ChangePasswordViewModel password, string login)
         {
             var user = GetByLogin(login);
-            if(user.Password == password.OldPassword)
+            if(user.Password == password.OldPassword.HashString())
             {
-                _userService.ChangePassword(user.Id, password.NewPassword);
+                _userService.ChangePassword(user.Id, password.NewPassword.HashString());
                 return true;
             }
             return false;

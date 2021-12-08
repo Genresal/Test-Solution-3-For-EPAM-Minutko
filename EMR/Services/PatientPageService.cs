@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EMR.Business.Helpers;
 using EMR.Business.Models;
 using EMR.Business.Services;
 using EMR.Helpers;
@@ -53,6 +54,13 @@ namespace EMR.Services
             }
 
             return result.Order(searchParameters);
+        }
+
+        public override void Create(PatientViewModel viewModel)
+        {
+            var model = _mapper.Map<PatientViewModel, Patient>(viewModel);
+            model.User.Password = model.User.Password.HashString();
+            _mainService.Create(model);
         }
 
         public PatientViewModel GetByLogin(string login)
