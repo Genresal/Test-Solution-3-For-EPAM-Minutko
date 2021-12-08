@@ -28,7 +28,7 @@ namespace EMR.Controllers
             {
                 return RedirectToAction(nameof(Index), "Users");
             }
-            return View("Details");
+            return RedirectToAction(nameof(Details));
         }
 
         [Authorize]

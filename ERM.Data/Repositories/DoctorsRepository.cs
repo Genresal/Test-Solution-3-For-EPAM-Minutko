@@ -93,31 +93,6 @@ namespace EMR.Data.Repositories
 
         public override void Update(Doctor model)
         {
-            string sqlExpression = $"BEGIN TRY " +
-            $"BEGIN TRAN " +
-            $"UPDATE [dbo].[tUser] " +
-            $"SET " +
-            $"[Login] = @Login" +
-            $",[Password] = @Password" +
-            $",[RoleId] = @RoleId" +
-            $",[FirstName] = @FirstName" +
-            $",[LastName] = @LastName" +
-            $",[Birthday] = @Birthday" +
-            $",[Email] = @Email" +
-            $",[PhoneNumber] = @PhoneNumber" +
-            $",[PhotoUrl] = @PhotoUrl " +
-            $"WHERE Id = @UserId " +
-            $"UPDATE [dbo].[tDoctor] " +
-            $"SET " +
-            $"[UserId] = @UserId" +
-            $",[PositionId] = @PositionId " +
-            $"WHERE Id = @Id " +
-            $"COMMIT TRAN " +
-            $"END TRY " +
-            $"BEGIN CATCH " +
-            $"ROLLBACK TRAN " +
-            $"END CATCH";
-
             var doctorProperties = model.GetType()
                         .GetProperties()
                         .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
@@ -132,7 +107,7 @@ namespace EMR.Data.Repositories
             var parameters = ProrertiesToSqlParameters(model, doctorProperties);
             parameters.AddRange(ProrertiesToSqlParameters(model.User, userProperties));
 
-            ExecuteNonQuery(sqlExpression, parameters);
+            StoredExecuteNonQuery("UpdateDoctor", parameters);
         }
 
         public override IEnumerable<Doctor> GetByColumn(string column, string value)

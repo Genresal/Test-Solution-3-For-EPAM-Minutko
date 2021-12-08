@@ -250,6 +250,24 @@ namespace EMR.Data.Repositories
             return results;
         }
 
+        protected void StoredExecuteNonQuery(string sqlExpression, List<SqlParameter> parameters = null)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                command.CommandType = CommandType.StoredProcedure;
+                if (parameters is not null)
+                {
+                    command.Parameters.AddRange(parameters.ToArray());
+                }
+
+                command.ExecuteNonQuery();
+
+                connection.Close();
+            }
+        }
+
         protected void StoredExecuteNonQuery(string sqlExpression, SqlParameter parameter)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
