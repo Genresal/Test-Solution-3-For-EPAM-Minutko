@@ -9,7 +9,6 @@ namespace EMR.Controllers
     {
         private readonly IPositionPageService _pageService;
 
-
         public PositionsController(IPositionPageService pageService)
         {
             _pageService = pageService;

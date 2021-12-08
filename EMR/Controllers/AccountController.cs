@@ -20,15 +20,12 @@ namespace EMR.Controllers
     {
         private readonly IUserPageService _userService;
         private readonly IAccountPageService _accountService;
-        private readonly ILogger<PatientsController> _logger;
         private readonly IMapper _mapper;
         public AccountController(IUserPageService s
-            , ILogger<PatientsController> logger
             , IAccountPageService accountPageService
             , IMapper mapper)
         {
             _userService = s;
-            _logger = logger;
             _mapper = mapper;
             _accountService = accountPageService;
         }

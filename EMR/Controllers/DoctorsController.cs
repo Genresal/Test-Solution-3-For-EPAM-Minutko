@@ -15,12 +15,10 @@ namespace EMR.Controllers
     public class DoctorsController : Controller
     {
         private readonly IDoctorPageService _pageService;
-        private readonly ILogger<DoctorsController> _logger;
 
-        public DoctorsController(IDoctorPageService s, ILogger<DoctorsController> logger)
+        public DoctorsController(IDoctorPageService s)
         {
             _pageService = s;
-            _logger = logger;
         }
         public IActionResult Index()
         {

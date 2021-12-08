@@ -11,11 +11,9 @@ namespace EMR.Controllers
     public class UsersController : Controller
     {
         private readonly IUserPageService _pageService;
-        private readonly ILogger<PatientsController> _logger;
-        public UsersController(IUserPageService s, ILogger<PatientsController> logger)
+        public UsersController(IUserPageService s)
         {
             _pageService = s;
-            _logger = logger;
         }
 
         public IActionResult Index()

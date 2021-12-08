@@ -20,23 +20,19 @@ namespace EMR.Controllers
     {
         private readonly IRecordPageService _pageService;
         private readonly IDoctorPageService _doctorService;
-        private readonly ILogger<RecordsController> _logger;
 
-        public RecordsController(IRecordPageService s, IDoctorPageService d, ILogger<RecordsController> logger)
+        public RecordsController(IRecordPageService s, IDoctorPageService d)
         {
             _doctorService = d;
             _pageService = s;
-            _logger = logger;
         }
-        // GET: HomeController
+
         public IActionResult Index()
         {
             RecordSearchModel searchModel = new RecordSearchModel();
             searchModel.DoctorPositions = _pageService.GetDoctorPositions()
                                             .Select(x => new FilterCondition(x.Id, x.Name))
                                             .ToList();
-            //
-            _logger.LogInformation("The main page has been accessed");
 
             return View(searchModel);
         }

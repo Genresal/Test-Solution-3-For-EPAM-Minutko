@@ -1,4 +1,4 @@
-﻿@model EMR.ViewModels.PatientInfoSearchModel
+﻿@model PatientInfoSearchModel
 @using EMR.DataTables
 @{
 
@@ -11,7 +11,7 @@
 }
 
 <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-2 border-right">
         @await Html.PartialAsync("_Filters", _filters)
 
         <form method="post" action="~/Doctors/Details">
@@ -21,7 +21,7 @@
         </form>
     </div>
 
-    <div class="col-md-10">
+    <div class="col-md-9">
         <table id="patientsInfoTable" class="table table-sm table-striped table-bordered h-auto" style="width:100%">
             <thead>
                 <tr>
@@ -29,7 +29,7 @@
                     <th>@Html.DisplayNameFor(value => _model.FullName)</th>
                     <th>@Html.DisplayNameFor(value => _model.RecordsNumber)</th>
                     <th>@Html.DisplayNameFor(value => _model.LastRecordModified)</th>
-                    <th>Actions</th>
+                    <th></th>
                 </tr>
             </thead>
         </table>
@@ -39,7 +39,7 @@
 @{
     var gridModel = new DataTablesModel
     {
-        StateSave = false,
+        StateSave = true,
         AutoWidth = true,
         Processing = true,
         ServerSide = true,
