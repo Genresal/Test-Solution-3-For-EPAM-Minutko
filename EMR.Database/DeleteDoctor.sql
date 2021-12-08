@@ -6,10 +6,10 @@ BEGIN TRY
 BEGIN TRAN 
 
 	DELETE FROM [dbo].[tDiagnosis] WHERE Id IN
-		(SELECT DiagnosisId FROM [tRecord] WHERE PatientId = @Id) 
+		(SELECT DiagnosisId FROM [tRecord] WHERE DoctorId = @Id) 
 
 	DELETE FROM [dbo].[tUser] 
-	WHERE Id IN (SELECT UserId FROM [tPatient] WHERE Id = @Id) 
+	WHERE Id IN (SELECT UserId FROM [tDoctor] WHERE Id = @Id) 
 
 COMMIT TRAN 
 END TRY 

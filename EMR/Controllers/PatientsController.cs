@@ -129,7 +129,7 @@ namespace EMR.Controllers
         public IActionResult Delete(int id)
         {
             _pageService.Delete(id);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), "Users");
         }
     }
 }

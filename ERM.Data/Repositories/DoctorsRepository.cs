@@ -77,6 +77,11 @@ namespace EMR.Data.Repositories
             StoredExecuteNonQuery("UpdateDoctor", parameters);
         }
 
+        public override void Delete(int id)
+        {
+            StoredExecuteNonQuery("DeleteDoctor", new SqlParameter("@Id", id));
+        }
+
         public void SetDefaultData()
         {
             string sqlExpression = $@"INSERT INTO [dbo].[{nameof(Doctor).ConvertToTableName()}](

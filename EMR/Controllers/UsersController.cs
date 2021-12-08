@@ -115,8 +115,23 @@ namespace EMR.Controllers
 
         public IActionResult Delete(int id)
         {
-            _pageService.Delete(id);
-            return RedirectToAction(nameof(Index));
+            var model = _pageService.GetById(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            if (model.RoleId > 2)
+            {
+                _pageService.Delete(id);
+            }
+
+            return model.RoleId switch
+            {
+                1 => RedirectToAction("Delete", "Patients", new { id = _pageService.GePatientByUserId(id).Id }),
+                2 => RedirectToAction("Delete", "Doctors", new { id = _pageService.GeDoctorByUserId(id).Id }),
+                _ => View("Details", model),
+            };
         }
     }
 }
