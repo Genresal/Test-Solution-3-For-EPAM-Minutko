@@ -49,20 +49,14 @@ namespace EMR.Data.Repositories
 
         public override void Create(Patient model)
         {
-            var patientProperties = model.GetType()
-                      .GetProperties()
-                      .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
-                      .Where(x => x.Name != "Id")
-                      .ToList();
-
             var userProperties = model.User.GetType()
                         .GetProperties()
                         .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
                         .Where(x => x.Name != "Id")
                         .ToList();
 
-            var parameters = ProrertiesToSqlParameters(model, patientProperties);
-            parameters.AddRange(ProrertiesToSqlParameters(model.User, userProperties));
+            var parameters = ProrertiesToSqlParameters(model.User, userProperties);
+            parameters.Add(new SqlParameter(nameof(model.Job), model.Job));
 
             StoredExecuteNonQuery("CreatePatient", parameters);
         }

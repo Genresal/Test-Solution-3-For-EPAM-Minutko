@@ -50,54 +50,20 @@ namespace EMR.Data.Repositories
 
         public override void Create(SickLeave item, int relationId)
         {
-            string sqlExpression = $"BEGIN TRY " +
-                                    $"BEGIN TRAN " +
-                                    $"INSERT INTO [dbo].[tSickLeave]" +
-                                    $"([Number]" +
-                                    $",[StartDate]" +
-                                    $",[FinalDate])" +
-                                    $"VALUES" +
-                                    $"(@Number" +
-                                    $",@StartDate" +
-                                    $",@FinalDate) " +
-                                    $"UPDATE [dbo].[tRecord] " +
-                                    $"SET [SickLeaveId] = @@IDENTITY " +
-                                    $"WHERE Id = @RecordId " +
-                                    $"COMMIT TRAN " +
-                                    $"END TRY " +
-                                    $"BEGIN CATCH " +
-                                    $"ROLLBACK TRAN " +
-                                    $"END CATCH";
-
             var properties = item.GetType()
-          .GetProperties()
-          .Where(x => x.Name != "Id")
-          .ToList();
+                .GetProperties()
+                .Where(x => x.Name != "Id")
+                .ToList();
 
             var parameters = ProrertiesToSqlParameters(item, properties);
             parameters.Add(new SqlParameter(nameof(RecordTreatment.RecordId), relationId));
 
-            ExecuteNonQuery(sqlExpression, parameters);
+            StoredExecuteNonQuery("CreateSIckLeave", parameters);
         }
 
         public override void Delete(int id)
         {
-            string sqlExpression = $"BEGIN TRY " +
-                                    $"BEGIN TRAN " +
-                                    $"UPDATE [dbo].[tRecord] " +
-                                    $"SET [SickLeaveId] = null " +
-                                    $"WHERE SickLeaveId = @Id " +
-                                    $"DELETE FROM [dbo].[tSickLeave] " +
-                                    $"WHERE Id = @Id " +
-                                    $"COMMIT TRAN " +
-                                    $"END TRY " +
-                                    $"BEGIN CATCH " +
-                                    $"ROLLBACK TRAN " +
-                                    $"END CATCH";
-
-            var parameter = new SqlParameter("@Id", id);
-
-            ExecuteNonQuery(sqlExpression, parameter);
+            StoredExecuteNonQuery("DeleteSickLeave", new SqlParameter("@Id", id));
         }
 
         protected override SickLeave Map(SqlDataReader reader)

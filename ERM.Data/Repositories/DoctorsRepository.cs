@@ -38,24 +38,18 @@ namespace EMR.Data.Repositories
             return GetByColumn("doc.Id", id).FirstOrDefault();
         }
 
-        public override void Create(Doctor doctor)
+        public override void Create(Doctor model)
         {
-            var doctorProperties = doctor.GetType()
-                      .GetProperties()
-                      .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
-                      .Where(x => x.Name != "Id")
-                      .ToList();
-
-            var userProperties = doctor.User.GetType()
+            var userProperties = model.User.GetType()
                         .GetProperties()
                         .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
                         .Where(x => x.Name != "Id")
                         .ToList();
 
-            var parameters = ProrertiesToSqlParameters(doctor, doctorProperties);
-            parameters.AddRange(ProrertiesToSqlParameters(doctor.User, userProperties));
+            var parameters = ProrertiesToSqlParameters(model.User, userProperties);
+            parameters.Add(new SqlParameter(nameof(model.PositionId), model.PositionId));
 
-            StoredExecuteNonQuery("CreatreDoctor", parameters);
+            StoredExecuteNonQuery("CreateDoctor", parameters);
         }
 
         public override void Update(Doctor model)

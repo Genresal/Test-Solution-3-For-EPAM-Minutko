@@ -48,7 +48,7 @@ namespace EMR.Data.Repositories
             var parameters = ProrertiesToSqlParameters(item, properties);
             parameters.Add(new SqlParameter(nameof(RecordTreatment.RecordId), relationId));
 
-            StoredExecuteNonQuery("CreatreProcedure", parameters);
+            StoredExecuteNonQuery("CreateProcedure", parameters);
         }
 
         protected override Procedure Map(SqlDataReader reader)
