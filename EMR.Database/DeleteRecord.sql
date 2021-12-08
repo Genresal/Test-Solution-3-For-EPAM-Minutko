@@ -4,12 +4,12 @@ AS
 
 BEGIN TRY 
 BEGIN TRAN 
-DECLARE @Id int = 199
-DELETE FROM [dbo].[tDrug] 
-WHERE Id in (Select DrugId from tRecordTreatment where RecordId = @Id) 
-DELETE FROM [dbo].[tProcedure] 
-WHERE Id in (Select ProcedureId from tRecordTreatment where RecordId = @Id) 
-DELETE FROM [dbo].[tDiagnosis] WHERE Id in (Select DiagnosisId from tRecord where Id = @Id) 
+	DELETE FROM [dbo].[tDrug] 
+	WHERE Id IN (SELECT DrugId FROM tRecordTreatment WHERE RecordId = @Id) 
+	DELETE FROM [dbo].[tProcedure] 
+	WHERE Id IN (SELECT ProcedureId FROM tRecordTreatment WHERE RecordId = @Id) 
+	DELETE FROM [dbo].[tDiagnosis] WHERE Id in 
+		(SELECT DiagnosisId FROM tRecord WHERE Id = @Id) 
 COMMIT TRAN 
 END TRY 
 BEGIN CATCH 

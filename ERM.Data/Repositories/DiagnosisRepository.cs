@@ -27,7 +27,7 @@ namespace EMR.Data.Repositories
             string sqlExpression = $@"INSERT INTO [dbo].[{nameof(Diagnosis).ConvertToTableName()}](
                                                         [{nameof(Diagnosis.Name)}])
                                                     VALUES";
-            int dataCount = 100;
+            int dataCount = 200;
             for (int i = 1; i <= dataCount; i++)
             {
 
