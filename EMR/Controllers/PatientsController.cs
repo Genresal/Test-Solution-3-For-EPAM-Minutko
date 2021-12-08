@@ -23,13 +23,33 @@ namespace EMR.Controllers
 
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int id = 0)
         {
             if (!HttpContext.User.IsInRole("User"))
             {
                 return RedirectToAction(nameof(Index), "Users");
             }
-            return View("Details");
+
+            PatientViewModel model;
+            if (id == 0)
+            {
+                string login = HttpContext.User.Identity.Name;
+                model = _pageService.GetByLogin(login);
+            }
+            else
+            {
+                model = _pageService.GetById(id);
+            }
+
+            RecordSearchModel searchModel = new RecordSearchModel();
+            searchModel.DoctorPositions = _recordPageService.GetDoctorPositions()
+                                            .Select(x => new FilterCondition(x.Id, x.Name))
+                                            .ToList();
+            searchModel.PatientId = model.Id;
+
+            ViewBag.SearchModel = searchModel;
+
+            return View(model);
         }
 
         [HttpPost]

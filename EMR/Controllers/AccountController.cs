@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -21,13 +22,16 @@ namespace EMR.Controllers
         private readonly IUserPageService _userService;
         private readonly IAccountPageService _accountService;
         private readonly IMapper _mapper;
-        public AccountController(IUserPageService s
-            , IAccountPageService accountPageService
-            , IMapper mapper)
+        private readonly ILogger _logger;
+        public AccountController(IUserPageService userPageService,
+            IAccountPageService accountPageService,
+            IMapper mapper,
+            ILogger<AccountController> logger)
         {
-            _userService = s;
+            _userService = userPageService;
             _mapper = mapper;
             _accountService = accountPageService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -58,7 +62,7 @@ namespace EMR.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserViewModel user = _userService.GeByLogin(model.Login);
+                UserViewModel user = _userService.GetByLogin(model.Login);
 
                 if (user != null)
                 {
@@ -115,6 +119,45 @@ namespace EMR.Controllers
             }
             PrepareViewBag();
             return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            var user = _userService.GetByLogin(User.Identity.Name);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with Login '{User.Identity.Name}'.");
+            }
+
+            var model = new ChangePasswordViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = _userService.GetByLogin(User.Identity.Name);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with Login '{User.Identity.Name}'.");
+            }
+
+            var changePasswordResult = _userService.ChangePassword(model, User.Identity.Name);
+            if (!changePasswordResult)
+            {
+                return View(model);
+            }
+
+            _logger.LogInformation($"User: {User.Identity.Name} changed their password successfully.");
+
+            return RedirectToAction(nameof(ChangePassword));
         }
 
         private async Task Authenticate(UserViewModel user)

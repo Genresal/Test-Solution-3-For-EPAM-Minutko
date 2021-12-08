@@ -26,6 +26,7 @@ namespace EMR.Business.Repositories
         void Create(T item, int relationId);
         void Create(T item);
         void Update(T item);
+        void Update(string column, string value, int id);
         void Delete(int id);
     }
 

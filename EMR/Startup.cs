@@ -31,13 +31,13 @@ namespace EMR
         {
             string conectionString = Configuration.GetConnectionString("EMR");
             string mainConectionString = Configuration.GetConnectionString("MASTER");
-
+            /*
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.File("Logs\\log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
             services.AddSingleton(Log.Logger);
-
+            */
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
@@ -96,6 +96,9 @@ namespace EMR
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            var path = AppContext.BaseDirectory;
+            loggerFactory.AddFile($"{path}\\Logs\\Log.txt");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

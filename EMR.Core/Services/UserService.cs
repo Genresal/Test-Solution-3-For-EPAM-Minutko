@@ -9,7 +9,7 @@ namespace EMR.Business.Services
 {
     public class UserService : BaseBusinessService<User>, IUserService
     {
-        public UserService(IRepository<User> repository, ILogger<UserService> _logger) : base (repository, _logger)
+        public UserService(IRepository<User> repository, ILogger<UserService> logger) : base (repository, logger)
         {
         }
 
@@ -18,6 +18,11 @@ namespace EMR.Business.Services
             var accounts = _mainRepository.GetByColumn(nameof(User.RoleId), roleId).ToList();
             var random = new Random();
             return accounts[random.Next(accounts.Count)];
+        }
+
+        public void ChangePassword(int id, string password)
+        {
+            _mainRepository.Update(nameof(User.Password), password, id);
         }
     }
 }

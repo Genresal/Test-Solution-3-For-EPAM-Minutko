@@ -154,6 +154,15 @@ namespace EMR.Data.Repositories
             ExecuteNonQuery(sqlExpression, parameters);
         }
 
+        public void Update(string column, string value, int id)
+        {
+            string sqlExpression = $@"UPDATE {typeof(T).Name.ConvertToTableName()} 
+                                        SET {column} = '{value}' 
+                                        WHERE Id = @Id";
+
+            ExecuteNonQuery(sqlExpression, new SqlParameter($"@Id", id));
+        }
+
         public virtual void Delete(int id)
         {
             string sqlExpression = $@"DELETE FROM {typeof(T).Name.ConvertToTableName()} WHERE Id = @Id";

@@ -10,6 +10,7 @@ namespace EMR.Business.Services
     /// </summary>
     public interface IUserService : IBusinessService<User>
     {
-        public User GetRandomAccount(int roleId);   
+        public User GetRandomAccount(int roleId);
+        public void ChangePassword(int id, string password);
     }
 }

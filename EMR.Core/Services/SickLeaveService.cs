@@ -9,7 +9,7 @@ namespace EMR.Business.Services
 {
     public class SickLeaveService : BaseBusinessService<SickLeave>, ISickLeaveService
     {
-        public SickLeaveService(IRepository<SickLeave> repository, ILogger<UserService> _logger) : base (repository, _logger)
+        public SickLeaveService(IRepository<SickLeave> repository, ILogger<SickLeaveService> logger) : base (repository, logger)
         {
         }
 

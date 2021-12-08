@@ -9,108 +9,117 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
-        @if (User.Identity.IsAuthenticated)
-        {
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="image">
-                    <img src="@User.FindFirst("PhotoUrl")?.Value" class="img-circle elevation-2" alt="User Image">
-                </div>
-                <div class="info">
-                    <a class="d-block">@User.FindFirst("FullName")?.Value</a>
-                    <a class="d-block" asp-controller="Account" asp-action="Logout">LogOut</a> 
-                </div>
-            </div>
-        }
-        else
-        {
-            <a class="d-block" asp-controller="Account" asp-action="Login">LogIn</a>
-        }
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <form asp-area="" asp-controller="Account" asp-action="Logout">
 
-        <!-- SidebarSearch Form -->
-        <div class="form-inline">
-            <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                <div class="input-group-append">
-                    <button class="btn btn-sidebar">
-                        <i class="fas fa-search fa-fw"></i>
-                    </button>
-                </div>
-            </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <div class="image">
+                                <img src="@User.FindFirst("PhotoUrl")?.Value" class="img-circle elevation-2" alt="User Image">
+                            </div>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="Users" asp-action="Details" asp-route-id="@User.FindFirst("UserId")?.Value" title="Manage">@User.FindFirst("FullName")?.Value</a>
+                        </li>
+                        <li>
+                            <button type="submit" class="btn btn-secondary">Log out</button>
+                        </li>
+                    </ul>
+                </form>
+            }
+            else
+            {
+                <a class="d-block" asp-controller="Account" asp-action="Login">LogIn</a>
+            }
         </div>
 
-        <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            @if (User.Identity.IsAuthenticated)
-            { }
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-    with font-awesome or any other icon font library -->
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        <i class="nav-icon fas fa-vector-square"></i>
-                        <p>
-                            Dashboard
-                        </p>
-                    </a>
-                </li>
+            <!-- SidebarSearch Form -->
+            <div class="form-inline">
+                <div class="input-group" data-widget="sidebar-search">
+                    <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-sidebar">
+                            <i class="fas fa-search fa-fw"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Records" asp-action="Index">
-                        <i class="nav-icon far fa-circle"></i>
-                        <p>
-                            Records
-                        </p>
-                    </a>
-                </li>
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                @if (User.Identity.IsAuthenticated)
+                { }
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <!-- Add icons to the links using the .nav-icon class
+                with font-awesome or any other icon font library -->
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <i class="nav-icon fas fa-vector-square"></i>
+                            <p>
+                                Dashboard
+                            </p>
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Patients" asp-action="Details">
-                        <i class="nav-icon far fa-circle"></i>
-                        <p>
-                            PatientRecord
-                        </p>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Records" asp-action="Index">
+                            <i class="nav-icon far fa-circle"></i>
+                            <p>
+                                Records
+                            </p>
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Doctors" asp-action="Details">
-                        <i class="nav-icon far fa-circle"></i>
-                        <p>
-                            Doctors page
-                        </p>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Patients" asp-action="Details">
+                            <i class="nav-icon far fa-circle"></i>
+                            <p>
+                                PatientRecord
+                            </p>
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">
-                        <i class="nav-icon far fa-circle"></i>
-                        <p>
-                            Users page
-                        </p>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Doctors" asp-action="Details">
+                            <i class="nav-icon far fa-circle"></i>
+                            <p>
+                                Doctors page
+                            </p>
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">
-                        <i class="nav-icon far fa-circle"></i>
-                        <p>
-                            Register new user
-                        </p>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">
+                            <i class="nav-icon far fa-circle"></i>
+                            <p>
+                                Users page
+                            </p>
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Positions" asp-action="Index">
-                        <i class="nav-icon far fa-circle"></i>
-                        <p>
-                            Doctor's positions
-                        </p>
-                    </a>
-                </li>
-            </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">
+                            <i class="nav-icon far fa-circle"></i>
+                            <p>
+                                Register new user
+                            </p>
+                        </a>
+                    </li>
 
-        </nav>
-        <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Positions" asp-action="Index">
+                            <i class="nav-icon far fa-circle"></i>
+                            <p>
+                                Doctor's positions
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
 </aside>

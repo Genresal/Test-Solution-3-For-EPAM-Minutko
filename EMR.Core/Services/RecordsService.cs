@@ -11,7 +11,7 @@ namespace EMR.Business.Services
     {
         private readonly IRepository<Diagnosis> _diagnosisRepository;
         private readonly ILogger<RecordService> _logger;
-        public RecordService(IRepository<Record> recordRepository, IRepository<Diagnosis> diagnosisRepository, ILogger<RecordService> logger) : base (recordRepository)
+        public RecordService(IRepository<Record> recordRepository, IRepository<Diagnosis> diagnosisRepository, ILogger<RecordService> logger) : base (recordRepository, logger)
         {
             _diagnosisRepository = diagnosisRepository;
             _logger = logger;

@@ -1,8 +1,7 @@
 ﻿using EMR.Business.Models;
 using EMR.Business.Repositories;
-using System;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EMR.Business.Services
 {
@@ -10,9 +9,12 @@ namespace EMR.Business.Services
     {
         private readonly IPatientRepository _patientRepository;
         private readonly IPatientInfoRepository _patientInfoRepository;
-        public PatientService(IPatientRepository r, IRepository<User> u, IPatientInfoRepository patientInfoRepository) : base(r)
+        public PatientService(IPatientRepository repository
+            , IRepository<User> userRepository
+            , IPatientInfoRepository patientInfoRepository
+            , ILogger<PatientService> logger) : base(repository, logger)
         {
-            _patientRepository = r;
+            _patientRepository = repository;
             _patientInfoRepository = patientInfoRepository;
         }
 

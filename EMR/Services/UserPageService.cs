@@ -69,7 +69,7 @@ namespace EMR.Services
             return _userService.GetByColumn(nameof(User.Login), login).Any();
         }
 
-        public UserViewModel GeByLogin(string login)
+        public UserViewModel GetByLogin(string login)
         {
             var rawResult = _userService.GetByColumn(nameof(User.Login), login).FirstOrDefault();
             return _mapper.Map<UserViewModel>(rawResult);
@@ -85,6 +85,17 @@ namespace EMR.Services
         {
             var rawResult = _patientService.GetByColumn(nameof(Patient.UserId), userId.ToString()).FirstOrDefault();
             return _mapper.Map<PatientViewModel>(rawResult);
+        }
+
+        public bool ChangePassword(ChangePasswordViewModel password, string login)
+        {
+            var user = GetByLogin(login);
+            if(user.Password == password.OldPassword)
+            {
+                _userService.ChangePassword(user.Id, password.NewPassword);
+                return true;
+            }
+            return false;
         }
     }
 }

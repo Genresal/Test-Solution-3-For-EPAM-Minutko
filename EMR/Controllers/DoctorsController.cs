@@ -20,13 +20,20 @@ namespace EMR.Controllers
         {
             _pageService = s;
         }
-        public IActionResult Index()
+        public IActionResult Index(int id = 0)
         {
             if (!HttpContext.User.IsInRole("Doctor"))
             {
                 return RedirectToAction(nameof(Index), "Users");
             }
-            return RedirectToAction(nameof(Details));
+
+            if (id == 0)
+            {
+                string login = HttpContext.User.Identity.Name;
+                return View(_pageService.GetByLogin(login));
+            }
+
+            return View(_pageService.GetById(id));
         }
 
         [Authorize]

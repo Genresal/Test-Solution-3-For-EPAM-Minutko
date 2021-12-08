@@ -35,7 +35,7 @@ namespace EMR.Business.Services
 
         public virtual void Create(T model)
         {
-            _logger.LogInformation($"Create new {nameof(T)}");
+            _logger.LogInformation($"Create new model");
             _mainRepository.Create(model);
         }
 
