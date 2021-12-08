@@ -18,7 +18,7 @@ namespace EMR.Data.Repositories
         }
             public IEnumerable<PatientInfo> GetPatientsInfo(int doctorId)
             {
-            return StoredExecuteReader("GetPatients", new SqlParameter("@doctorId", doctorId));
+            return StoredExecuteReader("GetPatientsInfo", new SqlParameter("@doctorId", doctorId));
         }
 
         protected override PatientInfo Map(SqlDataReader reader)
