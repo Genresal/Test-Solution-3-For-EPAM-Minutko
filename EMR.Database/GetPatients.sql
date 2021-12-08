@@ -11,15 +11,15 @@ END
 SET @SQL_QUERY = 'SELECT pat.Id
 ,UserId
 ,Job
-,userPat.Login as DoctorLogin
-,userPat.Password as DoctorPassword
-,userPat.FirstName as DoctorFirstName
-,userPat.LastName as DoctorLastName
-,userPat.RoleId as DoctorRoleId
-,userPat.Birthday as DoctorBirthday
-,userPat.Email as DoctorEmail
-,userPat.PhoneNumber as DoctorPhoneNumber
-,userPat.PhotoUrl as DoctorPhotoUrl
+,userPat.Login as PatientLogin
+,userPat.Password as PatientPassword
+,userPat.FirstName as PatientFirstName
+,userPat.LastName as PatientLastName
+,userPat.RoleId as PatientRoleId
+,userPat.Birthday as PatientBirthday
+,userPat.Email as PatientEmail
+,userPat.PhoneNumber as PatientPhoneNumber
+,userPat.PhotoUrl as PatientPhotoUrl
 FROM [tPatient] as pat 
 LEFT JOIN tUser as userPat ON userPat.Id = pat.UserId ' + @CONDITION
 
