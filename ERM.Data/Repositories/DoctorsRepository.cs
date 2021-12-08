@@ -11,68 +11,35 @@ namespace EMR.Data.Repositories
 {
     public class DoctorsRepository : BaseRepository<Doctor>, IRepository<Doctor>
     {
-        private readonly string baseQuery;
         public DoctorsRepository(string conn) : base(conn)
         {
-            baseQuery = $"SELECT d.{nameof(Patient.Id)}, " +
-  $"{nameof(Doctor.UserId)}, " +
-  $"{nameof(Doctor.PositionId)}, " +
-  $"up.{nameof(User.Login)} as {nameof(Doctor)}{nameof(User.Login)}, " +
-  $"up.{nameof(User.Password)} as {nameof(Doctor)}{nameof(User.Password)}, " +
-  $"up.{nameof(User.FirstName)} as {nameof(Doctor)}{nameof(User.FirstName)}, " +
-  $"up.{nameof(User.LastName)} as {nameof(Doctor)}{nameof(User.LastName)}, " +
-  $"up.{nameof(User.RoleId)} as {nameof(Doctor)}{nameof(User.RoleId)}, " +
-  $"up.{nameof(User.Birthday)} as {nameof(Doctor)}{nameof(User.Birthday)}, " +
-  $"up.{nameof(User.Email)} as {nameof(Doctor)}{nameof(User.Email)}, " +
-  $"up.{nameof(User.PhoneNumber)} as {nameof(Doctor)}{nameof(User.PhoneNumber)}, " +
-  $"up.{nameof(User.PhotoUrl)} as {nameof(Doctor)}{nameof(User.PhotoUrl)}, " +
-  $"dp.{nameof(Position.Name)} as {nameof(Position)}{nameof(Position.Name)} " +
-  $"FROM {nameof(Doctor).ConvertToTableName()} as d " +
-  $"LEFT JOIN {nameof(User).ConvertToTableName()} as up ON up.{nameof(User.Id)} = d.{nameof(Patient.UserId)} " +
-  $"LEFT JOIN {nameof(Position).ConvertToTableName()} as dp ON dp.{nameof(Position.Id)} = d.{nameof(Doctor.PositionId)}";
         }
 
         public override IEnumerable<Doctor> GetAll()
         {
-            return ExecuteReader(baseQuery);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@COLUMN", DBNull.Value));
+            parameters.Add(new SqlParameter("@OPERATOR", DBNull.Value));
+            parameters.Add(new SqlParameter("@VALUE", DBNull.Value));
+            return StoredExecuteReader("GetDoctors", parameters);
+        }
+
+        public override IEnumerable<Doctor> GetByColumn(string column, string value)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@COLUMN", column));
+            parameters.Add(new SqlParameter("@OPERATOR", "="));
+            parameters.Add(new SqlParameter("@VALUE", value));
+            return StoredExecuteReader("GetDoctors", parameters);
+        }
+
+        public override Doctor GetById(int id)
+        {
+            return GetByColumn("doc.Id", id).FirstOrDefault();
         }
 
         public override void Create(Doctor doctor)
         {
-            string sqlExpression = $"BEGIN TRY " +
-                $"BEGIN TRAN " +
-                $"INSERT INTO [dbo].[tUser]" +
-                $"([Login]" +
-                $",[Password]" +
-                $",[RoleId]" +
-                $",[FirstName]" +
-                $",[LastName]" +
-                $",[Birthday]" +
-                $",[Email]" +
-                $",[PhoneNumber]" +
-                $",[PhotoUrl])" +
-                $"VALUES" +
-                $"(@Login" +
-                $",@Password" +
-                $",@RoleId" +
-                $",@FirstName" +
-                $",@LastName" +
-                $",@Birthday" +
-                $",@Email" +
-                $",@PhoneNumber" +
-                $",@PhotoUrl) " +
-                $"INSERT INTO [dbo].[tDoctor]" +
-                $"([UserId]" +
-                $",[PositionId])" +
-                $"VALUES" +
-                $"(SCOPE_IDENTITY()" +
-                $",@PositionId) " +
-                $"COMMIT TRAN " +
-                $"END TRY " +
-                $"BEGIN CATCH " +
-                $"ROLLBACK TRAN " +
-                $"END CATCH";
-
             var doctorProperties = doctor.GetType()
                       .GetProperties()
                       .Where(x => !x.PropertyType.IsSubclassOf(typeof(BaseModel)))
@@ -88,7 +55,7 @@ namespace EMR.Data.Repositories
             var parameters = ProrertiesToSqlParameters(doctor, doctorProperties);
             parameters.AddRange(ProrertiesToSqlParameters(doctor.User, userProperties));
 
-            ExecuteNonQuery(sqlExpression, parameters);
+            StoredExecuteNonQuery("CreatreDoctor", parameters);
         }
 
         public override void Update(Doctor model)
@@ -108,18 +75,6 @@ namespace EMR.Data.Repositories
             parameters.AddRange(ProrertiesToSqlParameters(model.User, userProperties));
 
             StoredExecuteNonQuery("UpdateDoctor", parameters);
-        }
-
-        public override IEnumerable<Doctor> GetByColumn(string column, string value)
-        {
-            string sqlExpression = $"{baseQuery} WHERE [{column}] = @value";
-            return ExecuteReader(sqlExpression, new SqlParameter("@value", value));
-        }
-
-        public override Doctor GetById(int id)
-        {
-            string sqlExpression = $"{baseQuery} WHERE d.Id = @id";
-            return ExecuteReader(sqlExpression, new SqlParameter("@id", id)).FirstOrDefault();
         }
 
         public void SetDefaultData()
