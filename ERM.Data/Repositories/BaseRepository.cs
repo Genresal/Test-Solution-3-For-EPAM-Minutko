@@ -220,7 +220,7 @@ namespace EMR.Data.Repositories
             return result;
         }
 
-        protected List<T> StoredExecuteReader(string sqlExpression, List<SqlParameter> parameters = null)
+        protected List<T> StoredExecuteReader(string sqlExpression, List<SqlParameter> parameters)
         {
             List<T> results = new List<T>();
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -232,6 +232,36 @@ namespace EMR.Data.Repositories
                 if (parameters is not null)
                 {
                     command.Parameters.AddRange(parameters.ToArray());
+                }
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            results.Add(Map(reader));
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+            return results;
+        }
+
+        protected List<T> StoredExecuteReader(string sqlExpression, SqlParameter parameter = null)
+        {
+            List<T> results = new List<T>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                if (parameter is not null)
+                {
+                    command.Parameters.Add(parameter);
                 }
 
                 using (SqlDataReader reader = command.ExecuteReader())

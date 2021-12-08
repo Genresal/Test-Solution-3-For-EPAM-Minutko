@@ -40,35 +40,15 @@ namespace EMR.Data.Repositories
 
         public override void Create(Drug item, int relationId)
         {
-            string sqlExpression = $"BEGIN TRY " +
-                                    $"BEGIN TRAN " +
-                                    $"INSERT INTO [dbo].[tDrug]" +
-                                    $"([Name]" +
-                                    $",[Description])" +
-                                    $"VALUES" +
-                                    $"(@Name" +
-                                    $",@Description) " +
-                                    $"INSERT INTO [dbo].[tRecordTreatment]" +
-                                    $"([RecordId]" +
-                                    $",[DrugId])" +
-                                    $"VALUES" +
-                                    $"(@RecordId" +
-                                    $",SCOPE_IDENTITY()) " +
-                                    $"COMMIT TRAN " +
-                                    $"END TRY " +
-                                    $"BEGIN CATCH " +
-                                    $"ROLLBACK TRAN " +
-                                    $"END CATCH";
-
             var properties = item.GetType()
-          .GetProperties()
-          .Where(x => x.Name != "Id")
-          .ToList();
+                .GetProperties()
+                .Where(x => x.Name != "Id")
+                .ToList();
 
             var parameters = ProrertiesToSqlParameters(item, properties);
             parameters.Add(new SqlParameter(nameof(RecordTreatment.RecordId), relationId));
 
-            ExecuteNonQuery(sqlExpression, parameters);
+            StoredExecuteNonQuery("CreatreDrug", parameters);
         }
 
         protected override Drug Map(SqlDataReader reader)

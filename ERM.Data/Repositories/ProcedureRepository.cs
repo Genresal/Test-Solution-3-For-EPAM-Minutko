@@ -40,35 +40,15 @@ namespace EMR.Data.Repositories
 
         public override void Create(Procedure item, int relationId)
         {
-            string sqlExpression = $"BEGIN TRY " +
-                                    $"BEGIN TRAN " +
-                                    $"INSERT INTO [dbo].[tProcedure]" +
-                                    $"([Name]" +
-                                    $",[Description])" +
-                                    $"VALUES" +
-                                    $"(@Name" +
-                                    $",@Description) " +
-                                    $"INSERT INTO [dbo].[tRecordTreatment]" +
-                                    $"([RecordId]" +
-                                    $",[ProcedureId])" +
-                                    $"VALUES" +
-                                    $"(@RecordId" +
-                                    $",SCOPE_IDENTITY()) " +
-                                    $"COMMIT TRAN " +
-                                    $"END TRY " +
-                                    $"BEGIN CATCH " +
-                                    $"ROLLBACK TRAN " +
-                                    $"END CATCH";
-
             var properties = item.GetType()
-          .GetProperties()
-          .Where(x => x.Name != "Id")
-          .ToList();
+                .GetProperties()
+                .Where(x => x.Name != "Id")
+                .ToList();
 
             var parameters = ProrertiesToSqlParameters(item, properties);
             parameters.Add(new SqlParameter(nameof(RecordTreatment.RecordId), relationId));
 
-            ExecuteNonQuery(sqlExpression, parameters);
+            StoredExecuteNonQuery("CreatreProcedure", parameters);
         }
 
         protected override Procedure Map(SqlDataReader reader)
