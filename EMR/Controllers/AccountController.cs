@@ -152,6 +152,7 @@ namespace EMR.Controllers
             var changePasswordResult = _userService.ChangePassword(model, User.Identity.Name);
             if (!changePasswordResult)
             {
+                ViewBag.Message = "Wrong current password";
                 return View(model);
             }
 

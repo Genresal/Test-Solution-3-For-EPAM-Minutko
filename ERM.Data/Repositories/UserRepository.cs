@@ -69,7 +69,7 @@ namespace EMR.Data.Repositories
 
                 sqlExpression = $"{sqlExpression}" +
                     $"('{Gen.Random.Text.Words()().MakeFirstCharUppercase()}'" +
-                    $",'{Gen.Random.Text.Words()()}'" +
+                    $",'{Gen.Random.Text.Words()().HashString()}'" +
                     $",'{roleId}'" +
                     $",'{name}'" +
                     $",'{Gen.Random.Names.Surname()()}'" +
@@ -85,7 +85,7 @@ namespace EMR.Data.Repositories
 
             sqlExpression = $"{sqlExpression}," +
     $"('{Gen.Random.Text.Words()().MakeFirstCharUppercase()}'" +
-    $",'{Gen.Random.Text.Words()()}'" +
+    $",'{Gen.Random.Text.Words()().HashString()}'" +
     $",'{3}'" +
     $",'{Gen.Random.Names.Male()()}'" +
     $",'{Gen.Random.Names.Surname()()}'" +
@@ -96,7 +96,7 @@ namespace EMR.Data.Repositories
 
             sqlExpression = $"{sqlExpression}," +
 $"('{Gen.Random.Text.Words()().MakeFirstCharUppercase()}'" +
-$",'{Gen.Random.Text.Words()()}'" +
+$",'{Gen.Random.Text.Words()().HashString()}'" +
 $",'{4}'" +
 $",'{Gen.Random.Names.Male()()}'" +
 $",'{Gen.Random.Names.Surname()()}'" +
