@@ -10,21 +10,7 @@ namespace EMR.Business.Services
 {
     public class DbService : IDbService
     {
-        /*
-        IRepository<SickLeave> _sickLeave;
-        IRepository<Diagnosis> _diagnosis;
-        IRepository<Drug> _drug;
-        IRepository<Procedure> _procedure;
-        IRepository<Role> _role;
-        IRepository<User> _user;
-        IRepository<Position> _position;
-        IRepository<Doctor> _doctor;
-        IRepository<Patient> _patient;
-        IRepository<Record> _record;
-        IRepository<RecordTreatment> _recordTreatment;
-        */
         private List<IRepository> repositories = new List<IRepository>();
-        private IDbRepository _dbRepository;
 
         public DbService(IRepository<SickLeave> sickLeave
             , IRepository<Diagnosis> diagnosis
@@ -36,8 +22,7 @@ namespace EMR.Business.Services
             , IRepository<Doctor> doctor
             , IPatientRepository patient
             , IRepository<Record> record
-            , IRepository<RecordTreatment> recordTreatment
-            , IDbRepository dbRepository)
+            , IRepository<RecordTreatment> recordTreatment)
         {
             repositories.Add(sickLeave);
             repositories.Add(diagnosis);
@@ -50,18 +35,11 @@ namespace EMR.Business.Services
             repositories.Add(patient);
             repositories.Add(record);
             repositories.Add(recordTreatment);
-            _dbRepository = dbRepository;
         }
 
         public DbStatus GetDbStatus()
         {
             DbStatus result = new DbStatus();
-            result.IsDbExist = _dbRepository.IsDbExist();
-
-            if(!result.IsDbExist)
-            {
-                return result;
-            }
 
             result.IsTablesExist = true;
 
@@ -101,18 +79,6 @@ namespace EMR.Business.Services
                         repo.SetDefaultData();
                     }
             }
-        }
-        public void CreateDb()
-        {
-            _dbRepository.CreateDb();
-        }
-        public void DropDb()
-        {
-            _dbRepository.DropDb();
-        }
-        public void CreateTables()
-        {
-            _dbRepository.CreateTables();
         }
         public void DropTables()
         {

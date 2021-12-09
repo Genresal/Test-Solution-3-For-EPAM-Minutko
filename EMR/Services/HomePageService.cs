@@ -20,18 +20,7 @@ namespace EMR.Services
         {
             _dbService.CreateDefaultDate();
         }
-        public void CreateDb()
-        {
-            _dbService.CreateDb();
-        }
-        public void DropDb()
-        {
-            _dbService.DropDb();
-        }
-        public void CreateTables()
-        {
-            _dbService.CreateTables();
-        }
+
         public void DropTables()
         {
             _dbService.DropTables();

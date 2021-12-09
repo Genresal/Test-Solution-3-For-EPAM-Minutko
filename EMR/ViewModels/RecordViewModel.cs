@@ -17,7 +17,6 @@ namespace EMR.ViewModels
         [Required]
         [Display(Name = "Diagnosis")]
         public string Diagnosis { get; set; }
-        [Required]
         [Display(Name = "Diagnosis")]
         public string DiagnosisWithCode { get; set; }
         [Display(Name = "Patient name")]

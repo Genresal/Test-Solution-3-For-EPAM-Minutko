@@ -30,7 +30,7 @@ namespace EMR
         public void ConfigureServices(IServiceCollection services)
         {
             string conectionString = Configuration.GetConnectionString("EMR");
-            string mainConectionString = Configuration.GetConnectionString("MASTER");
+            //string conectionString = Configuration.GetConnectionString("AZURE");
             /*
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -52,8 +52,6 @@ namespace EMR
             });
 
             services.AddRazorPages();
-
-            services.AddTransient<IDbRepository, DbRepository>(provider => new DbRepository(mainConectionString));
 
             services.AddTransient<IRepository<SickLeave>, SickLeavesRepository>(provider => new SickLeavesRepository(conectionString));
             services.AddTransient<IRepository<Diagnosis>, DiagnosisRepository>(provider => new DiagnosisRepository(conectionString));

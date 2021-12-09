@@ -50,24 +50,6 @@ namespace EMR.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult CreateDb()
-        {
-            _pageService.CreateDb();
-            return RedirectToAction(nameof(Index));
-        }
-
-        public IActionResult DropDb()
-        {
-            _pageService.DropDb();
-            return RedirectToAction(nameof(Index));
-        }
-
-        public IActionResult CreateTables()
-        {
-            _pageService.CreateTables();
-            return RedirectToAction(nameof(Index));
-        }
-
         public IActionResult DropTables()
         {
             _pageService.DropTables();

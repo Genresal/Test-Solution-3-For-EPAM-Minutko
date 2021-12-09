@@ -23,22 +23,6 @@
     <tbody>
         <tr>
             <td>
-                @if (Model.IsDbExist)
-                {
-                    <text>DB exist</text>
-                }
-                else
-                {
-                    <text>DB not exist</text>
-                }
-            </td>
-            <td>
-                <a asp-action="CreateDb"><button @if (Model.IsDbExist) {@Html.Raw("disabled")} class="btn btn-primary">Create Db</button></a>
-                <a asp-action="DropDb"><button @if (!Model.IsDbExist) {@Html.Raw("disabled")} class="btn btn-primary">Drop Db</button></a>
-            </td>
-        </tr>
-        <tr>
-            <td>
                 @if (Model.IsTablesExist)
                 {
                     <text>Tables exist</text>

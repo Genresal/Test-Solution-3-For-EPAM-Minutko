@@ -11,9 +11,6 @@ namespace EMR.Business.Services
     {
         public DbStatus GetDbStatus();
         public void CreateDefaultDate();
-        public void CreateDb();
-        public void DropDb();
-        public void CreateTables();
         public void DropTables();
     }
 }
