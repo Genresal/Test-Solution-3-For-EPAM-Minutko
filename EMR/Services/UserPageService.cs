@@ -83,6 +83,13 @@ namespace EMR.Services
             return _mapper.Map<UserViewModel>(rawResult);
         }
 
+        public UserViewModel LogIn(LoginViewModel model)
+        {
+            var rawResult = _userService.GetByColumn(nameof(User.Login), model.Login)
+                .FirstOrDefault(x => x.Password == model.Password.HashString());
+            return _mapper.Map<UserViewModel>(rawResult);
+        }
+
         public DoctorViewModel GeDoctorByUserId(int userId)
         {
             var rawResult = _doctorService.GetByColumn(nameof(Doctor.UserId), userId.ToString()).FirstOrDefault();

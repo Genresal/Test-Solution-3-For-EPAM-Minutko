@@ -12,22 +12,19 @@
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             @if (User.Identity.IsAuthenticated)
             {
-                <form asp-area="" asp-controller="Account" asp-action="Logout">
-
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <div class="image">
-                                <img src="@User.FindFirst("PhotoUrl")?.Value" class="img-circle elevation-2" alt="User Image">
-                            </div>
-                        </li>
-                        <li>
-                            <a asp-area="" asp-controller="Users" asp-action="Details" asp-route-id="@User.FindFirst("UserId")?.Value" title="Manage">@User.FindFirst("FullName")?.Value</a>
-                        </li>
-                        <li>
-                            <button type="submit" class="btn btn-secondary">Log out</button>
-                        </li>
-                    </ul>
-                </form>
+                  <ul class="nav navbar-nav navbar-right">
+                      <li>
+                          <div class="image">
+                              <img src="@User.FindFirst("PhotoUrl")?.Value" class="img-circle elevation-2" alt="User Image">
+                          </div>
+                      </li>
+                      <li>
+                          <a asp-area="" asp-controller="Users" asp-action="Details" asp-route-id="@User.FindFirst("UserId")?.Value" title="Manage">@User.FindFirst("FullName")?.Value</a>
+                      </li>
+                      <li>
+                          <a class="d-block" asp-controller="Account" asp-action="Logout">Log out</a>
+                      </li>
+                  </ul>
             }
             else
             {
@@ -35,22 +32,10 @@
             }
         </div>
 
-            <!-- SidebarSearch Form -->
-            <div class="form-inline">
-                <div class="input-group" data-widget="sidebar-search">
-                    <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-sidebar">
-                            <i class="fas fa-search fa-fw"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
             <!-- Sidebar Menu -->
             <nav class="mt-2">
                 @if (User.Identity.IsAuthenticated)
-                { }
+                { 
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <!-- Add icons to the links using the .nav-icon class
                 with font-awesome or any other icon font library -->
@@ -117,7 +102,7 @@
                         </a>
                     </li>
                 </ul>
-
+                }
             </nav>
             <!-- /.sidebar-menu -->
         </div>

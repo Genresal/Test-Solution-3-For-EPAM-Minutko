@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using EMR.Business.Models;
+using EMR.Business.Helpers;
 using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authentication;
@@ -49,33 +49,37 @@ namespace EMR.Controllers
             if (user != null)
             {
                 await Authenticate(user);
+
+                return user.RoleId switch
+                {
+                    1 => RedirectToAction("Index", "Patients"),
+                    2 => RedirectToAction("Index", "Doctors"),
+                    _ => RedirectToAction("Index", "Users"),
+                };
             }
 
-            return RedirectToAction("Index", "Home");
-
+            return RedirectToAction("Login", "Account");
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = "")        //https://newbedev.com/working-with-return-url-in-asp-net-core //ReturnUrl
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                UserViewModel user = _userService.GetByLogin(model.Login);
+                UserViewModel user = _userService.LogIn(model);
 
                 if (user != null)
                 {
                     await Authenticate(user);
 
-                    if (!string.IsNullOrEmpty(returnUrl))
+                    return user.RoleId switch
                     {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+                        1 => RedirectToAction("Index", "Patients"),
+                        2 => RedirectToAction("Index", "Doctors"),
+                        _ => RedirectToAction("Index", "Users"),
+                    };
                 }
                 ModelState.AddModelError("", "Incorrect login or password");
             }
@@ -164,19 +168,16 @@ namespace EMR.Controllers
 
         private async Task Authenticate(UserViewModel user)
         {
-            // создаем один claim
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role),
                 new Claim("FullName", $"{user.FirstName} {user.LastName}"),
-                new Claim("PhotoUrl", user.PhotoUrl),
+                new Claim("PhotoUrl", string.IsNullOrEmpty(user.PhotoUrl) ? string.Empty : user.PhotoUrl),  // TODO: default picture url
                 new Claim("UserId", user.Id.ToString())
             };
-            // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
                 ClaimsIdentity.DefaultRoleClaimType);
-            // установка аутентификационных куки
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 
