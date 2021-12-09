@@ -95,7 +95,7 @@ namespace EMR.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public IActionResult Register()
         {
             PrepareViewBag();
@@ -103,7 +103,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public IActionResult Register(RegisterViewModel model)
         {
@@ -126,6 +126,7 @@ namespace EMR.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult ChangePassword()
         {
             var user = _userService.GetByLogin(User.Identity.Name);
@@ -139,6 +140,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public IActionResult ChangePassword(ChangePasswordViewModel model)
         {

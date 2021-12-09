@@ -1,6 +1,7 @@
 ﻿using EMR.DataTables;
 using EMR.Services;
 using EMR.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,6 +17,7 @@ namespace EMR.Controllers
             _pageService = s;
         }
 
+        [Authorize(Roles = "Editor, Admin")]
         public IActionResult Index()
         {
             UserSearchModel searchModel = new UserSearchModel();
@@ -26,6 +28,7 @@ namespace EMR.Controllers
             return View(searchModel);
         }
 
+        [Authorize(Roles = "Editor, Admin")]
         public IActionResult LoadTable([FromBody] UserSearchModel SearchParameters)
         {
             var result = _pageService.LoadTable(SearchParameters);
@@ -44,6 +47,7 @@ namespace EMR.Controllers
             });
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(UserViewModel model = null)
         {
             if (model == null)
@@ -53,6 +57,7 @@ namespace EMR.Controllers
             return View("AddOrEdit", model);
         }
 
+        [Authorize(Roles = "Editor, Admin")]
         public IActionResult Update(int id)
         {
             var model = _pageService.GetById(id);
@@ -70,6 +75,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Editor, Admin")]
         public IActionResult AddOrEdit(UserViewModel model)
         {
             if (ModelState.IsValid)
@@ -95,6 +101,7 @@ namespace EMR.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Editor, Admin")]
         public IActionResult Details(int id)
         {
             var model = _pageService.GetById(id);
@@ -111,6 +118,7 @@ namespace EMR.Controllers
             };
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var model = _pageService.GetById(id);

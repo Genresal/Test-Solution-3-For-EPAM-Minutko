@@ -1,12 +1,14 @@
 ﻿using EMR.Business.Models;
 using EMR.Services;
 using EMR.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 
 namespace EMR.Controllers
 {
+    [Authorize(Roles = "Doctor, Editor, Admin")]
     public class SickLeavesController : Controller
     {
         readonly ISickLeavePageService _pageService;

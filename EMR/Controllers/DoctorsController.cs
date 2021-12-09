@@ -20,6 +20,7 @@ namespace EMR.Controllers
         {
             _pageService = s;
         }
+        [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult Index(int id = 0)
         {
             if (!HttpContext.User.IsInRole("Doctor"))
@@ -37,6 +38,7 @@ namespace EMR.Controllers
         }
 
         [Authorize]
+        [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult Details(int id = 0)
         {
             if (id == 0)
@@ -48,6 +50,7 @@ namespace EMR.Controllers
             return View(_pageService.GetById(id));
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(DoctorViewModel model = null)
         {
             if (model == null)
@@ -58,6 +61,7 @@ namespace EMR.Controllers
             return View("AddOrEdit", model);
         }
 
+        [Authorize(Roles = "Doctor, Admin")]
         public IActionResult Update(int id)
         {
             var model = _pageService.GetById(id);
@@ -70,6 +74,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Doctor, Admin")]
         public IActionResult AddOrEdit(DoctorViewModel model)
         {
             if (ModelState.IsValid)
@@ -95,7 +100,7 @@ namespace EMR.Controllers
             return View(model);
         }
 
-        // GET: HomeController/Delete/5
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             _pageService.Delete(id);

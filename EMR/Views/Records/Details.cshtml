@@ -15,8 +15,11 @@
             </div>
             <div class="card-body">
                 @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model.Patient)
-                <a href="/Patients/Details?id=@Model.Patient.Id" class="btn btn-primary btn-block"><b>View profile</b></a>
-            </div>
+                @if (!User.IsInRole("User"))
+                {
+                    <a href="/Patients/Details?id=@Model.Patient.Id" class="btn btn-primary btn-block"><b>View profile</b></a>
+                }
+                </div>
         </div>
     </div>
 
@@ -27,8 +30,11 @@
             </div>
             <div class="card-body">
                 @await Html.PartialAsync("~/Views/Doctors/_DoctorDetailsPartialView.cshtml", Model.Doctor)
-                <a href="/Doctors/Details?id=@Model.Doctor.Id" class="btn btn-primary btn-block"><b>View profile</b></a>
-            </div>
+                @if (!User.IsInRole("User"))
+                {
+                    <a href="/Doctors/Details?id=@Model.Doctor.Id" class="btn btn-primary btn-block"><b>View profile</b></a>
+                }
+                </div>
         </div>
     </div>
 
@@ -50,10 +56,13 @@
             <div class="card-header">
                 <h3 class="card-title">Used drugs for the case</h3>
                 <div class="card-tools">
-                    <a asp-controller="Drugs" asp-action="AddOrEdit" asp-route-recordId="@Model.Id">
-                        <button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add drug</button>
-                    </a>
-                </div>
+                    @if (!User.IsInRole("User"))
+                    {
+                        <a asp-controller="Drugs" asp-action="AddOrEdit" asp-route-recordId="@Model.Id">
+                            <button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add drug</button>
+                        </a>
+                    }
+                    </div>
             </div>
             <div class="card-body">
                 @await Html.PartialAsync("~/Views/Drugs/_DrugsTable.cshtml", new DrugSearchModel() { RecordId = Model.Id })
@@ -65,10 +74,13 @@
             <div class="card-header">
                 <h3 class="card-title">Procedures</h3>
                 <div class="card-tools">
-                    <a asp-controller="Procedures" asp-action="AddOrEdit" asp-route-recordId="@Model.Id">
-                        <button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add procedure</button>
-                    </a>
-                </div>
+                    @if (!User.IsInRole("User"))
+                    {
+                        <a asp-controller="Procedures" asp-action="AddOrEdit" asp-route-recordId="@Model.Id">
+                            <button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add procedure</button>
+                        </a>
+                    }
+                    </div>
             </div>
             <div class="card-body">
                 @await Html.PartialAsync("~/Views/Procedures/_ProceduresTable.cshtml", new ProcedureSearchModel() { RecordId = Model.Id })

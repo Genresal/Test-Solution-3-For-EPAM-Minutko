@@ -1,10 +1,12 @@
 ﻿using EMR.Services;
 using EMR.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 namespace EMR.Controllers
 {
+    [Authorize(Roles = "Editor, Admin")]
     public class PositionsController : Controller
     {
         private readonly IPositionPageService _pageService;
@@ -85,7 +87,6 @@ namespace EMR.Controllers
             return View(model);
         }
 
-        // GET: HomeController/Delete/5
         public IActionResult Delete(int id)
         {
             if (_pageService.IsPositionInUse(id))

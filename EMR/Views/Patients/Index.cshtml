@@ -1,44 +1,46 @@
 ﻿@model PatientViewModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Patient's records";
 }
 
 <partial name="_TableScriptsAndStyles" />
 
-<h3>@ViewData["Title"]</h3>
-
 <div class="row">
-
-    <div class="col-md-2">
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title">Patient</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-                @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model)
-                @if (User.IsInRole("User") || User.IsInRole("Admin"))
-                {
-                    <a href="/Patients/AddOrEdit?id=@Model.Id" class="btn btn-primary btn-block"><b>Edit profile</b></a>
-                }
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-10">
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title">Patients record</h3>
-                <div class="card-tools">
-                    <a asp-controller="Records" asp-action="AddOrEdit" asp-route-patientId="@Model.Id">
-                        <button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add record</button>
-                    </a>
+    @if (!User.IsInRole("User"))
+    {
+        <div class="col-md-2">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">Patient</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model)
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a href="/Patients/AddOrEdit?id=@Model.Id" class="btn btn-primary btn-block"><b>Edit profile</b></a>
+                    }
                 </div>
             </div>
+        </div>
+    }
+        <div class="col-md-10">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">@ViewData["Title"]</h3>
+                    <div class="card-tools">
+                        @if (!User.IsInRole("User"))
+                        {
+                            <a asp-controller="Records" asp-action="AddOrEdit" asp-route-patientId="@Model.Id">
+                                <button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add record</button>
+                            </a>
+                        }
+                        </div>
+                </div>
                 <div class="card-body">
                     @await Html.PartialAsync("~/Views/Records/_PatientRecordsTable.cshtml", (RecordSearchModel)ViewBag.SearchModel)
                 </div>
             </div>
+        </div>
     </div>
-</div>
 

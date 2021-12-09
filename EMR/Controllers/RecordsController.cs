@@ -13,9 +13,11 @@ using System.Threading.Tasks;
 using EMR.Business.Services;
 using EMR.Services;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EMR.Controllers
 {
+
     public class RecordsController : Controller
     {
         private readonly IRecordPageService _pageService;
@@ -26,7 +28,7 @@ namespace EMR.Controllers
             _doctorService = d;
             _pageService = s;
         }
-
+        [Authorize(Roles = "Editor, Admin")]
         public IActionResult Index()
         {
             RecordSearchModel searchModel = new RecordSearchModel();
@@ -38,6 +40,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult LoadTable([FromBody] RecordSearchModel SearchParameters)
         {
             var result = _pageService.LoadTable(SearchParameters);
@@ -55,7 +58,8 @@ namespace EMR.Controllers
                 .ToList()
             });
         }
-        
+
+        [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult AddOrEdit(int id = 0, int patientId = 0)
         {
             PrepareViewBag();
@@ -89,6 +93,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult AddOrEdit(int id, RecordViewModel model)
         {
             if (ModelState.IsValid)
@@ -115,12 +120,14 @@ namespace EMR.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult Delete(int id)
         {
             _pageService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         public IActionResult Details(int id)
         {
             if (id == 0)

@@ -1,12 +1,14 @@
 ﻿using EMR.Business.Models;
 using EMR.Services;
 using EMR.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 
 namespace EMR.Controllers
 {
+
     public class ProceduresController : Controller
     {
         readonly IProcedurePageService _pageService;
@@ -22,6 +24,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult LoadTable([FromBody] ProcedureSearchModel SearchParameters)
         {
             var result = _pageService.LoadTable(SearchParameters);
@@ -40,6 +43,7 @@ namespace EMR.Controllers
             });
         }
 
+        [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult AddOrEdit(int id = 0, int recordId = 0)
         {
             if (id == 0)
@@ -62,6 +66,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult AddOrEdit(int id, ProcedureViewModel model)
         {
             if (ModelState.IsValid)
@@ -86,6 +91,7 @@ namespace EMR.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult Delete(int id, int recordId)
         { 
             _pageService.Delete(id);

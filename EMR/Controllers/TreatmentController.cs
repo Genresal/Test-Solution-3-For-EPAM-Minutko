@@ -12,9 +12,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using EMR.Business.Services;
 using EMR.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EMR.Controllers
 {
+    [Authorize(Roles = "Doctor, Editor, Admin")]
     public class TreatmentController : Controller
     {
         readonly IRecordPageService _pageService;

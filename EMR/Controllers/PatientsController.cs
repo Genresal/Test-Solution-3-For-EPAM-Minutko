@@ -23,6 +23,7 @@ namespace EMR.Controllers
 
         }
 
+        [Authorize]
         public IActionResult Index(int id = 0)
         {
             if (!HttpContext.User.IsInRole("User"))
@@ -53,6 +54,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult LoadPatientInfoTable([FromBody] PatientInfoSearchModel SearchParameters)
         {
             var result = _pageService.LoadTable(SearchParameters);
@@ -95,6 +97,7 @@ namespace EMR.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(PatientViewModel model = null)
         {
             if (model == null)
@@ -105,6 +108,7 @@ namespace EMR.Controllers
             return View("AddOrEdit", model);
         }
 
+        [Authorize(Roles = "User, Admin")]
         public IActionResult Update(int id)
         {
             var model = _pageService.GetById(id);
@@ -117,6 +121,7 @@ namespace EMR.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "User, Admin")]
         public IActionResult AddOrEdit(PatientViewModel model)
         {
             if (ModelState.IsValid)
@@ -127,14 +132,14 @@ namespace EMR.Controllers
                 }
                 else
                 {
-                    //try
-                    //{
+                    try
+                    {
                         _pageService.Update(model);
-                    //}
-                    //catch (Exception)
-                    //{
-                    //    return NotFound();
-                    //}
+                    }
+                    catch (Exception)
+                    {
+                        return NotFound();
+                    }
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -143,7 +148,7 @@ namespace EMR.Controllers
             return View(model);
         }
 
-        // GET: HomeController/Delete/5
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             _pageService.Delete(id);
