@@ -1,14 +1,12 @@
 ﻿@model EMR.Business.Models.DbStatus
 @{
-    ViewData["Title"] = "Home page";
-    //Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
+    ViewData["Title"] = "Database";
 
 }
 
 <h3>@ViewData["Title"]</h3>
 
 <div class="row">
-    DashBoard
 </div>
 
 <table>
@@ -51,7 +49,6 @@
                 }
             </td>
             <td>
-                <a asp-action="CreateTables"><button @if (Model.IsTablesExist) {@Html.Raw("disabled")} class="btn btn-primary">Create Tables</button></a>
                 <a asp-action="DropTables"><button @if (!Model.IsTablesExist) {@Html.Raw("disabled")} class="btn btn-primary">Drop Tables</button></a>
             </td>
         </tr>

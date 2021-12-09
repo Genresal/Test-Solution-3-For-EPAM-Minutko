@@ -77,7 +77,7 @@ namespace EMR.Data.Repositories
             var parameters = ProrertiesToSqlParameters(model, patientProperties);
             parameters.AddRange(ProrertiesToSqlParameters(model.User, userProperties));
 
-            StoredExecuteNonQuery("UpratePatient", parameters);
+            StoredExecuteNonQuery("UpdatePatient", parameters);
         }
 
         public override void Delete(int id)

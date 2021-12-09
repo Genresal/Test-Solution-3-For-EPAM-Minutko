@@ -3,6 +3,7 @@ using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 
@@ -12,12 +13,15 @@ namespace EMR.Controllers
     public class SickLeavesController : Controller
     {
         readonly ISickLeavePageService _pageService;
+        private readonly ILogger<SickLeavesController> _logger;
 
-        public SickLeavesController(ISickLeavePageService pageService)
+        public SickLeavesController(ISickLeavePageService pageService, ILogger<SickLeavesController> logger)
         {
             _pageService = pageService;
+            _logger = logger;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             return View();
@@ -29,7 +33,6 @@ namespace EMR.Controllers
             {
                 var model = new SickLeaveViewModel();
                 model.Id = 0;
-                // TODO: Remove at drugs and at procedures and fix mapping
                 model.RecordId = recordId;
                 return View(model);
             }
@@ -40,31 +43,33 @@ namespace EMR.Controllers
                 {
                     return NotFound();
                 }
-                // TODO: Remove at drugs and at procedures and fix mapping
-               //model.RecordId = recordId;
+
                 return View(model);
             }
         }
 
         [HttpPost]
-        public IActionResult AddOrEdit(int id, SickLeaveViewModel model)
+        public IActionResult AddOrEdit(SickLeaveViewModel model)
         {
             if (ModelState.IsValid)
             {
-                if (id == 0)
+                if (model.Id == 0)
                 {
                     _pageService.Create(model);
+                    _logger.LogInformation($"{User.Identity.Name} created new sick leave {model.StartDate} - {model.FinalDate}.");
                 }
                 else
                 {
-                    //try
-                    //{
+                    try
+                    {
                         _pageService.Update(model);
-                    //}
-                    //catch (Exception)
-                    //{
-                    //    return NotFound();
-                    //}
+                        _logger.LogInformation($"{User.Identity.Name} updated sick leave with id {model.Id}.");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"{User.Identity.Name} failed to update sick leave with id {model.Id}. {ex.Message}");
+                        return NotFound();
+                    }
                 }
 
                 return RedirectToAction("Details", "Records", new { id = model.RecordId});
@@ -74,7 +79,16 @@ namespace EMR.Controllers
 
         public IActionResult Delete(int id, int recordId)
         {
-            _pageService.Delete(id);
+            try
+            {
+                _pageService.Delete(id);
+                _logger.LogInformation($"{User.Identity.Name} deleted sick leave with id {id} inside record with id {recordId}.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{User.Identity.Name} failed to delete sick leave with id {id}. {ex.Message}");
+            }
+
             if (recordId == 0)
             {
                 return RedirectToAction("Index", "Records");

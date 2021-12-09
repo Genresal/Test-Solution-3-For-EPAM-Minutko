@@ -14,5 +14,7 @@ namespace EMR.ViewModels
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
+
+        public string Message { get; set; }
     }
 }

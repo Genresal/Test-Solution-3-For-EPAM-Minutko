@@ -31,73 +31,83 @@
                 <a class="d-block" asp-controller="Account" asp-action="Login">LogIn</a>
             }
         </div>
-        @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
-        {
+
             <!-- Sidebar Menu -->
             <nav class="mt-2">
 
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <!-- Add icons to the links using the .nav-icon class
-                with font-awesome or any other icon font library -->
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                            <i class="nav-icon fas fa-vector-square"></i>
-                            <p>
-                                Dashboard
-                            </p>
-                        </a>
-                    </li>
+    with font-awesome or any other icon font library -->
+                    @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="nav-icon fas fa-vector-square"></i>
+                                <p>
+                                    Dashboard
+                                </p>
+                            </a>
+                        </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Records" asp-action="Index">
+                                <i class="nav-icon far fa-circle"></i>
+                                <p>
+                                    Records
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Patients" asp-action="Details">
+                                <i class="nav-icon far fa-circle"></i>
+                                <p>
+                                    PatientRecord
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Doctors" asp-action="Details">
+                                <i class="nav-icon far fa-circle"></i>
+                                <p>
+                                    Doctors page
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">
+                                <i class="nav-icon far fa-circle"></i>
+                                <p>
+                                    Users page
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">
+                                <i class="nav-icon far fa-circle"></i>
+                                <p>
+                                    Register new user
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Positions" asp-action="Index">
+                                <i class="nav-icon far fa-circle"></i>
+                                <p>
+                                    Doctor's positions
+                                </p>
+                            </a>
+                        </li>
+                    }
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Records" asp-action="Index">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="DbPage">
                             <i class="nav-icon far fa-circle"></i>
                             <p>
-                                Records
-                            </p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Patients" asp-action="Details">
-                            <i class="nav-icon far fa-circle"></i>
-                            <p>
-                                PatientRecord
-                            </p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Doctors" asp-action="Details">
-                            <i class="nav-icon far fa-circle"></i>
-                            <p>
-                                Doctors page
-                            </p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">
-                            <i class="nav-icon far fa-circle"></i>
-                            <p>
-                                Users page
-                            </p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">
-                            <i class="nav-icon far fa-circle"></i>
-                            <p>
-                                Register new user
-                            </p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Positions" asp-action="Index">
-                            <i class="nav-icon far fa-circle"></i>
-                            <p>
-                                Doctor's positions
+                                Database
                             </p>
                         </a>
                     </li>
@@ -105,7 +115,7 @@
                 
             </nav>
             <!-- /.sidebar-menu -->
-        }
+        
         </div>
         <!-- /.sidebar -->
 </aside>

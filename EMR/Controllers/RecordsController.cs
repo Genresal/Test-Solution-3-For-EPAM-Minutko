@@ -22,11 +22,15 @@ namespace EMR.Controllers
     {
         private readonly IRecordPageService _pageService;
         private readonly IDoctorPageService _doctorService;
+        private readonly ILogger<RecordsController> _logger;
 
-        public RecordsController(IRecordPageService s, IDoctorPageService d)
+        public RecordsController(IRecordPageService recordService, 
+            IDoctorPageService doctorService, 
+            ILogger<RecordsController> logger)
         {
-            _doctorService = d;
-            _pageService = s;
+            _doctorService = doctorService;
+            _pageService = recordService;
+            _logger = logger;
         }
         [Authorize(Roles = "Editor, Admin")]
         public IActionResult Index()
@@ -102,15 +106,18 @@ namespace EMR.Controllers
                 {
                     model.ModifiedDate = DateTime.Now;
                     _pageService.Create(model);
+                    _logger.LogInformation($"{User.Identity.Name} created new record with diagnosis {model.Diagnosis}.");
                 }
                 else
                 {
                     try
                     {
                         _pageService.Update(model);
+                        _logger.LogInformation($"{User.Identity.Name} updated record with id {model.Id}.");
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        _logger.LogError($"{User.Identity.Name} failed to update record with id {model.Id}. {ex.Message}");
                         return NotFound();
                     }
                 }
@@ -123,7 +130,16 @@ namespace EMR.Controllers
         [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult Delete(int id)
         {
-            _pageService.Delete(id);
+            try
+            {
+                _pageService.Delete(id);
+                _logger.LogInformation($"{User.Identity.Name} deleted record with id {id}.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{User.Identity.Name} failed to delete record with id {id}. {ex.Message}");
+            }
+
             return RedirectToAction(nameof(Index));
         }
 

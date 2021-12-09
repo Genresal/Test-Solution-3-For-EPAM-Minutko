@@ -2,6 +2,8 @@
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 
 namespace EMR.Controllers
@@ -10,10 +12,12 @@ namespace EMR.Controllers
     public class PositionsController : Controller
     {
         private readonly IPositionPageService _pageService;
+        private readonly ILogger<PositionsController> _logger;
 
-        public PositionsController(IPositionPageService pageService)
+        public PositionsController(IPositionPageService pageService, ILogger<PositionsController> logger)
         {
             _pageService = pageService;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -68,17 +72,20 @@ namespace EMR.Controllers
                 if (model.Id == 0)
                 {
                     _pageService.Create(model);
+                    _logger.LogInformation($"{User.Identity.Name} created a new position with name {model.Name}.");
                 }
                 else
                 {
-                    //try
-                    //{
-                    _pageService.Update(model);
-                    //}
-                    //catch (Exception)
-                    //{
-                    //    return NotFound();
-                    //}
+                    try
+                    {
+                        _pageService.Update(model);
+                        _logger.LogInformation($"{User.Identity.Name} updated a position with id {id}.");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"{User.Identity.Name} failed to update doctor's position with id {model.Id}. {ex.Message}");
+                        return NotFound();
+                    }
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -91,11 +98,19 @@ namespace EMR.Controllers
         {
             if (_pageService.IsPositionInUse(id))
             {
-                ViewBag.Message = "Cannot be deleted, remove the position at doctors first!";
+                ViewBag.Message = "Error! Cannot be deleted. Doctors with that position still exist, change their position first!";
                 return View(nameof(Index));
             }
 
-            _pageService.Delete(id);
+            try
+            {
+                _pageService.Delete(id);
+                _logger.LogInformation($"{User.Identity.Name} deleted user with id {id}.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{User.Identity.Name} failed to delete user with id {id}. {ex.Message}");
+            }
             return View(nameof(Index));
         }
     }

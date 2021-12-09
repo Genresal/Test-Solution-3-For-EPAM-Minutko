@@ -24,5 +24,7 @@ namespace EMR.ViewModels
         [Display(Name = "Confirm Password")]
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
+
+        public string Message { get; set; }
     }
 }

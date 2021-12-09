@@ -12,9 +12,11 @@ namespace EMR.Controllers
     public class UsersController : Controller
     {
         private readonly IUserPageService _pageService;
-        public UsersController(IUserPageService s)
+        private readonly ILogger<UsersController> _logger;
+        public UsersController(IUserPageService s, ILogger<UsersController> logger)
         {
             _pageService = s;
+            _logger = logger;
         }
 
         [Authorize(Roles = "Editor, Admin")]
@@ -82,16 +84,20 @@ namespace EMR.Controllers
             {
                 if (model.Id == 0)
                 {
+
                     _pageService.Create(model);
+                    _logger.LogInformation($"{User.Identity.Name} created new user {model.Login}.");
                 }
                 else
                 {
                     try
                     {
                         _pageService.Update(model);
+                        _logger.LogInformation($"{User.Identity.Name} updated user with id {model.Id}.");
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        _logger.LogError($"{User.Identity.Name} failed to update user with id {model.Id}. {ex.Message}");
                         return NotFound();
                     }
                 }
@@ -101,7 +107,7 @@ namespace EMR.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Editor, Admin")]
+        [Authorize]
         public IActionResult Details(int id)
         {
             var model = _pageService.GetById(id);
@@ -129,7 +135,15 @@ namespace EMR.Controllers
 
             if (model.RoleId > 2)
             {
-                _pageService.Delete(id);
+                try
+                {
+                    _pageService.Delete(id);
+                    _logger.LogInformation($"{User.Identity.Name} deleted user with id {id}.");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"{User.Identity.Name} failed to delete user with id {id}. {ex.Message}");
+                }
             }
 
             return model.RoleId switch

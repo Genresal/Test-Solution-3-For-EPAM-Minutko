@@ -1,8 +1,8 @@
-﻿using EMR.Business.Models;
-using EMR.Services;
+﻿using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 
@@ -10,11 +10,13 @@ namespace EMR.Controllers
 {
     public class DrugsController : Controller
     {
-        readonly IDrugPageService _pageService;
+        private readonly IDrugPageService _pageService;
+        private readonly ILogger<DrugsController> _logger;
 
-        public DrugsController(IDrugPageService pageService)
+        public DrugsController(IDrugPageService pageService, ILogger<DrugsController> logger)
         {
             _pageService = pageService;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -79,14 +81,16 @@ namespace EMR.Controllers
                     try
                     {
                         _pageService.Update(model);
+                        _logger.LogInformation($"{User.Identity.Name} updated drug information with id {id}.");
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        _logger.LogError($"{User.Identity.Name} failed to delete drug information with id {id}. {ex.Message}");
                         return NotFound();
                     }
                 }
 
-                return RedirectToAction("Details", "Records", new { id = model.RecordId});
+                return RedirectToAction("Details", "Records", new { id = model.RecordId });
             }
             return View(model);
         }
@@ -94,13 +98,22 @@ namespace EMR.Controllers
         [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult Delete(int id, int recordId)
         {
-            _pageService.Delete(id);
+            try
+            {
+                _pageService.Delete(id);
+                _logger.LogInformation($"{User.Identity.Name} deleted drug information with id {id} inside record with id {recordId}.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{User.Identity.Name} failed to delete drug information with id {id}. {ex.Message}");
+            }
+
             if (recordId == 0)
             {
                 return RedirectToAction("Index", "Records");
             }
 
-            return RedirectToAction("Details", "Records", new {id = recordId});
+            return RedirectToAction("Details", "Records", new { id = recordId });
         }
     }
 }

@@ -15,10 +15,12 @@ namespace EMR.Controllers
     public class DoctorsController : Controller
     {
         private readonly IDoctorPageService _pageService;
+        private readonly ILogger<AccountController> _logger;
 
-        public DoctorsController(IDoctorPageService s)
+        public DoctorsController(IDoctorPageService pageService, ILogger<AccountController> logger)
         {
-            _pageService = s;
+            _pageService = pageService;
+            _logger = logger;
         }
         [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult Index(int id = 0)
@@ -81,7 +83,14 @@ namespace EMR.Controllers
             {
                 if (model.Id == 0)
                 {
-                    _pageService.Create(model);
+                    try
+                    {
+                        _pageService.Create(model);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"{User.Identity.Name} failed to create new user. {ex.Message}");
+                    }
                 }
                 else
                 {
@@ -89,8 +98,9 @@ namespace EMR.Controllers
                     {
                         _pageService.Update(model);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        _logger.LogError($"{User.Identity.Name} failed to update user {model.Login}. {ex.Message}");
                         return NotFound();
                     }
                 }
@@ -103,7 +113,15 @@ namespace EMR.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
-            _pageService.Delete(id);
+            try
+            {
+                _pageService.Delete(id);
+                _logger.LogInformation($"{User.Identity.Name} deleted user with id {id}.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{User.Identity.Name} failed to delete user with id {id}. {ex.Message}");
+            }
             return RedirectToAction(nameof(Index), "Users");
         }
 

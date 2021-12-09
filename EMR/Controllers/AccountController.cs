@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using EMR.Business.Helpers;
-using EMR.Services;
+﻿using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -21,15 +19,13 @@ namespace EMR.Controllers
     {
         private readonly IUserPageService _userService;
         private readonly IAccountPageService _accountService;
-        private readonly IMapper _mapper;
-        private readonly ILogger _logger;
+        private readonly ILogger<AccountController> _logger;
+
         public AccountController(IUserPageService userPageService,
             IAccountPageService accountPageService,
-            IMapper mapper,
             ILogger<AccountController> logger)
         {
             _userService = userPageService;
-            _mapper = mapper;
             _accountService = accountPageService;
             _logger = logger;
         }
@@ -39,9 +35,38 @@ namespace EMR.Controllers
         public IActionResult Login()
         {
             HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-            return View();
+            return View(new LoginViewModel());
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                UserViewModel user = _userService.LogIn(model);
+
+                if (user != null)
+                {
+                    await Authenticate(user);
+
+                    _logger.LogInformation($"{User.Identity.Name} is logged into the account.");
+
+                    return user.RoleId switch
+                    {
+                        1 => RedirectToAction("Index", "Patients"),
+                        2 => RedirectToAction("Index", "Doctors"),
+                        _ => RedirectToAction("Index", "Users"),
+                    };
+                }
+
+                model.Message = "Error, incorrect login or password";
+            }
+            return View(model);
+        }
+
+        [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> LoginRandom(int roleId)
         {
@@ -61,36 +86,12 @@ namespace EMR.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                UserViewModel user = _userService.LogIn(model);
-
-                if (user != null)
-                {
-                    await Authenticate(user);
-
-                    return user.RoleId switch
-                    {
-                        1 => RedirectToAction("Index", "Patients"),
-                        2 => RedirectToAction("Index", "Doctors"),
-                        _ => RedirectToAction("Index", "Users"),
-                    };
-                }
-                ModelState.AddModelError("", "Incorrect login or password");
-            }
-            return View(model);
-        }
-
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
+            _logger.LogInformation($"{User.Identity.Name} is logged out.");
             return RedirectToAction("Login");
         }
 
@@ -118,8 +119,8 @@ namespace EMR.Controllers
                         _ => RedirectToAction("Create", "Users", new { Login = model.Login, Password = model.Password, RoleId = model.RoleId }),
                     };
                 }
-                else
-                    ModelState.AddModelError("", "Choose another login");
+
+                model.Message = "Error, the login already exists";
             }
             PrepareViewBag();
             return View(model);
@@ -130,12 +131,13 @@ namespace EMR.Controllers
         public IActionResult ChangePassword()
         {
             var user = _userService.GetByLogin(User.Identity.Name);
+            var model = new ChangePasswordViewModel();
             if (user == null)
             {
-                throw new ApplicationException($"Unable to load user with Login '{User.Identity.Name}'.");
+                model.Message = $"Error, unable to load user with Login {User.Identity.Name}";
             }
 
-            var model = new ChangePasswordViewModel();
+            model = new ChangePasswordViewModel();
             return View(model);
         }
 
@@ -152,18 +154,18 @@ namespace EMR.Controllers
             var user = _userService.GetByLogin(User.Identity.Name);
             if (user == null)
             {
-                ViewBag.Message = $"Unable to load user with Login '{User.Identity.Name}'.";
+                model.Message = $"Error, unable to load user with Login '{User.Identity.Name}'.";
                 return View(model);
             }
 
             var changePasswordResult = _userService.ChangePassword(model, User.Identity.Name);
             if (!changePasswordResult)
             {
-                ViewBag.Message = "Wrong current password";
+                model.Message = "Error, wrong current password";
                 return View(model);
             }
 
-            _logger.LogInformation($"User: {User.Identity.Name} changed their password successfully.");
+            _logger.LogInformation($"User: {User.Identity.Name} changed his password successfully.");
 
             return RedirectToAction(nameof(ChangePassword));
         }

@@ -1,5 +1,4 @@
-﻿using EMR.Business.Models;
-using EMR.DataTables;
+﻿using EMR.DataTables;
 using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -15,11 +14,15 @@ namespace EMR.Controllers
     {
         private readonly IPatientPageService _pageService;
         private readonly IRecordPageService _recordPageService;
+        private readonly ILogger<PatientsController> _logger;
 
-        public PatientsController(IPatientPageService s, IRecordPageService recordPageService)
+        public PatientsController(IPatientPageService s,
+            IRecordPageService recordPageService,
+            ILogger<PatientsController> logger)
         {
             _pageService = s;
             _recordPageService = recordPageService;
+            _logger = logger;
 
         }
 
@@ -129,15 +132,18 @@ namespace EMR.Controllers
                 if (model.Id == 0)
                 {
                     _pageService.Create(model);
+                    _logger.LogInformation($"{User.Identity.Name} created new user {model.Login}.");
                 }
                 else
                 {
                     try
                     {
                         _pageService.Update(model);
+                        _logger.LogInformation($"{User.Identity.Name} updated user with id {model.Id}.");
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        _logger.LogError($"{User.Identity.Name} failed to update user with id {model.Id}. {ex.Message}");
                         return NotFound();
                     }
                 }
@@ -151,7 +157,16 @@ namespace EMR.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
-            _pageService.Delete(id);
+            try
+            {
+                _pageService.Delete(id);
+                _logger.LogInformation($"{User.Identity.Name} deleted user with id {id}.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{User.Identity.Name} failed to delete user with id {id}. {ex.Message}");
+            }
+
             return RedirectToAction(nameof(Index), "Users");
         }
     }

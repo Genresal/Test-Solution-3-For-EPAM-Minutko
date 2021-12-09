@@ -7,10 +7,9 @@
     var _filters = new List<FilterParameter>();
 }
 
-<span class="text-danger">@ViewBag.Message</span>
-
 <div class="row">
     <div class="col-md-10">
+        @await Html.PartialAsync("_Message", (string)ViewBag.Message)
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">@ViewData["Title"]</h3>

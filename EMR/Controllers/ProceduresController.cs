@@ -3,6 +3,7 @@ using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 
@@ -11,11 +12,13 @@ namespace EMR.Controllers
 
     public class ProceduresController : Controller
     {
-        readonly IProcedurePageService _pageService;
+        private readonly IProcedurePageService _pageService;
+        private readonly ILogger<ProceduresController> _logger;
 
-        public ProceduresController(IProcedurePageService pageService)
+        public ProceduresController(IProcedurePageService pageService, ILogger<ProceduresController> logger)
         {
             _pageService = pageService;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -74,15 +77,18 @@ namespace EMR.Controllers
                 if (id == 0)
                 {
                     _pageService.Create(model);
+                    _logger.LogInformation($"{User.Identity.Name} created procedure {model.Name}.");
                 }
                 else
                 {
                     try
                     {
                         _pageService.Update(model);
+                        _logger.LogInformation($"{User.Identity.Name} updated procedure with id {model.Id}.");
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        _logger.LogError($"{User.Identity.Name} failed to update procedure with id {model.Id}. {ex.Message}");
                         return NotFound();
                     }
                 }
@@ -93,8 +99,17 @@ namespace EMR.Controllers
 
         [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult Delete(int id, int recordId)
-        { 
-            _pageService.Delete(id);
+        {
+            try
+            {
+                _pageService.Delete(id);
+                _logger.LogInformation($"{User.Identity.Name} deleted procedure with id {id} inside record with id {recordId}.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{User.Identity.Name} failed to delete procedure  with id {id}. {ex.Message}");
+            }
+
             if (recordId == 0)
             {
                 return RedirectToAction("Index", "Records");
