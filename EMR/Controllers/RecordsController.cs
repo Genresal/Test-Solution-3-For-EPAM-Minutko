@@ -64,7 +64,7 @@ namespace EMR.Controllers
         }
 
         [Authorize(Roles = "Doctor, Editor, Admin")]
-        public IActionResult AddOrEdit(int id = 0, int patientId = 0)
+        public IActionResult AddOrEdit(int id = 0)
         {
             PrepareViewBag();
 
@@ -72,7 +72,6 @@ namespace EMR.Controllers
             {
                 var model = new RecordViewModel();
                 model.Id = 0;
-                model.PatientId = patientId;
                 if (User.IsInRole("Doctor"))
                 {
                     int doctorId = 0;
@@ -121,7 +120,8 @@ namespace EMR.Controllers
                         return NotFound();
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction(nameof(Details), new { id = model.Id});
             }
             PrepareViewBag();
             return View(model);
@@ -146,10 +146,6 @@ namespace EMR.Controllers
         [Authorize]
         public IActionResult Details(int id)
         {
-            if (id == 0)
-            {
-                return RedirectToAction(nameof(Index));
-            }
             return View(_pageService.Details(id));
         }
 

@@ -11,12 +11,12 @@ namespace EMR.Services
 {
     public class RecordPageService : BasePageService<Record, RecordViewModel>, IRecordPageService
     {
-        private readonly IBusinessService<Record> _recordService;
+        private readonly IRecordService _recordService;
         private readonly IDoctorService _doctorService;
         private readonly IPatientService _patientService;
         private readonly IPositionService _positionService;
 
-        public RecordPageService(IBusinessService<Record> recordService
+        public RecordPageService(IRecordService recordService
             , IDoctorService doctorService
             , IPatientService patientService
             , IPositionService positionService
@@ -99,8 +99,18 @@ namespace EMR.Services
 
         public RecordDetailsViewModel Details(int id)
         {
-            var rawResult = _recordService.GetById(id);
+            Record rawResult;
+            if(id == 0)
+            {
+                rawResult = _recordService.GetLast();
+            }
+            else
+            {
+                rawResult = _recordService.GetById(id);
+            }
+            
             var result = _mapper.Map<Record, RecordDetailsViewModel>(rawResult);
+            result.SickLeave.RecordId = result.Id;
 
             return result;
         }

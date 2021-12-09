@@ -63,12 +63,20 @@ namespace EMR.Data.Repositories
             return ExecuteReader(sqlExpression, parameters);
         }
 
+        public virtual int GetLastId()
+        {
+            string sqlExpression = $"SELECT TOP(1) [Id] " +
+                                   $"FROM {typeof(T).Name.ConvertToTableName()} " +
+                                   $"ORDER BY [Id] DESC";
+
+            return (int)ExecuteScalar(sqlExpression, "Id");
+        }
+
         public virtual T GetById(int id)
         {
             string sqlExpression = $"SELECT * " +
                                    $"FROM {typeof(T).Name.ConvertToTableName()} " +
                                    $"WHERE [Id] = @Id";
-
 
             return ExecuteReader(sqlExpression, new SqlParameter("@Id", id)).FirstOrDefault();
         }

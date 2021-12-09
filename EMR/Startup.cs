@@ -71,7 +71,7 @@ namespace EMR
             services.AddTransient<IPositionService, PositionService>();
             services.AddTransient<IBusinessService<Role>, RoleService>();
             services.AddTransient<ISickLeaveService, SickLeaveService>();
-            services.AddTransient<IBusinessService<Record>, RecordService>();
+            services.AddTransient<IRecordService, RecordService>();
             services.AddTransient<IDoctorService, DoctorService>();
             services.AddTransient<IPatientService, PatientService>();
             services.AddTransient<ITreatmentService, RecordTreatmentService>();

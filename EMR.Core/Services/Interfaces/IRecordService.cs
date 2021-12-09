@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace EMR.Business.Services
 {
-    public interface IPositionService : IBusinessService<Position>
+    public interface IRecordService : IBusinessService<Record>
     {
-        public bool IsPositionInUse(int positionId);
+        public Record GetLast();
     }
 
 

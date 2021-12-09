@@ -8,37 +8,56 @@
 </div>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">Patient</h3>
             </div>
             <div class="card-body">
                 @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model.Patient)
-                @if (!User.IsInRole("User"))
+                @if (User.IsInRole("Admin"))
                 {
                     <a href="/Patients/Details?id=@Model.Patient.Id" class="btn btn-primary btn-block"><b>View profile</b></a>
                 }
-                </div>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">Doctor</h3>
             </div>
             <div class="card-body">
                 @await Html.PartialAsync("~/Views/Doctors/_DoctorDetailsPartialView.cshtml", Model.Doctor)
-                @if (!User.IsInRole("User"))
+                @if (User.IsInRole("Admin"))
                 {
                     <a href="/Doctors/Details?id=@Model.Doctor.Id" class="btn btn-primary btn-block"><b>View profile</b></a>
                 }
-                </div>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Diagnosis</h3>
+            </div>
+            <div class="card-body">
+
+                <h3 class="profile-username text-center">
+                    <span>@Model.Diagnosis.Name</span>
+                </h3>
+                
+                @if (!User.IsInRole("User"))
+                {
+                    <a href="/Records/AddOrEdit?id=@Model.Id" class="btn btn-primary btn-block"><b>Edit record</b></a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">Sick Leave</h3>

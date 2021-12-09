@@ -71,7 +71,7 @@ namespace EMR.Data.Repositories
             var model = new SickLeave();
 
             model.Id = (int)reader[nameof(model.Id)];
-            model.Number = (string)reader[nameof(model.Number)];
+            model.Number = Convert.IsDBNull(reader[nameof(model.Number)]) ? null : (string)reader[nameof(model.Number)];
             model.StartDate = (DateTime)reader[nameof(model.StartDate)];
             model.FinalDate = (DateTime)reader[nameof(model.FinalDate)];
 

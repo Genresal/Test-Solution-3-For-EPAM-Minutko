@@ -62,7 +62,7 @@
     }
     );
 
-string button = " <a href =\"/Patients/Details?id=' + row.patientId + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"far fa-eye\"></i></a>";
+string button = " <a href =\"/Patients/Index?id=' + row.patientId + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"far fa-eye\"></i></a>";
 
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.PatientId))
     {

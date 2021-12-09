@@ -23,7 +23,7 @@
                     @await Html.PartialAsync("_DoctorDetailsPartialView.cshtml", Model)
                     @if (User.IsInRole("Admin"))
                     {
-                        <a href="/Patients/AddOrEdit?id=@Model.Id" class="btn btn-primary btn-block"><b>Edit profile</b></a>
+                        <a href="/Doctor/Update?id=@Model.Id" class="btn btn-primary btn-block"><b>Edit profile</b></a>
                     }
 
                 </div>
@@ -38,13 +38,14 @@
                         Records
                     </h3>
                     <div class="card-tools">
-                        <a asp-action="LastRecords"><button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add new record</button></a>
+                        <a asp-controller="Records" asp-action="AddOrEdit">
+                            <button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add record</button>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        @await Html.PartialAsync("~/Views/Patients/_PatientsInfoTable.cshtml", new EMR.ViewModels.PatientInfoSearchModel() { DoctorId = Model.Id })
                     </div>
                 </div>
-                <div class="card-body">
-                    @await Html.PartialAsync("~/Views/Patients/_PatientsInfoTable.cshtml", new EMR.ViewModels.PatientInfoSearchModel() { DoctorId = Model.Id })
-                </div>
-            </div>
         </div>
     </div>
 

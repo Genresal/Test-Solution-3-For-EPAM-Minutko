@@ -17,7 +17,7 @@
 
         @if (!User.IsInRole("User"))
         {
-            <a href="/SickLeaves/AddOrEdit?id=@Model.Id" class="btn btn-primary btn-block"><b>Edit</b></a>
+            <a href="/SickLeaves/AddOrEdit?id=@Model.Id&recordId=@Model.RecordId" class="btn btn-primary btn-block"><b>Edit</b></a>
             <a href="/SickLeaves/Delete?id=@Model.Id&recordId=@Model.RecordId" class="btn btn-primary btn-block"><b>Delete</b></a>
         }
     }

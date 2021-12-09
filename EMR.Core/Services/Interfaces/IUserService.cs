@@ -5,9 +5,6 @@ using System.Collections.Generic;
 
 namespace EMR.Business.Services
 {
-    /// <summary>
-    /// Base repository
-    /// </summary>
     public interface IUserService : IBusinessService<User>
     {
         public User GetRandomAccount(int roleId);

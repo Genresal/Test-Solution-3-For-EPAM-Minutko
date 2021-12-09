@@ -38,6 +38,7 @@ namespace EMR.ViewModels
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Please enter job")]
+        [Display(Name = "Job")]
         public string Job { get; set; }
 
         [Display(Name = "Photo")]

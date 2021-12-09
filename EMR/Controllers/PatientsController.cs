@@ -29,7 +29,7 @@ namespace EMR.Controllers
         [Authorize]
         public IActionResult Index(int id = 0)
         {
-            if (!HttpContext.User.IsInRole("User"))
+            if (!HttpContext.User.IsInRole("Doctor"))
             {
                 return RedirectToAction(nameof(Index), "Users");
             }

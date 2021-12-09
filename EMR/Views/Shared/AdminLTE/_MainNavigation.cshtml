@@ -41,15 +41,6 @@
                     @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                                <i class="nav-icon fas fa-vector-square"></i>
-                                <p>
-                                    Dashboard
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Records" asp-action="Index">
                                 <i class="nav-icon far fa-circle"></i>
                                 <p>
@@ -59,37 +50,10 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Patients" asp-action="Details">
-                                <i class="nav-icon far fa-circle"></i>
-                                <p>
-                                    PatientRecord
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Doctors" asp-action="Details">
-                                <i class="nav-icon far fa-circle"></i>
-                                <p>
-                                    Doctors page
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">
                                 <i class="nav-icon far fa-circle"></i>
                                 <p>
-                                    Users page
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">
-                                <i class="nav-icon far fa-circle"></i>
-                                <p>
-                                    Register new user
+                                    Users
                                 </p>
                             </a>
                         </li>

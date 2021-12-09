@@ -100,7 +100,7 @@ namespace EMR.Controllers
         public IActionResult Register()
         {
             PrepareViewBag();
-            return View();
+            return View(new RegisterViewModel());
         }
 
         [HttpPost]
