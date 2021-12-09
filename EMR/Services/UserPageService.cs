@@ -11,10 +11,10 @@ namespace EMR.Services
 {
     public class UserPageService : BasePageService<User, UserViewModel>, IUserPageService
     {
-        readonly IUserService _userService;
-        readonly IDoctorService _doctorService;
-        readonly IPatientService _patientService;
-        readonly IBusinessService<Role> _roleService;
+        private readonly IUserService _userService;
+        private readonly IDoctorService _doctorService;
+        private readonly IPatientService _patientService;
+        private readonly IBusinessService<Role> _roleService;
 
         public UserPageService(IUserService userService
             , IBusinessService<Role> roleService

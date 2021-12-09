@@ -1,7 +1,6 @@
 ﻿using EMR.Business.Models;
 using EMR.Business.Repositories;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,7 +11,7 @@ namespace EMR.Business.Services
         private readonly IRepository<RecordTreatment> _treatmentRepository;
         public ProcedureService(IRepository<Procedure> procedureRepository
             , IRepository<RecordTreatment> treatmentRepository
-            , ILogger<ProcedureService> logger) : base (procedureRepository, logger)
+            , ILogger<ProcedureService> logger) : base(procedureRepository, logger)
         {
             _treatmentRepository = treatmentRepository;
         }

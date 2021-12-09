@@ -6,7 +6,6 @@ namespace EMR.Business.Helpers
 {
     public static class StringHelpers
     {
-
         public static string HashString(this string input)
         {
             byte[] data = Encoding.Default.GetBytes(input);

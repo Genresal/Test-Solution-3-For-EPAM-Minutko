@@ -1,17 +1,13 @@
-﻿using EMR.Business.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EMR.ViewModels
 {
-    public class PatientViewModel
+    public class UserViewModel
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
         public int RoleId { get; set; }
+        public string Role { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
 
@@ -19,9 +15,12 @@ namespace EMR.ViewModels
         [Display(Name = "First name")]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Please enter last name")]
+        [Required(ErrorMessage = "Please enter дast name")]
         [Display(Name = "Last name")]
         public string LastName { get; set; }
+
+        [Display(Name = "Full name")]
+        public string FullName { get; set; }
 
         [Required(ErrorMessage = "Please select date of birth")]
         [Display(Name = "Birthday")]
@@ -37,13 +36,7 @@ namespace EMR.ViewModels
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Please enter job")]
-        [Display(Name = "Job")]
-        public string Job { get; set; }
-
         [Display(Name = "Photo")]
         public string PhotoUrl { get; set; }
-
-        public string FullName { get; set; }
     }
 }

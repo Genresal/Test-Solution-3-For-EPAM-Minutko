@@ -5,7 +5,7 @@ namespace EMR.Services
 {
     public class HomePageService : IHomePageService
     {
-        IDbService _dbService;
+        private readonly IDbService _dbService;
 
         public HomePageService(IDbService s)
         {
@@ -25,6 +25,5 @@ namespace EMR.Services
         {
             _dbService.DropTables();
         }
-
     }
 }

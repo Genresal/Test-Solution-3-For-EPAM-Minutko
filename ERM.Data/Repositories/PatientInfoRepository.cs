@@ -1,23 +1,18 @@
-﻿using EMR.Data.Helpers;
-using EMR.Business.Models;
+﻿using EMR.Business.Models;
+using EMR.Business.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using RandomGen;
-using EMR.Business.Repositories;
 
 namespace EMR.Data.Repositories
 {
     public class PatientInfoRepository : BaseRepository<PatientInfo>, IPatientInfoRepository
     {
-        public PatientInfoRepository(string conn) : base (conn)
+        public PatientInfoRepository(string conn) : base(conn)
         {
         }
-            public IEnumerable<PatientInfo> GetPatientsInfo(int doctorId)
-            {
+        public IEnumerable<PatientInfo> GetPatientsInfo(int doctorId)
+        {
             return StoredExecuteReader("GetPatientsInfo", new SqlParameter("@doctorId", doctorId));
         }
 

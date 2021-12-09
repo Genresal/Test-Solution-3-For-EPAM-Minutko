@@ -1,9 +1,6 @@
 ﻿using EMR.Business.Models;
 using EMR.ViewModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EMR.Services
 {
@@ -14,7 +11,6 @@ namespace EMR.Services
         public IEnumerable<Patient> GetPatients();
         public Patient GetPatient(int id);
         public IEnumerable<Position> GetDoctorPositions();
-
         public RecordDetailsViewModel Details(int id);
     }
 }

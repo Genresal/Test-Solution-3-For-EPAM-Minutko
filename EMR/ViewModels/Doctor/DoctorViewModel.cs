@@ -1,9 +1,5 @@
-﻿using EMR.Business.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EMR.ViewModels
 {
@@ -12,12 +8,14 @@ namespace EMR.ViewModels
         public int Id { get; set; }
         public int UserId { get; set; }
         public int RoleId { get; set; }
+
         [Required(ErrorMessage = "Please select doctor's position")]
         [Display(Name = "First name")]
         public int PositionId { get; set; }
         public string Position { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+
         [Required(ErrorMessage = "Please enter name")]
         [Display(Name = "First name")]
         public string FirstName { get; set; }

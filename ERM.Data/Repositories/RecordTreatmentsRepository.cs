@@ -1,19 +1,15 @@
-﻿using EMR.Data.Helpers;
-using EMR.Business.Models;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using RandomGen;
+﻿using EMR.Business.Models;
 using EMR.Business.Repositories;
+using EMR.Data.Helpers;
+using RandomGen;
+using System;
+using System.Data.SqlClient;
 
 namespace EMR.Data.Repositories
 {
     public class RecordTreatmentsRepository : BaseRepository<RecordTreatment>, IRepository<RecordTreatment>
     {
-        public RecordTreatmentsRepository(string conn) : base (conn)
+        public RecordTreatmentsRepository(string conn) : base(conn)
         {
         }
 
@@ -28,7 +24,7 @@ namespace EMR.Data.Repositories
             for (int i = 1; i <= dataCount; i++)
             {
                 string randomNumString = Gen.Random.Numbers.Integers(1, 80)().ToString();
-                string drugId =  i % 2 == 0 ? "null" : randomNumString;
+                string drugId = i % 2 == 0 ? "null" : randomNumString;
                 string procedureId = drugId.Equals("null") ? randomNumString : "null";
 
                 sqlExpression = $"{sqlExpression}('{Gen.Random.Numbers.Integers(1, 200)()}'" +

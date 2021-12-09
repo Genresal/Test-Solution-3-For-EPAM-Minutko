@@ -1,6 +1,4 @@
 ﻿using EMR.Business.Models;
-using EMR.Business.Repositories;
-using System;
 using System.Collections.Generic;
 
 namespace EMR.Business.Services

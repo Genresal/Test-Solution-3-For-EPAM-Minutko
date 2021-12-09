@@ -1,10 +1,6 @@
 ﻿using EMR.Business.Models;
 using EMR.Business.Repositories;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EMR.Business.Services
 {
@@ -43,7 +39,7 @@ namespace EMR.Business.Services
 
             result.IsTablesExist = true;
 
-            foreach(var repo in repositories)
+            foreach (var repo in repositories)
             {
                 if (!repo.IsTableExist())
                 {
@@ -72,17 +68,17 @@ namespace EMR.Business.Services
 
         public void CreateDefaultDate()
         {
-            foreach(var repo in repositories)
+            foreach (var repo in repositories)
             {
-                    if (!repo.IsTableHasRecords())
-                    {
-                        repo.SetDefaultData();
-                    }
+                if (!repo.IsTableHasRecords())
+                {
+                    repo.SetDefaultData();
+                }
             }
         }
         public void DropTables()
         {
-            for (int i = repositories.Count-1; i >= 0; i--)
+            for (int i = repositories.Count - 1; i >= 0; i--)
             {
                 repositories[i].DropTable();
             }

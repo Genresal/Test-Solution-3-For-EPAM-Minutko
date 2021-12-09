@@ -1,8 +1,4 @@
-﻿using System;
-using System.Security.Cryptography;
-using System.Text;
-
-namespace EMR.Data.Helpers
+﻿namespace EMR.Data.Helpers
 {
     public static class StringHelpers
     {

@@ -12,7 +12,7 @@ namespace EMR.Services
 {
     public class PatientPageService : BasePageService<Patient, PatientViewModel>, IPatientPageService
     {
-        readonly IPatientService _patientService;
+        private readonly IPatientService _patientService;
 
         public PatientPageService(IPatientService patientService, IMapper mapper) : base(patientService, mapper)
         {

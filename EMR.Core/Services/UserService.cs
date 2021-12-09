@@ -2,14 +2,13 @@
 using EMR.Business.Repositories;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace EMR.Business.Services
 {
     public class UserService : BaseBusinessService<User>, IUserService
     {
-        public UserService(IRepository<User> repository, ILogger<UserService> logger) : base (repository, logger)
+        public UserService(IRepository<User> repository, ILogger<UserService> logger) : base(repository, logger)
         {
         }
 

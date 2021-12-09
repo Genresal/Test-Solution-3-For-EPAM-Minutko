@@ -1,19 +1,15 @@
-﻿using EMR.Data.Helpers;
-using EMR.Business.Models;
-using System;
-using System.Collections.Generic;
+﻿using EMR.Business.Models;
+using EMR.Business.Repositories;
+using EMR.Data.Helpers;
+using RandomGen;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using RandomGen;
-using EMR.Business.Repositories;
 
 namespace EMR.Data.Repositories
 {
     public class DrugRepository : BaseRepository<Drug>, IRepository<Drug>
     {
-        public DrugRepository(string conn) : base (conn)
+        public DrugRepository(string conn) : base(conn)
         {
         }
 

@@ -1,23 +1,20 @@
-﻿using EMR.Data.Helpers;
-using EMR.Business.Models;
+﻿using EMR.Business.Models;
+using EMR.Business.Repositories;
+using EMR.Data.Helpers;
 using RandomGen;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using EMR.Business.Repositories;
-using System.Data;
 
 namespace EMR.Data.Repositories
 {
     public class RecordsRepository : BaseRepository<Record>, IRepository<Record>
     {
-        public RecordsRepository(string conn) : base (conn)
+        public RecordsRepository(string conn) : base(conn)
         {
         }
-        
+
         public override IEnumerable<Record> GetAll()
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -88,9 +85,9 @@ namespace EMR.Data.Repositories
 
             ExecuteNonQuery(sqlExpression);
         }
-    
 
-    protected override Record Map(SqlDataReader reader)
+
+        protected override Record Map(SqlDataReader reader)
         {
             var model = new Record();
 

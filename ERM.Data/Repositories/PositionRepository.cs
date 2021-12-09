@@ -1,13 +1,8 @@
-﻿using EMR.Data.Helpers;
-using EMR.Business.Models;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using RandomGen;
+﻿using EMR.Business.Models;
 using EMR.Business.Repositories;
+using EMR.Data.Helpers;
+using RandomGen;
+using System.Data.SqlClient;
 
 namespace EMR.Data.Repositories
 {

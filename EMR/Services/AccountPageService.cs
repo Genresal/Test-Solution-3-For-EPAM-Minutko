@@ -14,8 +14,8 @@ namespace EMR.Services
 {
     public class AccountPageService :  IAccountPageService
     {
-        readonly IUserService _userService;
-        readonly IBusinessService<Role> _roleService;
+        private readonly IUserService _userService;
+        private readonly IBusinessService<Role> _roleService;
         private readonly IMapper _mapper;
 
         public AccountPageService(IUserService userService, IBusinessService<Role> roleService, IMapper mapper)

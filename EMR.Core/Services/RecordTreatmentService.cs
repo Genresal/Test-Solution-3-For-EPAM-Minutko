@@ -1,15 +1,13 @@
 ﻿using EMR.Business.Models;
 using EMR.Business.Repositories;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace EMR.Business.Services
 {
     public class RecordTreatmentService : BaseBusinessService<RecordTreatment>, ITreatmentService
     {
-        public RecordTreatmentService(IRepository<RecordTreatment> repository, ILogger<RecordTreatmentService> logger) : base (repository, logger)
+        public RecordTreatmentService(IRepository<RecordTreatment> repository, ILogger<RecordTreatmentService> logger) : base(repository, logger)
         {
         }
 
