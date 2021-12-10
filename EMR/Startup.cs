@@ -2,6 +2,7 @@ using EMR.Business.Models;
 using EMR.Business.Repositories;
 using EMR.Business.Services;
 using EMR.Data.Repositories;
+using EMR.Models;
 using EMR.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -38,6 +39,9 @@ namespace EMR
                 .CreateLogger();
             services.AddSingleton(Log.Logger);
             */
+            services.AddOptions();
+            services.Configure<AzureStorageConfig>(Configuration.GetSection("AzureStorageConfig"));
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {

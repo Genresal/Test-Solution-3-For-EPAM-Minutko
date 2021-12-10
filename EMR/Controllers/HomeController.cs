@@ -40,6 +40,7 @@ namespace EMR.Controllers
 
         public IActionResult DbPage()
         {
+
             var status = _pageService.GetDbStatus();
             return View(status);
         }

@@ -49,6 +49,8 @@
                     <span asp-validation-for="@Model.PhotoUrl" class="text-danger"></span>
                 </div>
 
+                @await Html.PartialAsync("_ImageUploaderPartial")
+
                 <hr />
 
                 <div class="form-group">

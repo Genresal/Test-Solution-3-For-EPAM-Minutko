@@ -108,20 +108,23 @@ namespace EMR.Controllers
         }
 
         [Authorize]
-        public IActionResult Details(int id)
+        public IActionResult Details(int id, int roleId = 0)
         {
-            var model = _pageService.GetById(id);
-            if (model == null)
+            switch (roleId)
             {
-                return NotFound();
-            }
+                case 1:
+                    return RedirectToAction("Index", "Patients", new { id = _pageService.GePatientByUserId(id).Id });
+                case 2:
+                    return RedirectToAction("Index", "Doctors", new { id = _pageService.GeDoctorByUserId(id).Id });
+                default:
+                    var model = _pageService.GetById(id);
+                    if (model == null)
+                    {
+                        return NotFound();
+                    }
 
-            return model.RoleId switch
-            {
-                1 => RedirectToAction("Index", "Patients", new { id = _pageService.GePatientByUserId(id).Id }),
-                2 => RedirectToAction("Index", "Doctors", new { id = _pageService.GeDoctorByUserId(id).Id }),
-                _ => View("Details", model),
-            };
+                    return View("Details", model);
+            }
         }
 
         [Authorize(Roles = "Admin")]

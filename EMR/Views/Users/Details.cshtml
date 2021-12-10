@@ -15,6 +15,7 @@
                 @await Html.PartialAsync("_UserDetails.cshtml", Model)
                 <a href="/Users/Update?id=@Model.Id" class="btn btn-primary btn-block"><b>Edit profile</b></a>
                 <a href="/Account/ChangePassword" class="btn btn-primary btn-block"><b>Change password</b></a>
+                <a href="/Images/Index?userId=@Model.Id" class="btn btn-primary btn-block"><b>Change pic</b></a>
             </div>
         </div>
     </div>
