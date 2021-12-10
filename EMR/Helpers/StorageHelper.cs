@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageResizeWebApp.Helpers
+namespace EMR.Helpers
 {
     public static class StorageHelper
     {
@@ -48,6 +48,23 @@ namespace ImageResizeWebApp.Helpers
             await blobClient.UploadAsync(fileStream, overwrite: true);
 
             return await Task.FromResult(true);
+        }
+
+        public static bool IsBlobExists(int id, AzureStorageConfig _storageConfig)
+        {
+            Uri accountUri = new Uri("https://" + _storageConfig.AccountName + ".blob.core.windows.net/");
+
+            // Create BlobServiceClient from the account URI
+            BlobServiceClient blobServiceClient = new BlobServiceClient(accountUri);
+
+            BlobContainerClient container = blobServiceClient.GetBlobContainerClient(_storageConfig.ImageContainer);
+
+            if (container.Exists())
+            {
+                return container.GetBlobClient(id.ToString()).Exists();
+            }
+
+            return false;
         }
 
         public static async Task<List<string>> GetThumbNailUrls(AzureStorageConfig _storageConfig)

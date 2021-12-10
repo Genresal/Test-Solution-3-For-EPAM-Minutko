@@ -1,4 +1,4 @@
-﻿using ImageResizeWebApp.Helpers;
+﻿using EMR.Helpers;
 using EMR.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

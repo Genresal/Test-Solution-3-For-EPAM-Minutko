@@ -1,4 +1,6 @@
-﻿using EMR.Services;
+﻿using EMR.Helpers;
+using EMR.Models;
+using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -7,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +23,17 @@ namespace EMR.Controllers
         private readonly IUserPageService _userService;
         private readonly IAccountPageService _accountService;
         private readonly ILogger<AccountController> _logger;
+        private readonly AzureStorageConfig _storageConfig;
 
         public AccountController(IUserPageService userPageService,
             IAccountPageService accountPageService,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IOptions<AzureStorageConfig> config)
         {
             _userService = userPageService;
             _accountService = accountPageService;
             _logger = logger;
+            _storageConfig = config.Value;
         }
 
         [HttpGet]
@@ -177,7 +183,10 @@ namespace EMR.Controllers
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role),
                 new Claim("FullName", $"{user.FirstName} {user.LastName}"),
-                new Claim("PhotoUrl", string.IsNullOrEmpty(user.PhotoUrl) ? string.Empty : user.PhotoUrl),  // TODO: default picture url
+                //new Claim("PhotoUrl", string.IsNullOrEmpty(user.PhotoUrl) ? string.Empty : user.PhotoUrl),  // TODO: default picture url
+                new Claim("PhotoUrl", StorageHelper.IsBlobExists(user.Id, _storageConfig) ? 
+                                    $"https://azuresklad.blob.core.windows.net/images/{user.Id}" :
+                                    $"https://azuresklad.blob.core.windows.net/images/0"),
                 new Claim("UserId", user.Id.ToString())
             };
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
