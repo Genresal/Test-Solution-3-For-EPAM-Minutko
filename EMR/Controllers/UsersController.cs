@@ -118,8 +118,8 @@ namespace EMR.Controllers
 
             return model.RoleId switch
             {
-                1 => RedirectToAction("Details", "Patients", new { id = _pageService.GePatientByUserId(id).Id }),
-                2 => RedirectToAction("Details", "Doctors", new { id = _pageService.GeDoctorByUserId(id).Id }),
+                1 => RedirectToAction("Index", "Patients", new { id = _pageService.GePatientByUserId(id).Id }),
+                2 => RedirectToAction("Index", "Doctors", new { id = _pageService.GeDoctorByUserId(id).Id }),
                 _ => View("Details", model),
             };
         }

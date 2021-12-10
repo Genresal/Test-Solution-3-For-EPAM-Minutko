@@ -20,7 +20,7 @@ SET @SQL_QUERY = 'SELECT u.Id
 ,PhotoUrl
 ,r.Name as RoleName
 FROM [tUser] as u 
-LEFT JOIN [tRole] as r ON r.Id = r.RoleId ' + @CONDITION
+LEFT JOIN [tRole] as r ON r.Id = u.RoleId ' + @CONDITION
 
 EXECUTE sp_executesql @SQL_QUERY
 RETURN 0

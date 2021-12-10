@@ -12,39 +12,31 @@ namespace EMR.Data.Repositories
 {
     public class UserRepository : BaseRepository<User>, IRepository<User>
     {
-        private readonly string baseQuery;
         public UserRepository(string conn) : base(conn)
         {
-            baseQuery = $"SELECT u.{nameof(User.Id)}, " +
-                        $"{nameof(User.Login)}, " +
-                        $"{nameof(User.Password)}, " +
-                        $"{nameof(User.FirstName)}, " +
-                        $"{nameof(User.LastName)}, " +
-                        $"{nameof(User.RoleId)}, " +
-                        $"{nameof(User.Birthday)}, " +
-                        $"{nameof(User.Email)}, " +
-                        $"{nameof(User.PhoneNumber)}, " +
-                        $"{nameof(User.PhotoUrl)}, " +
-                        $"r.{nameof(Role.Name)} as {nameof(Role)}{nameof(Role.Name)} " +
-                        $"FROM {nameof(User).ConvertToTableName()} as u " +
-                        $"LEFT JOIN {nameof(Role).ConvertToTableName()} as r ON r.{nameof(Role.Id)} = u.{nameof(User.RoleId)}";
         }
 
         public override IEnumerable<User> GetAll()
         {
-            return ExecuteReader(baseQuery);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@COLUMN", DBNull.Value));
+            parameters.Add(new SqlParameter("@OPERATOR", DBNull.Value));
+            parameters.Add(new SqlParameter("@VALUE", DBNull.Value));
+            return StoredExecuteReader("GetUsers", parameters);
         }
 
         public override IEnumerable<User> GetByColumn(string column, string value)
         {
-            string sqlExpression = $"{baseQuery} WHERE [{column}] = @value";
-            return ExecuteReader(sqlExpression, new SqlParameter("@value", value));
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@COLUMN", column));
+            parameters.Add(new SqlParameter("@OPERATOR", "="));
+            parameters.Add(new SqlParameter("@VALUE", value));
+            return StoredExecuteReader("GetUsers", parameters);
         }
 
         public override User GetById(int id)
         {
-            string sqlExpression = $"{baseQuery} WHERE u.Id = @id";
-            return ExecuteReader(sqlExpression, new SqlParameter("@id", id)).FirstOrDefault();
+            return GetByColumn("u.Id", id).FirstOrDefault();
         }
 
         public void SetDefaultData()

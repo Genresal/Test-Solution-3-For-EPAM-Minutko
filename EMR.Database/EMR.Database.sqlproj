@@ -88,4 +88,7 @@
     <Build Include="DeleteSickLeave.sql" />
     <Build Include="CreateRecord.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment1.sql" />
+  </ItemGroup>
 </Project>
