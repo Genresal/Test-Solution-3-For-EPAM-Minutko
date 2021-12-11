@@ -17,7 +17,7 @@
                 @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model.Patient)
                 @if (Model.isUserAllowedToEdit)
                 {
-                    <a href="/Patients/Details?id=@Model.Patient.Id" class="btn btn-primary btn-block"><b>View profile</b></a>
+                    <a href="/Patients/Details?userId=@Model.Patient.UserId" class="btn btn-primary btn-block"><b>View profile</b></a>
                 }
             </div>
         </div>
@@ -32,7 +32,7 @@
                 @await Html.PartialAsync("~/Views/Doctors/_DoctorDetailsPartialView.cshtml", Model.Doctor)
                 @if (Model.isUserAllowedToEdit)
                 {
-                    <a href="/Doctors/Details?id=@Model.Doctor.Id" class="btn btn-primary btn-block"><b>View profile</b></a>
+                    <a href="/Doctors/Details?userId=@Model.Doctor.UserId" class="btn btn-primary btn-block"><b>View profile</b></a>
                 }
             </div>
         </div>

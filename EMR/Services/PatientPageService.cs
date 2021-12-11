@@ -68,5 +68,11 @@ namespace EMR.Services
             var rawResult = _patientService.GetByColumn("Login", login).FirstOrDefault();
             return _mapper.Map<PatientViewModel>(rawResult);
         }
+
+        public PatientViewModel GetByUserId(int userId)
+        {
+            var model = _mainService.GetByColumn(nameof(Patient.UserId), userId.ToString()).FirstOrDefault();
+            return _mapper.Map<Patient, PatientViewModel>(model);
+        }
     }
 }

@@ -40,5 +40,7 @@ namespace EMR.ViewModels
 
         [Display(Name = "Photo")]
         public string PhotoUrl { get; set; }
+
+        public bool isUserAllowedToEdit { get; set; }
     }
 }

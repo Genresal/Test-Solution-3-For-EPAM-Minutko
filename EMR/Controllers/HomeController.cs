@@ -53,9 +53,9 @@ namespace EMR.Controllers
             switch (model.RoleId)
             {
                 case 1:
-                    return RedirectToAction("Details", "Patients", new { id = _userPageService.GePatientByUserId(id).Id });
+                    return RedirectToAction("Details", "Patients", new { userId = id });
                 case 2:
-                    return RedirectToAction("Details", "Doctors", new { id = _userPageService.GeDoctorByUserId(id).Id });
+                    return RedirectToAction("Details", "Doctors", new { userId = id });
                 default:
                     return RedirectToAction("Details", "Users", new { id = id });
             }

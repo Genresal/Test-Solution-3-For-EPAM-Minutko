@@ -16,7 +16,7 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model)
-                        <a href="/Patients/Details?id=@Model.Id" class="btn btn-primary btn-block"><b>Details</b></a>
+                        <a href="/Patients/Details?userId=@Model.UserId" class="btn btn-primary btn-block"><b>Details</b></a>
                 </div>
             </div>
         </div>

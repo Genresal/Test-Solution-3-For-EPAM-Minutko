@@ -7,5 +7,6 @@ namespace EMR.Services
     {
         public IEnumerable<PatientInfoViewModel> LoadTable(PatientInfoSearchModel searchParameters);
         public PatientViewModel GetByLogin(string login);
+        public PatientViewModel GetByUserId(int userId);
     }
 }

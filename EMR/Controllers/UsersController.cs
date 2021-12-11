@@ -131,7 +131,24 @@ namespace EMR.Controllers
                 case 2:
                     return RedirectToAction("Index", "Doctors", new { id = _pageService.GeDoctorByUserId(id).Id });
                 default:
-                    return View("Details", model);
+
+                    if (User.IsInRole("Editor"))
+                    {
+                        int currentUserId;
+                        if (int.TryParse(User.FindFirst("UserId").Value, out currentUserId))
+                        {
+                            model.isUserAllowedToEdit = currentUserId == id;
+                        }
+
+                        return View(model);
+                    }
+
+                    if (User.IsInRole("Admin"))
+                    {
+                        model.isUserAllowedToEdit = true;
+                    }
+
+                    return View(model);
             }
         }
 

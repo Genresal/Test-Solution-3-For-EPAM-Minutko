@@ -82,26 +82,25 @@ namespace EMR.Controllers
         }
 
         [Authorize]
-        public IActionResult Details(int id = 0)
+        public IActionResult Details(int userId)
         {
-            PatientViewModel model;
-            if (id == 0)
+            var model = _pageService.GetByUserId(userId);
+
+            if (User.IsInRole("User"))
             {
-                string login = HttpContext.User.Identity.Name;
-                model = _pageService.GetByLogin(login);
-            }
-            else
-            {
-                model = _pageService.GetById(id);
+                int currentUserId;
+                if (int.TryParse(User.FindFirst("UserId").Value, out currentUserId))
+                {
+                    model.isUserAllowedToEdit = currentUserId == userId;
+                }
+
+                return View(model);
             }
 
-            RecordSearchModel searchModel = new RecordSearchModel();
-            searchModel.DoctorPositions = _recordPageService.GetDoctorPositions()
-                                            .Select(x => new FilterCondition(x.Id, x.Name))
-                                            .ToList();
-            searchModel.PatientId = model.Id;
-
-            ViewBag.SearchModel = searchModel;
+            if (User.IsInRole("Admin"))
+            {
+                model.isUserAllowedToEdit = true;
+            }
 
             return View(model);
         }

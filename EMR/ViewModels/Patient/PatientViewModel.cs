@@ -41,5 +41,7 @@ namespace EMR.ViewModels
         public string PhotoUrl { get; set; }
 
         public string FullName { get; set; }
+
+        public bool isUserAllowedToEdit { get; set; }
     }
 }

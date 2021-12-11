@@ -48,15 +48,27 @@ namespace EMR.Controllers
 
         [Authorize]
         [Authorize(Roles = "Doctor, Editor, Admin")]
-        public IActionResult Details(int id = 0)
+        public IActionResult Details(int userId)
         {
-            if (id == 0)
+            var model = _pageService.GetByUserId(userId);
+
+            if (User.IsInRole("Doctor"))
             {
-                string login = HttpContext.User.Identity.Name;
-                return View(_pageService.GetByLogin(login));
+                int currentUserId;
+                if (int.TryParse(User.FindFirst("UserId").Value, out currentUserId))
+                {
+                    model.isUserAllowedToEdit = currentUserId == userId;
+                }
+
+                return View(model);
             }
 
-            return View(_pageService.GetById(id));
+            if (User.IsInRole("Admin"))
+            {
+                model.isUserAllowedToEdit = true;
+            }
+
+            return View(model);
         }
 
         [Authorize(Roles = "Admin")]
