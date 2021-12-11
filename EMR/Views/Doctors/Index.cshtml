@@ -19,12 +19,8 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <img src="@Model.PhotoUrl" class="profile-user-img img-responsive img-circle" alt="User Image">
                     @await Html.PartialAsync("_DoctorDetailsPartialView.cshtml", Model)
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a href="/Doctor/Update?id=@Model.Id" class="btn btn-primary btn-block"><b>Edit profile</b></a>
-                    }
+                    <a href="/Doctors/Details?id=@Model.Id" class="btn btn-primary btn-block"><b>Details</b></a>
 
                 </div>
             </div>
@@ -42,12 +38,12 @@
                     </a>
                 </div>
             </div>
-                <div class="card-body">
-                    @await Html.PartialAsync("~/Views/Patients/_PatientsInfoTable.cshtml", new EMR.ViewModels.PatientInfoSearchModel() { DoctorId = Model.Id })
-                </div>
+            <div class="card-body">
+                @await Html.PartialAsync("~/Views/Patients/_PatientsInfoTable.cshtml", new EMR.ViewModels.PatientInfoSearchModel() { DoctorId = Model.Id })
             </div>
         </div>
     </div>
+</div>
 
 
 

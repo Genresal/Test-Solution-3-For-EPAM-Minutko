@@ -22,6 +22,7 @@ SET @SQL_QUERY = 'SELECT rec.Id
 			,userDoc.Birthday as DoctorBirthday
 			,userDoc.Email as DoctorEmail
 			,userDoc.PhoneNumber as DoctorPhoneNumber
+			,userDoc.PhotoUrl as DoctorPhotoUrl
 			,pat.Job as PatientJob
 			,pat.UserId as PatientUserId
 			,userPat.FirstName as PatientFirstName
@@ -29,6 +30,7 @@ SET @SQL_QUERY = 'SELECT rec.Id
 			,userPat.Birthday as PatientBirthday
 			,userPat.Email as PatientEmail
 			,userPat.PhoneNumber as PatientPhoneNumber
+			,userPat.PhotoUrl as PatientPhotoUrl
 			,pos.Name as DoctorName
 			,sick.Id as SickLeaveId
 			,sick.Number as SickLeaveNumber

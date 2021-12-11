@@ -67,7 +67,7 @@ namespace EMR.Data.Repositories
                     $",'{Gen.Random.Time.Dates(DateTime.Now.AddYears(-100), DateTime.Now)()}'" +
                     $",'{Gen.Random.Internet.EmailAddresses()()}'" +
                     $",'{Gen.Random.PhoneNumbers.WithRandomFormat()()}'" +
-                    $",'{Gen.Random.Internet.Urls()()}')";
+                    $",'https://azuresklad.blob.core.windows.net/images/{i}')";
                 if (i != dataCount)
                 {
                     sqlExpression = $"{sqlExpression},";
@@ -83,7 +83,7 @@ namespace EMR.Data.Repositories
     $",'{Gen.Random.Time.Dates(DateTime.Now.AddYears(-100), DateTime.Now)()}'" +
     $",'{Gen.Random.Internet.EmailAddresses()()}'" +
     $",'{Gen.Random.PhoneNumbers.WithRandomFormat()()}'" +
-    $",'{Gen.Random.Internet.Urls()()}')";
+    $",'https://azuresklad.blob.core.windows.net/images/101')";
 
             sqlExpression = $"{sqlExpression}," +
 $"('{Gen.Random.Text.Words()().MakeFirstCharUppercase()}'" +
@@ -94,7 +94,7 @@ $",'{Gen.Random.Names.Surname()()}'" +
 $",'{Gen.Random.Time.Dates(DateTime.Now.AddYears(-100), DateTime.Now)()}'" +
 $",'{Gen.Random.Internet.EmailAddresses()()}'" +
 $",'{Gen.Random.PhoneNumbers.WithRandomFormat()()}'" +
-$",'{Gen.Random.Internet.Urls()()}')";
+$",'https://azuresklad.blob.core.windows.net/images/102')";
             ExecuteNonQuery(sqlExpression);
         }
 

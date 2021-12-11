@@ -9,6 +9,11 @@ namespace EMR.Helpers
     {
         public static HtmlString ImageOrDefault(this IHtmlHelper helper, string url)
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                return new HtmlString("/img/0.jpg");
+            }
+
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "HEAD";
 

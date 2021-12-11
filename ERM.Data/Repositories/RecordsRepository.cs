@@ -110,11 +110,13 @@ namespace EMR.Data.Repositories
             model.Doctor.User.Birthday = (DateTime)reader[$"{nameof(Doctor)}{nameof(model.Doctor.User.Birthday)}"];
             model.Doctor.User.Email = (string)reader[$"{nameof(Doctor)}{nameof(model.Doctor.User.Email)}"];
             model.Doctor.User.PhoneNumber = (string)reader[$"{nameof(Doctor)}{nameof(model.Doctor.User.PhoneNumber)}"];
+            model.Doctor.User.PhotoUrl = (string)reader[$"{nameof(Doctor)}{nameof(model.Doctor.User.PhotoUrl)}"];
             model.Patient.User.FirstName = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.FirstName)}"];
             model.Patient.User.LastName = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.LastName)}"];
             model.Patient.User.Birthday = (DateTime)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.Birthday)}"];
             model.Patient.User.Email = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.Email)}"];
             model.Patient.User.PhoneNumber = (string)reader[$"{nameof(Patient)}{nameof(model.Doctor.User.PhoneNumber)}"];
+            model.Patient.User.PhotoUrl = (string)reader[$"{nameof(Patient)}{nameof(model.Patient.User.PhotoUrl)}"];
             if (!Convert.IsDBNull(reader[$"{nameof(SickLeave)}{nameof(SickLeave.Id)}"]))
             {
                 model.SickLeave.Id = (int)reader[$"{nameof(SickLeave)}{nameof(SickLeave.Id)}"];
