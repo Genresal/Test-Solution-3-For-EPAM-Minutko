@@ -50,27 +50,8 @@ namespace EMR.Helpers
             return await Task.FromResult(true);
         }
 
-        public static bool IsBlobExists(int id, AzureStorageConfig _storageConfig)
+        public static async Task<bool> DeleteFileFromStorage(string fileName, AzureStorageConfig _storageConfig)
         {
-            Uri accountUri = new Uri("https://" + _storageConfig.AccountName + ".blob.core.windows.net/");
-
-            // Create BlobServiceClient from the account URI
-            BlobServiceClient blobServiceClient = new BlobServiceClient(accountUri);
-
-            BlobContainerClient container = blobServiceClient.GetBlobContainerClient(_storageConfig.ImageContainer);
-
-            if (container.Exists())
-            {
-                return container.GetBlobClient(id.ToString()).Exists();
-            }
-
-            return false;
-        }
-
-        public static async Task<List<string>> GetThumbNailUrls(AzureStorageConfig _storageConfig)
-        {
-            List<string> thumbnailUrls = new List<string>();
-
             // Create a URI to the storage account
             Uri accountUri = new Uri("https://" + _storageConfig.AccountName + ".blob.core.windows.net/");
 
@@ -82,13 +63,11 @@ namespace EMR.Helpers
 
             if (container.Exists())
             {
-                foreach (BlobItem blobItem in container.GetBlobs())
-                {
-                    thumbnailUrls.Add(container.Uri + "/" + blobItem.Name);
-                }
+                await container.DeleteBlobAsync(fileName);
+                return await Task.FromResult(true);
             }
 
-            return await Task.FromResult(thumbnailUrls);
+            return false;
         }
     }
 }

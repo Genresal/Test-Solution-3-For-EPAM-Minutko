@@ -15,11 +15,14 @@ namespace EMR.Controllers
     public class HomeController : Controller
     {
         private readonly IHomePageService _pageService;
-        public HomeController(IHomePageService pageService)
+        private readonly IUserPageService _userPageService;
+        public HomeController(IHomePageService pageService, IUserPageService userPageService)
         {
             _pageService = pageService;
+            _userPageService = userPageService;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             if (User.IsInRole("User"))
@@ -36,6 +39,26 @@ namespace EMR.Controllers
             }
 
             return RedirectToAction("Login", "Account");
+        }
+
+        [Authorize]
+        public IActionResult Details(int id)
+        {
+            var model = _userPageService.GetById(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            switch (model.RoleId)
+            {
+                case 1:
+                    return RedirectToAction("Details", "Patients", new { id = _userPageService.GePatientByUserId(id).Id });
+                case 2:
+                    return RedirectToAction("Details", "Doctors", new { id = _userPageService.GeDoctorByUserId(id).Id });
+                default:
+                    return RedirectToAction("Details", "Users", new { id = id });
+            }
         }
 
         public IActionResult DbPage()

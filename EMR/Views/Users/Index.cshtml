@@ -40,7 +40,6 @@
                     <thead>
                         <tr>
                             <th>@Html.DisplayNameFor(value => _model.Id)</th>
-                            <th>@Html.DisplayNameFor(value => _model.RoleId)</th>
                             <th>@Html.DisplayNameFor(value => _model.Role)</th>
                             <th>@Html.DisplayNameFor(value => _model.FullName)</th>
                             <th>@Html.DisplayNameFor(value => _model.Birthday)</th>
@@ -75,11 +74,6 @@
     };
 
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Id)));
-    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.RoleId))
-{
-    Visible = false
-}
-);
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Role)));
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.FullName)));
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Birthday))
@@ -89,7 +83,7 @@
     );
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.PhoneNumber)));
     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.Email)));
-    string button = " <a href =\"/Users/Details?id=' + row.id + '&roleId=' + row.roleId + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"far fa-eye\"></i></a>";
+    string button = " <a href =\"/Users/Details?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"far fa-eye\"></i></a>";
 
     @if (User.IsInRole("Admin"))
         {
