@@ -1,5 +1,9 @@
 ﻿@model UserViewModel
 
+<div class="text-center">
+    <img src="@Html.ImageOrDefault(Model.PhotoUrl)" class="profile-user-img img-responsive img-circle" alt="User Image">
+</div>
+
 <h3 class="profile-username text-center">
     <span>Dr. </span>
     <span>@Model.FirstName</span>

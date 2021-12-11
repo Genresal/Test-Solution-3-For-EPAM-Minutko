@@ -6,5 +6,6 @@ namespace EMR.Business.Services
     {
         public User GetRandomAccount(int roleId);
         public void ChangePassword(int id, string password);
+        public void SetPhotoUrl(int id, string photoUrl);
     }
 }

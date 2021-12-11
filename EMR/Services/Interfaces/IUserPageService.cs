@@ -13,6 +13,7 @@ namespace EMR.Services
         public PatientViewModel GePatientByUserId(int userId);
         public UserViewModel GetRandomAccount(int roleId);
         public bool ChangePassword(ChangePasswordViewModel password, string login);
+        public void SetPhotoUrl(int userid, string photoUrl);
         public UserViewModel LogIn(LoginViewModel model);
     }
 }

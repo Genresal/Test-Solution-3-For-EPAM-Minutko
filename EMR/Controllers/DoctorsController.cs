@@ -126,8 +126,9 @@ namespace EMR.Controllers
         {
             try
             {
+                var userId = _pageService.GetById(id).UserId;
                 _pageService.Delete(id);
-                _ = StorageHelper.DeleteFileFromStorage(id.ToString(), _storageConfig);
+                _ = StorageHelper.DeleteFileFromStorage(userId.ToString(), _storageConfig);
                 _logger.LogInformation($"{User.Identity.Name} deleted user with id {id}.");
             }
             catch (Exception ex)

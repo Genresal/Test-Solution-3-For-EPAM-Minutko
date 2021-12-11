@@ -23,5 +23,11 @@ namespace EMR.Business.Services
         {
             _mainRepository.Update(nameof(User.Password), password, id);
         }
+
+        public void SetPhotoUrl(int id, string photoUrl)
+        {
+            _mainRepository.Update(nameof(User.PhotoUrl), photoUrl, id);
+        }
+
     }
 }

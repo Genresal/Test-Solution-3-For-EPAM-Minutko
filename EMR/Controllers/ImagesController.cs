@@ -1,5 +1,6 @@
 ﻿using EMR.Helpers;
 using EMR.Models;
+using EMR.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -13,22 +14,18 @@ namespace EMR.Controllers
     public class ImagesController : Controller
     {
         private readonly AzureStorageConfig _storageConfig;
+        private readonly IUserPageService _userPageService;
 
-        public ImagesController(IOptions<AzureStorageConfig> config)
+        public ImagesController(IOptions<AzureStorageConfig> config, 
+                            IUserPageService userPageService)
         {
             _storageConfig = config.Value;
+            _userPageService = userPageService;
         }
 
         public IActionResult Index(int userId)
         {
             return View(userId);
-        }
-
-        public IActionResult Delete()
-        {
-            _ = StorageHelper.DeleteFileFromStorage("104", _storageConfig);
-
-            return View("Index");
         }
 
         // POST /api/images/upload
@@ -57,6 +54,13 @@ namespace EMR.Controllers
                             using (Stream stream = formFile.OpenReadStream())
                             {
                                 isUploaded = await StorageHelper.UploadFileToStorage(stream, userId.ToString(), _storageConfig);
+                                string blobUri = "https://" +
+                                            _storageConfig.AccountName +
+                                            ".blob.core.windows.net/" +
+                                            _storageConfig.ImageContainer +
+                                            "/" + userId.ToString();
+
+                                _userPageService.SetPhotoUrl(userId, blobUri);
                             }
                         }
                     }

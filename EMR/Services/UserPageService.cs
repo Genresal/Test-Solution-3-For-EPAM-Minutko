@@ -61,6 +61,11 @@ namespace EMR.Services
             _mainService.Create(model);
         }
 
+        public void SetPhotoUrl(int userid, string photoUrl)
+        {
+            _userService.SetPhotoUrl(userid, photoUrl);
+        }
+
         public IEnumerable<Role> GetRoles()
         {
             return _roleService.GetAll();
