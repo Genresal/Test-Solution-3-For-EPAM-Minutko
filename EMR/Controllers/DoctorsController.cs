@@ -78,6 +78,9 @@ namespace EMR.Controllers
             {
                 model = new DoctorViewModel();
             }
+
+            model.Birthday = DateTime.Now;
+
             PrepareViewBag();
             return View("AddOrEdit", model);
         }

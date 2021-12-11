@@ -34,6 +34,8 @@ namespace EMR.Controllers
                 var model = new SickLeaveViewModel();
                 model.Id = 0;
                 model.RecordId = recordId;
+                model.StartDate = DateTime.Now;
+                model.FinalDate = DateTime.Now.AddDays(3);
                 return View(model);
             }
             else

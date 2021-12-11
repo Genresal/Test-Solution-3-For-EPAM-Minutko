@@ -13,12 +13,12 @@
 
                 <div class="form-group">
                     <label asp-for="StartDate" class="control-label"></label>
-                    <input type="date" asp-for="StartDate" value="@DateTime.Now" class="form-control">
+                    <input type="date" asp-for="StartDate" class="form-control">
                     <span asp-validation-for="StartDate" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="FinalDate" class="control-label"></label>
-                    <input type="date" asp-for="FinalDate" value="@(Model.FinalDate == DateTime.MaxValue ? DateTime.Now : Model.FinalDate)" class="form-control">
+                    <input type="date" asp-for="FinalDate" class="form-control">
                     <span asp-validation-for="FinalDate" class="text-danger"></span>
                 </div>
 

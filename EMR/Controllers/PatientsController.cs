@@ -113,6 +113,8 @@ namespace EMR.Controllers
                 model = new PatientViewModel();
             }
 
+            model.Birthday = DateTime.Now;
+
             return View("AddOrEdit", model);
         }
 
