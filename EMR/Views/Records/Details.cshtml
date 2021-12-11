@@ -15,7 +15,7 @@
             </div>
             <div class="card-body">
                 @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model.Patient)
-                @if (User.IsInRole("Admin"))
+                @if (Model.isUserAllowedToEdit)
                 {
                     <a href="/Patients/Details?id=@Model.Patient.Id" class="btn btn-primary btn-block"><b>View profile</b></a>
                 }
@@ -30,7 +30,7 @@
             </div>
             <div class="card-body">
                 @await Html.PartialAsync("~/Views/Doctors/_DoctorDetailsPartialView.cshtml", Model.Doctor)
-                @if (User.IsInRole("Admin"))
+                @if (Model.isUserAllowedToEdit)
                 {
                     <a href="/Doctors/Details?id=@Model.Doctor.Id" class="btn btn-primary btn-block"><b>View profile</b></a>
                 }
@@ -49,7 +49,7 @@
                     <span>@Model.Diagnosis.Name</span>
                 </h3>
                 
-                @if (!User.IsInRole("User"))
+                @if (Model.isUserAllowedToEdit)
                 {
                     <a href="/Records/AddOrEdit?id=@Model.Id" class="btn btn-primary btn-block"><b>Edit record</b></a>
                 }
@@ -63,7 +63,27 @@
                 <h3 class="card-title">Sick Leave</h3>
             </div>
             <div class="card-body">
-                @await Html.PartialAsync("~/Views/SickLeaves/_DetailsPartial.cshtml", Model.SickLeave)
+                @{if (Model.SickLeave.Id != 0)
+                    {
+                        @await Html.PartialAsync("~/Views/SickLeaves/_DetailsPartial.cshtml", Model.SickLeave)
+
+                        @if (Model.isUserAllowedToEdit)
+                        {
+                            <a href="/SickLeaves/AddOrEdit?id=@Model.Id&recordId=@Model.Id" class="btn btn-primary btn-block"><b>Edit</b></a>
+                            <a href="/SickLeaves/Delete?id=@Model.Id&recordId=@Model.Id" class="btn btn-primary btn-block"><b>Delete</b></a>
+                        }
+                    }
+                    else
+                    {
+                        <h3 class="profile-username text-center">
+                            <span>No sick leave</span>
+                        </h3>
+                        @if (Model.isUserAllowedToEdit)
+                        {
+                            <a href="/SickLeaves/AddOrEdit?recordId=@Model.Id" class="btn btn-primary btn-block"><b>Add sick leave</b></a>
+                        }
+                    }
+                }
             </div>
         </div>
     </div>
@@ -75,7 +95,7 @@
             <div class="card-header">
                 <h3 class="card-title">Used drugs for the case</h3>
                 <div class="card-tools">
-                    @if (!User.IsInRole("User"))
+                    @if (Model.isUserAllowedToEdit)
                     {
                         <a asp-controller="Drugs" asp-action="AddOrEdit" asp-route-recordId="@Model.Id">
                             <button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add drug</button>
@@ -84,7 +104,11 @@
                     </div>
             </div>
             <div class="card-body">
-                @await Html.PartialAsync("~/Views/Drugs/_DrugsTable.cshtml", new DrugSearchModel() { RecordId = Model.Id })
+                @await Html.PartialAsync("~/Views/Drugs/_DrugsTable.cshtml", new DrugSearchModel() 
+           { 
+               RecordId = Model.Id,
+               isUserAllowedToEdit = Model.isUserAllowedToEdit 
+           })
             </div>
         </div>
     </div>
@@ -93,7 +117,7 @@
             <div class="card-header">
                 <h3 class="card-title">Procedures</h3>
                 <div class="card-tools">
-                    @if (!User.IsInRole("User"))
+                    @if (Model.isUserAllowedToEdit)
                     {
                         <a asp-controller="Procedures" asp-action="AddOrEdit" asp-route-recordId="@Model.Id">
                             <button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add procedure</button>
@@ -102,7 +126,11 @@
                     </div>
             </div>
             <div class="card-body">
-                @await Html.PartialAsync("~/Views/Procedures/_ProceduresTable.cshtml", new ProcedureSearchModel() { RecordId = Model.Id })
+                @await Html.PartialAsync("~/Views/Procedures/_ProceduresTable.cshtml", new ProcedureSearchModel() 
+           { 
+               RecordId = Model.Id ,
+               isUserAllowedToEdit = Model.isUserAllowedToEdit
+           })
             </div>
         </div>
     </div>

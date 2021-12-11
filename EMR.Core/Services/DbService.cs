@@ -6,7 +6,7 @@ namespace EMR.Business.Services
 {
     public class DbService : IDbService
     {
-        private List<IRepository> repositories = new List<IRepository>();
+        private readonly List<IRepository> repositories = new List<IRepository>();
 
         public DbService(IRepository<SickLeave> sickLeave
             , IRepository<Diagnosis> diagnosis

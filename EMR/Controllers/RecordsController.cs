@@ -1,19 +1,13 @@
-﻿using EMR.Helpers;
-using EMR.DataTables;
-using EMR.Business.Models;
+﻿using EMR.DataTables;
+using EMR.Services;
 using EMR.ViewModels;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
-using System.Threading.Tasks;
-using EMR.Business.Services;
-using EMR.Services;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authorization;
 
 namespace EMR.Controllers
 {
@@ -24,8 +18,8 @@ namespace EMR.Controllers
         private readonly IDoctorPageService _doctorService;
         private readonly ILogger<RecordsController> _logger;
 
-        public RecordsController(IRecordPageService recordService, 
-            IDoctorPageService doctorService, 
+        public RecordsController(IRecordPageService recordService,
+            IDoctorPageService doctorService,
             ILogger<RecordsController> logger)
         {
             _doctorService = doctorService;
@@ -121,7 +115,7 @@ namespace EMR.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Details), new { id = model.Id});
+                return RedirectToAction(nameof(Details), new { id = model.Id });
             }
             PrepareViewBag();
             return View(model);
@@ -146,7 +140,30 @@ namespace EMR.Controllers
         [Authorize]
         public IActionResult Details(int id)
         {
-            return View(_pageService.Details(id));
+            var model = _pageService.Details(id);
+
+            if (User.IsInRole("User"))
+            {
+                return View(model);
+            }
+
+            if (User.IsInRole("Doctor"))
+            {
+                int userId;
+                if (int.TryParse(User.FindFirst("UserId").Value, out userId))
+                {
+                    model.isUserAllowedToEdit = userId == model.Doctor.UserId;
+                }
+
+                return View(model);
+            }
+
+            if (User.IsInRole("Editor") || User.IsInRole("Admin"))
+            {
+                model.isUserAllowedToEdit = true;
+            }
+
+            return View(model);
         }
 
         private void PrepareViewBag()

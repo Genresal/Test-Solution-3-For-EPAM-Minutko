@@ -11,6 +11,7 @@
         }
 
         public int Id { get; set; }
+        public bool isUserAllowedToEdit { get; set; }
         public DoctorViewModel Doctor { get; set; }
         public PatientViewModel Patient { get; set; }
         public SickLeaveViewModel SickLeave { get; set; }
