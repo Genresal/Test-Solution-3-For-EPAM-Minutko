@@ -1,4 +1,6 @@
 ﻿using EMR.Business.Models;
+using EMR.Helpers;
+using EMR.Models;
 using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +19,15 @@ namespace EMR.Controllers
     {
         private readonly IDoctorPageService _pageService;
         private readonly ILogger<AccountController> _logger;
+        private readonly AzureStorageConfig _storageConfig;
 
-        public DoctorsController(IDoctorPageService pageService, ILogger<AccountController> logger)
+        public DoctorsController(IDoctorPageService pageService,
+                                ILogger<AccountController> logger,
+                                IOptions<AzureStorageConfig> storageConfig)
         {
             _pageService = pageService;
             _logger = logger;
+            _storageConfig = storageConfig.Value;
         }
         [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult Index(int id = 0)
@@ -104,8 +111,12 @@ namespace EMR.Controllers
                         return NotFound();
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                var userId = _pageService.GetByLogin(model.Login).Id;
+
+                return RedirectToAction(nameof(Index), new { id = userId});
             }
+
             PrepareViewBag();
             return View(model);
         }
@@ -116,6 +127,7 @@ namespace EMR.Controllers
             try
             {
                 _pageService.Delete(id);
+                _ = StorageHelper.DeleteFileFromStorage(id.ToString(), _storageConfig);
                 _logger.LogInformation($"{User.Identity.Name} deleted user with id {id}.");
             }
             catch (Exception ex)

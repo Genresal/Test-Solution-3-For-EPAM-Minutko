@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -140,7 +138,6 @@ namespace EMR.Controllers
                 model.Message = $"Error, unable to load user with Login {User.Identity.Name}";
             }
 
-            model = new ChangePasswordViewModel();
             return View(model);
         }
 
@@ -170,7 +167,7 @@ namespace EMR.Controllers
 
             _logger.LogInformation($"User: {User.Identity.Name} changed his password successfully.");
 
-            return RedirectToAction(nameof(ChangePassword));
+            return RedirectToAction("Index", "Home");
         }
 
         private async Task Authenticate(UserViewModel user)
@@ -180,7 +177,6 @@ namespace EMR.Controllers
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role),
                 new Claim("FullName", $"{user.FirstName} {user.LastName}"),
-                //new Claim("PhotoUrl", string.IsNullOrEmpty(user.PhotoUrl) ? string.Empty : user.PhotoUrl),  // TODO: default picture url
                 new Claim("PhotoUrl", $"https://azuresklad.blob.core.windows.net/images/{user.Id}"),
                 new Claim("UserId", user.Id.ToString())
             };

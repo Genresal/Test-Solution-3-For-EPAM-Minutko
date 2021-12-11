@@ -1,10 +1,13 @@
 ﻿using EMR.DataTables;
+using EMR.Helpers;
+using EMR.Models;
 using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 
@@ -15,14 +18,17 @@ namespace EMR.Controllers
         private readonly IPatientPageService _pageService;
         private readonly IRecordPageService _recordPageService;
         private readonly ILogger<PatientsController> _logger;
+        private readonly AzureStorageConfig _storageConfig;
 
         public PatientsController(IPatientPageService s,
             IRecordPageService recordPageService,
-            ILogger<PatientsController> logger)
+            ILogger<PatientsController> logger,
+            IOptions<AzureStorageConfig> storageConfig)
         {
             _pageService = s;
             _recordPageService = recordPageService;
             _logger = logger;
+            _storageConfig = storageConfig.Value;
 
         }
 
@@ -148,7 +154,9 @@ namespace EMR.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Index));
+                var userId = _pageService.GetByLogin(model.Login).Id;
+
+                return RedirectToAction(nameof(Index), new { id = userId });
             }
 
             return View(model);
@@ -160,7 +168,9 @@ namespace EMR.Controllers
             try
             {
                 _pageService.Delete(id);
+                _ = StorageHelper.DeleteFileFromStorage(id.ToString(), _storageConfig);
                 _logger.LogInformation($"{User.Identity.Name} deleted user with id {id}.");
+                
             }
             catch (Exception ex)
             {

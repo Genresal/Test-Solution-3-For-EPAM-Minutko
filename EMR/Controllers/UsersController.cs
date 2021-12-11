@@ -1,9 +1,12 @@
 ﻿using EMR.DataTables;
+using EMR.Helpers;
+using EMR.Models;
 using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 
@@ -13,10 +16,15 @@ namespace EMR.Controllers
     {
         private readonly IUserPageService _pageService;
         private readonly ILogger<UsersController> _logger;
-        public UsersController(IUserPageService s, ILogger<UsersController> logger)
+        private readonly AzureStorageConfig _storageConfig;
+
+        public UsersController(IUserPageService s,
+            ILogger<UsersController> logger,
+            IOptions<AzureStorageConfig> config)
         {
             _pageService = s;
             _logger = logger;
+            _storageConfig = config.Value;
         }
 
         [Authorize(Roles = "Editor, Admin")]
@@ -136,25 +144,26 @@ namespace EMR.Controllers
                 return NotFound();
             }
 
-            if (model.RoleId > 2)
+            switch (model.RoleId)
             {
-                try
-                {
-                    _pageService.Delete(id);
-                    _logger.LogInformation($"{User.Identity.Name} deleted user with id {id}.");
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"{User.Identity.Name} failed to delete user with id {id}. {ex.Message}");
-                }
-            }
+                case 1:
+                    return RedirectToAction("Delete", "Patients", new { id = _pageService.GePatientByUserId(id).Id });
+                case 2:
+                    return RedirectToAction("Delete", "Doctors", new { id = _pageService.GeDoctorByUserId(id).Id });
+                default:
+                    try
+                    {
+                        _pageService.Delete(id);
+                        _ = StorageHelper.DeleteFileFromStorage(id.ToString(), _storageConfig);
+                        _logger.LogInformation($"{User.Identity.Name} deleted user with id {id}.");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"{User.Identity.Name} failed to delete user with id {id}. {ex.Message}");
+                    }
 
-            return model.RoleId switch
-            {
-                1 => RedirectToAction("Delete", "Patients", new { id = _pageService.GePatientByUserId(id).Id }),
-                2 => RedirectToAction("Delete", "Doctors", new { id = _pageService.GeDoctorByUserId(id).Id }),
-                _ => View("Details", model),
-            };
+                    return View("Details", model);
+            }
         }
     }
 }

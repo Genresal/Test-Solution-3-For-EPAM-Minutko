@@ -18,7 +18,7 @@
                     @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model)
                     @if (User.IsInRole("Admin"))
                     {
-                        <a href="/Patients/AddOrEdit?id=@Model.Id" class="btn btn-primary btn-block"><b>Edit profile</b></a>
+                        <a href="/Patients/Update?id=@Model.Id" class="btn btn-primary btn-block"><b>Edit profile</b></a>
                     }
                 </div>
             </div>

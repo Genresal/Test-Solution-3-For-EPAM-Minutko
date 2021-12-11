@@ -22,7 +22,7 @@ namespace EMR.Controllers
             _userPageService = userPageService;
         }
 
-        [Authorize]
+        //[Authorize]
         public IActionResult Index()
         {
             if (User.IsInRole("User"))

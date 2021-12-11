@@ -30,8 +30,8 @@ namespace EMR
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //string conectionString = Configuration.GetConnectionString("EMR");
-            string conectionString = Configuration.GetConnectionString("AZURE");
+             string conectionString = Configuration.GetConnectionString("EMR");
+            //string conectionString = Configuration.GetConnectionString("AZURE");
             /*
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()

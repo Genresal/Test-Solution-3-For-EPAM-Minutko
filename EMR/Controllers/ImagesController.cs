@@ -10,20 +10,25 @@ using System.Threading.Tasks;
 
 namespace EMR.Controllers
 {
-    //[Route("api/[controller]")]
     public class ImagesController : Controller
     {
-        // make sure that appsettings.json is filled with the necessary details of the azure storage
-        private readonly AzureStorageConfig storageConfig = null;
+        private readonly AzureStorageConfig _storageConfig;
 
         public ImagesController(IOptions<AzureStorageConfig> config)
         {
-            storageConfig = config.Value;
+            _storageConfig = config.Value;
         }
 
         public IActionResult Index(int userId)
         {
             return View(userId);
+        }
+
+        public IActionResult Delete()
+        {
+            _ = StorageHelper.DeleteFileFromStorage("104", _storageConfig);
+
+            return View("Index");
         }
 
         // POST /api/images/upload
@@ -37,10 +42,10 @@ namespace EMR.Controllers
                 if (files.Count == 0)
                     return BadRequest("No files received from the upload");
 
-                if (storageConfig.AccountKey == string.Empty || storageConfig.AccountName == string.Empty)
+                if (_storageConfig.AccountKey == string.Empty || _storageConfig.AccountName == string.Empty)
                     return BadRequest("sorry, can't retrieve your azure storage details from appsettings.js, make sure that you add azure storage details there");
 
-                if (storageConfig.ImageContainer == string.Empty)
+                if (_storageConfig.ImageContainer == string.Empty)
                     return BadRequest("Please provide a name for your image container in the azure blob storage");
 
                 foreach (var formFile in files)
@@ -51,7 +56,7 @@ namespace EMR.Controllers
                         {
                             using (Stream stream = formFile.OpenReadStream())
                             {
-                                isUploaded = await StorageHelper.UploadFileToStorage(stream, userId.ToString(), storageConfig);
+                                isUploaded = await StorageHelper.UploadFileToStorage(stream, userId.ToString(), _storageConfig);
                             }
                         }
                     }
@@ -63,11 +68,7 @@ namespace EMR.Controllers
 
                 if (isUploaded)
                 {
-                    if (storageConfig.ThumbnailContainer != string.Empty)
-                        //return new AcceptedAtActionResult("GetThumbNails", "Images", null, null);
-                        return RedirectToAction("Details", "Users", new { id = userId });
-                    else
-                        return new AcceptedResult();
+                    return RedirectToAction("Details", "Users", new { id = userId });
                 }
                 else
                     return BadRequest("Look like the image couldnt upload to the storage");

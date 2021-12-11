@@ -52,22 +52,21 @@ namespace EMR.Helpers
 
         public static async Task<bool> DeleteFileFromStorage(string fileName, AzureStorageConfig _storageConfig)
         {
-            // Create a URI to the storage account
-            Uri accountUri = new Uri("https://" + _storageConfig.AccountName + ".blob.core.windows.net/");
+            Uri blobUri = new Uri("https://" +
+                      _storageConfig.AccountName +
+                      ".blob.core.windows.net/" +
+                      _storageConfig.ImageContainer +
+                      "/" + fileName);
 
-            // Create BlobServiceClient from the account URI
-            BlobServiceClient blobServiceClient = new BlobServiceClient(accountUri);
+            StorageSharedKeyCredential storageCredentials =
+                new StorageSharedKeyCredential(_storageConfig.AccountName, _storageConfig.AccountKey);
 
-            // Get reference to the container
-            BlobContainerClient container = blobServiceClient.GetBlobContainerClient(_storageConfig.ThumbnailContainer);
+            // Create the blob client.
+            BlobClient blobClient = new BlobClient(blobUri, storageCredentials);
 
-            if (container.Exists())
-            {
-                await container.DeleteBlobAsync(fileName);
-                return await Task.FromResult(true);
-            }
+            await blobClient.DeleteIfExistsAsync();
 
-            return false;
+            return await Task.FromResult(true);
         }
     }
 }

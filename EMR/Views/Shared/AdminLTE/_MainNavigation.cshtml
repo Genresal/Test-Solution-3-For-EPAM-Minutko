@@ -34,7 +34,7 @@
 
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
-                with font-awesome or any other icon font library -->
+    with font-awesome or any other icon font library -->
                 @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
                 {
                     <li class="nav-item">
@@ -66,6 +66,15 @@
                 }
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="DbPage">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>
+                            Database
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Images" asp-action="Delete">
                         <i class="nav-icon far fa-circle"></i>
                         <p>
                             Database
