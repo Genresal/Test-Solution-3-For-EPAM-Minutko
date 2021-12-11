@@ -16,6 +16,11 @@
                 <input type="hidden" asp-for="DiagnosisId" />
                 <input type="hidden" asp-for="SickLeaveId" />
                 <input type="hidden" asp-for="ModifiedDate" />
+                @if(User.IsInRole("Doctor"))
+                    {
+                    <input type="hidden" asp-for="DoctorId" />
+                    }
+                
                 <div class="form-group">
                     <label asp-for="DoctorId" class="control-label"></label>
                     <select asp-for="DoctorId" asp-items="ViewBag.Doctors" class="form-control" disabled="@(User.IsInRole("Doctor"))"></select>

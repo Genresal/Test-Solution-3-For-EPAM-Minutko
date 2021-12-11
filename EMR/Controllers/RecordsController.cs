@@ -58,7 +58,7 @@ namespace EMR.Controllers
         }
 
         [Authorize(Roles = "Doctor, Editor, Admin")]
-        public IActionResult AddOrEdit(int id = 0)
+        public IActionResult AddOrEdit(int id = 0, int patientId = 0)
         {
             PrepareViewBag();
 
@@ -66,6 +66,7 @@ namespace EMR.Controllers
             {
                 var model = new RecordViewModel();
                 model.Id = 0;
+                model.PatientId = patientId;
                 if (User.IsInRole("Doctor"))
                 {
                     int doctorId = 0;
