@@ -1,4 +1,5 @@
 ﻿using EMR.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
 namespace EMR.Services
@@ -7,6 +8,10 @@ namespace EMR.Services
     {
         public DoctorViewModel GetByLogin(string login);
         public DoctorViewModel GetByUserId(int userId);
-        public IEnumerable<PositionViewModel> GetPositions();
+        public List<SelectListItem> PreparePositions();
+
+        public DoctorEditViewModel GetByIdEditModel(int id);
+        public void Create(DoctorEditViewModel viewModel);
+        public void Update(DoctorEditViewModel viewModel);
     }
 }

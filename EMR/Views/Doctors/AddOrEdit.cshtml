@@ -1,4 +1,4 @@
-﻿@model DoctorViewModel
+﻿@model DoctorEditViewModel
 
 <div class="col-md-6">
     <div class="card card-primary card-outline">
@@ -29,7 +29,7 @@
 
                 <div class="form-group">
                     <label asp-for="PositionId" class="control-label"></label><br />
-                    <select asp-for="PositionId" asp-items="ViewBag.Positions" class="form-control"></select>
+                    <select asp-for="PositionId" asp-items="Model.Positions" class="form-control"></select>
                     <span asp-validation-for="PositionId" class="text-danger" />
                 </div>
 

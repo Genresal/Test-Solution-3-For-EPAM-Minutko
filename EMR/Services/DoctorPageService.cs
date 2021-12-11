@@ -3,6 +3,7 @@ using EMR.Business.Helpers;
 using EMR.Business.Models;
 using EMR.Business.Services;
 using EMR.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,11 +17,25 @@ namespace EMR.Services
             _positionService = positionService;
         }
 
-        public override void Create(DoctorViewModel viewModel)
+        public void Create(DoctorEditViewModel viewModel)
         {
-            var model = _mapper.Map<DoctorViewModel, Doctor>(viewModel);
+            var model = _mapper.Map<DoctorEditViewModel, Doctor>(viewModel);
             model.User.Password = model.User.Password.HashString();
             _mainService.Create(model);
+        }
+
+        public virtual void Update(DoctorEditViewModel viewModel)
+        {
+            var model = _mapper.Map<DoctorEditViewModel, Doctor>(viewModel);
+            _mainService.Update(model);
+        }
+
+        public virtual DoctorEditViewModel GetByIdEditModel(int id)
+        {
+            var rawResult = _mainService.GetById(id);
+            var result = _mapper.Map<Doctor, DoctorEditViewModel>(rawResult);
+            result.Positions = PreparePositions();
+            return result;
         }
 
         public DoctorViewModel GetByLogin(string login)
@@ -35,10 +50,16 @@ namespace EMR.Services
             return _mapper.Map<Doctor, DoctorViewModel>(model);
         }
 
-        public IEnumerable<PositionViewModel> GetPositions()
+        public List<SelectListItem> PreparePositions()
         {
-            var result = _positionService.GetAll();
-            return _mapper.Map<IEnumerable<Position>, IEnumerable<PositionViewModel>>(result);
+            var rawResult = _positionService.GetAll();
+            var result = _mapper.Map<IEnumerable<Position>, IEnumerable<PositionViewModel>>(rawResult);
+
+            List<SelectListItem> positions = new List<SelectListItem>();
+            positions.AddRange(result
+                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList());
+
+            return positions;
         }
     }
 }

@@ -16,6 +16,17 @@ namespace EMR.MappingConfigurations
             CreateMap<User, DoctorViewModel>()
                 .ReverseMap()
                 .ForMember(dest => dest.Role, act => act.Ignore());
+
+
+
+            CreateMap<Doctor, DoctorEditViewModel>().IncludeMembers(x => x.User)
+        .ForMember(dest => dest.Position, act => act.MapFrom(src => src.Position.Name))
+        .ReverseMap()
+            .ForMember(dest => dest.Position, act => act.Ignore());
+
+            CreateMap<User, DoctorEditViewModel>()
+                    .ReverseMap()
+                    .ForMember(dest => dest.Role, act => act.Ignore());
         }
     }
 }

@@ -72,34 +72,33 @@ namespace EMR.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Create(DoctorViewModel model = null)
+        public IActionResult Create(DoctorEditViewModel model = null)
         {
             if (model == null)
             {
-                model = new DoctorViewModel();
+                model = new DoctorEditViewModel();
             }
 
             model.Birthday = DateTime.Now;
-
-            PrepareViewBag();
+            model.Positions = _pageService.PreparePositions();
             return View("AddOrEdit", model);
         }
 
         [Authorize(Roles = "Doctor, Admin")]
         public IActionResult Update(int id)
         {
-            var model = _pageService.GetById(id);
+            var model = _pageService.GetByIdEditModel(id);
             if (model == null)
             {
                 return NotFound();
             }
-            PrepareViewBag();
+
             return View("AddOrEdit", model);
         }
 
         [HttpPost]
         [Authorize(Roles = "Doctor, Admin")]
-        public IActionResult AddOrEdit(DoctorViewModel model)
+        public IActionResult AddOrEdit(DoctorEditViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -132,7 +131,6 @@ namespace EMR.Controllers
                 return RedirectToAction(nameof(Index), new { id = userId});
             }
 
-            PrepareViewBag();
             return View(model);
         }
 
@@ -151,14 +149,6 @@ namespace EMR.Controllers
                 _logger.LogError($"{User.Identity.Name} failed to delete user with id {id}. {ex.Message}");
             }
             return RedirectToAction(nameof(Index), "Users");
-        }
-
-        private void PrepareViewBag()
-        {
-            List<SelectListItem> positions = new List<SelectListItem>();
-            positions.AddRange(_pageService.GetPositions()
-                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList());
-            ViewBag.Positions = new SelectList(positions, "Value", "Text");
         }
     }
 }
