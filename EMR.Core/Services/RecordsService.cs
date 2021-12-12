@@ -7,11 +7,9 @@ namespace EMR.Business.Services
     public class RecordService : BaseBusinessService<Record>, IRecordService
     {
         private readonly IRepository<Diagnosis> _diagnosisRepository;
-        private readonly ILogger<RecordService> _logger;
         public RecordService(IRepository<Record> recordRepository, IRepository<Diagnosis> diagnosisRepository, ILogger<RecordService> logger) : base(recordRepository, logger)
         {
             _diagnosisRepository = diagnosisRepository;
-            _logger = logger;
         }
 
         public Record GetLast()

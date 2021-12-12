@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace EMR.Data.Repositories
 {
-    public class PatientsRepository : BaseRepository<Patient>, IPatientRepository
+    public class PatientsRepository : BaseRepository<Patient>, IRepository<Patient>
     {
         private readonly string baseQuery;
         public PatientsRepository(string conn) : base(conn)
@@ -47,15 +47,6 @@ namespace EMR.Data.Repositories
                                    $"WHERE p.[Id] = @Id";
 
             return ExecuteReader(sqlExpression, new SqlParameter("@Id", id)).FirstOrDefault();
-        }
-
-        public IEnumerable<Patient> GetByDoctorId(int doctorId)
-        {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@COLUMN", "pat.Id"));
-            parameters.Add(new SqlParameter("@OPERATOR", "IN"));
-            parameters.Add(new SqlParameter("@VALUE", "(SELECT PatientId from tRecord where DoctorId = @doctorId)"));
-            return StoredExecuteReader("GetPatients", parameters);
         }
 
         public override void Create(Patient model)

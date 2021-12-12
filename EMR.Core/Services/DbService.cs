@@ -16,7 +16,7 @@ namespace EMR.Business.Services
             , IRepository<User> user
             , IRepository<Position> position
             , IRepository<Doctor> doctor
-            , IPatientRepository patient
+            , IRepository<Patient> patient
             , IRepository<Record> record
             , IRepository<RecordTreatment> recordTreatment)
         {

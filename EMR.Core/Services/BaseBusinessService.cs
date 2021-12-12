@@ -7,8 +7,8 @@ namespace EMR.Business.Services
 {
     public abstract class BaseBusinessService<T> where T : BaseModel
     {
-        protected IRepository<T> _mainRepository;
-        ILogger<BaseBusinessService<T>> _logger;
+        protected readonly IRepository<T> _mainRepository;
+        protected readonly ILogger<BaseBusinessService<T>> _logger;
         protected BaseBusinessService(IRepository<T> repository, ILogger<BaseBusinessService<T>> logger)
         {
             _mainRepository = repository;
