@@ -11,35 +11,64 @@ namespace EMR.Data.Repositories
 {
     public class RecordsRepository : BaseRepository<Record>, IRepository<Record>
     {
+        private readonly string baseQuery;
         public RecordsRepository(string conn) : base(conn)
         {
+            baseQuery = $"SELECT r.{nameof(Record.Id)}, " +
+              $"{nameof(Record.DiagnosisId)}, " +
+              $"{nameof(Record.SickLeaveId)}, " +
+              $"{nameof(Record.DoctorId)}, " +
+              $"{nameof(Record.PatientId)}, " +
+              $"{nameof(Record.ModifiedDate)}, " +
+              $"di.{nameof(Diagnosis.Name)} as {nameof(Diagnosis)}{nameof(Diagnosis.Name)}, " +
+              $"d.{nameof(Doctor.PositionId)} as {nameof(Doctor)}{nameof(Doctor.PositionId)}, " +
+              $"d.{nameof(Doctor.UserId)} as {nameof(Doctor)}{nameof(Doctor.UserId)}, " +
+              $"p.{nameof(Patient.Job)} as {nameof(Patient)}{nameof(Patient.Job)}, " +
+              $"p.{nameof(Patient.UserId)} as {nameof(Patient)}{nameof(Patient.UserId)}, " +
+              $"ud.{nameof(User.FirstName)} as {nameof(Doctor)}{nameof(User.FirstName)}, " +
+              $"ud.{nameof(User.LastName)} as {nameof(Doctor)}{nameof(User.LastName)}, " +
+              $"ud.{nameof(User.Birthday)} as {nameof(Doctor)}{nameof(User.Birthday)}, " +
+              $"ud.{nameof(User.Email)} as {nameof(Doctor)}{nameof(User.Email)}, " +
+              $"ud.{nameof(User.PhoneNumber)} as {nameof(Doctor)}{nameof(User.PhoneNumber)}, " +
+              $"ud.{nameof(User.PhotoUrl)} as {nameof(Doctor)}{nameof(User.PhotoUrl)}, " +
+              $"up.{nameof(User.FirstName)} as {nameof(Patient)}{nameof(User.FirstName)}, " +
+              $"up.{nameof(User.LastName)} as {nameof(Patient)}{nameof(User.LastName)}, " +
+              $"up.{nameof(User.Birthday)} as {nameof(Patient)}{nameof(User.Birthday)}, " +
+              $"up.{nameof(User.Email)} as {nameof(Patient)}{nameof(User.Email)}, " +
+              $"up.{nameof(User.PhoneNumber)} as {nameof(Patient)}{nameof(User.PhoneNumber)}, " +
+              $"up.{nameof(User.PhotoUrl)} as {nameof(Patient)}{nameof(User.PhotoUrl)}, " +
+              $"pos.{nameof(Position.Name)} as {nameof(Doctor)}{nameof(Position.Name)}, " +
+              $"s.{nameof(SickLeave.Id)} as {nameof(SickLeave)}{nameof(SickLeave.Id)}, " +
+              $"s.{nameof(SickLeave.Number)} as {nameof(SickLeave)}{nameof(SickLeave.Number)}, " +
+              $"s.{nameof(SickLeave.StartDate)} as {nameof(SickLeave)}{nameof(SickLeave.StartDate)}, " +
+              $"s.{nameof(SickLeave.FinalDate)} as {nameof(SickLeave)}{nameof(SickLeave.FinalDate)} " +
+              $"FROM {nameof(Record).ConvertToTableName()} as r " +
+              $"LEFT JOIN {nameof(Doctor).ConvertToTableName()} as d ON d.{nameof(Doctor.Id)} = r.{nameof(Record.DoctorId)} " +
+              $"LEFT JOIN {nameof(Patient).ConvertToTableName()} as p ON p.{nameof(Patient.Id)} = r.{nameof(Record.PatientId)} " +
+              $"LEFT JOIN {nameof(User).ConvertToTableName()} as ud ON ud.{nameof(User.Id)} = d.{nameof(Doctor.UserId)} " +
+              $"LEFT JOIN {nameof(User).ConvertToTableName()} as up ON up.{nameof(User.Id)} = p.{nameof(Patient.UserId)} " +
+              $"LEFT JOIN {nameof(Diagnosis).ConvertToTableName()} as di ON di.{nameof(Diagnosis.Id)} = r.{nameof(Record.DiagnosisId)} " +
+              $"LEFT JOIN {nameof(Position).ConvertToTableName()} as pos ON pos.{nameof(Position.Id)} = d.{nameof(Doctor.PositionId)} " +
+              $"LEFT JOIN {nameof(SickLeave).ConvertToTableName()} as s ON s.{nameof(SickLeave.Id)} = r.{nameof(Record.SickLeaveId)}";
         }
 
         public override IEnumerable<Record> GetAll()
         {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@COLUMN", DBNull.Value));
-            parameters.Add(new SqlParameter("@OPERATOR", DBNull.Value));
-            parameters.Add(new SqlParameter("@VALUE", DBNull.Value));
-            return StoredExecuteReader("GetRecords", parameters);
+            return ExecuteReader(baseQuery);
         }
 
         public override IEnumerable<Record> GetByColumn(string column, string value)
         {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@COLUMN", column));
-            parameters.Add(new SqlParameter("@OPERATOR", "="));
-            parameters.Add(new SqlParameter("@VALUE", value));
-            return StoredExecuteReader("GetRecords", parameters);
+            string sqlExpression = $"{baseQuery} WHERE [{column}] = @value";
+            return ExecuteReader(sqlExpression, new SqlParameter("@value", value));
         }
 
         public override Record GetById(int id)
         {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@COLUMN", "rec.Id"));
-            parameters.Add(new SqlParameter("@OPERATOR", "="));
-            parameters.Add(new SqlParameter("@VALUE", id));
-            return StoredExecuteReader("GetRecords", parameters).FirstOrDefault();
+            string sqlExpression = $"{baseQuery} " +
+                                   $"WHERE r.[Id] = @Id";
+
+            return ExecuteReader(sqlExpression, new SqlParameter("@Id", id)).FirstOrDefault();
         }
 
         public override void Create(Record model)
