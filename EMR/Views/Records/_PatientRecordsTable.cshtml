@@ -1,4 +1,4 @@
-﻿@model EMR.ViewModels.RecordSearchModel
+﻿@model RecordSearchModel
 @using EMR.DataTables
 @{
 
@@ -67,7 +67,7 @@
 );
 
     string button = " <a href =\"/Records/Details?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"far fa-eye\"></i></a>";
-    if (User.Identity.IsAuthenticated && (User.IsInRole("Editor") || User.IsInRole("Admin")))
+    if (Model.IsUserEditor)
     {
         button = $"{button} <a href=\"/Records/AddOrEdit?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-edit\"></i></a>" +
                  " <a href=\"/Records/Delete?id=' + row.id + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"fa fa-trash\"></i></a>";

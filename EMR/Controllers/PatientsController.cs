@@ -35,11 +35,6 @@ namespace EMR.Controllers
         [Authorize]
         public IActionResult Index(int id = 0)
         {
-            //if (!HttpContext.User.IsInRole("Doctor") && !HttpContext.User.IsInRole("User"))
-            //{
-            //    return RedirectToAction(nameof(Index), "Users");
-            //}
-
             PatientViewModel model;
             if (id == 0)
             {
@@ -56,6 +51,10 @@ namespace EMR.Controllers
                                             .Select(x => new FilterCondition(x.Id, x.Name))
                                             .ToList();
             searchModel.PatientId = model.Id;
+            if(User.IsInRole("Editor") || User.IsInRole("Admin"))
+            {
+                searchModel.IsUserEditor = true;
+            }
 
             ViewBag.SearchModel = searchModel;
 

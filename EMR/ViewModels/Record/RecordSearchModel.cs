@@ -23,5 +23,6 @@ namespace EMR.ViewModels
 
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
+        public bool IsUserEditor { get; set; }
     }
 }

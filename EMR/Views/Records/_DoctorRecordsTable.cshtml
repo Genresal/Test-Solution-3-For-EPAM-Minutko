@@ -1,4 +1,4 @@
-﻿@model EMR.ViewModels.RecordSearchModel
+﻿@model RecordSearchModel
 @using EMR.DataTables
 @{
 
@@ -42,7 +42,7 @@
 @{
     var gridModel = new DataTablesModel
     {
-        StateSave = false, //save state
+        StateSave = true, 
         AutoWidth = true,
         Processing = true,
         ServerSide = true,

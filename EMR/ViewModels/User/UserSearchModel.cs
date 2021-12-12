@@ -16,5 +16,6 @@ namespace EMR.ViewModels
 
         [Display(Name = "User roles")]
         public List<FilterCondition> Roles { get; set; }
+        public bool isUserAdmin { get; set; }
     }
 }

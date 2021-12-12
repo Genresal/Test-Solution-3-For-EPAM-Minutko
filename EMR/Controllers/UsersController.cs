@@ -35,6 +35,11 @@ namespace EMR.Controllers
                                 .Select(x => new FilterCondition(x.Id, x.Name))
                                 .ToList();
 
+            if (User.IsInRole("Admin"))
+            {
+                searchModel.isUserAdmin = true;
+            }
+
             return View(searchModel);
         }
 
