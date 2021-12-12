@@ -1,30 +1,26 @@
-﻿@model ERM.Models.Patient
+﻿@model PatientViewModel
 
-<h3 class="profile-username text-center">
-    <span>@Model.FirstName</span>
-    <span>@Model.LastName</span>
-</h3>
+    <div class="text-center">
+        <img src="@Html.ImageOrDefault(Model.PhotoUrl)" class="profile-user-img img-responsive img-circle" alt="User Image">
+        </div>
 
-<hr>
+        <h3 class="profile-username text-center">
+            <span>@Model.FirstName</span>
+            <span>@Model.LastName</span>
+        </h3>
+        <hr>
 
-<strong><i class="fas fa-venus-mars mr-1"></i> Sex</strong>
+        <strong><i class="fas fa-birthday-cake mr-1"></i> @Html.DisplayNameFor(value => Model.Birthday)</strong>
+        <p class="text-muted">@Model.Birthday</p>
+        <hr>
 
-<p class="text-muted">@Model.Sex</p>
+        <strong><i class="fas fa-briefcase mr-1"></i> @Html.DisplayNameFor(value => Model.Job)</strong>
+        <p class="text-muted">@Model.Job</p>
+        <hr>
 
-<hr>
+        <strong><i class="fas fa-at mr-1"></i> @Html.DisplayNameFor(value => Model.Email)</strong>
+        <p class="text-muted">@Model.Email</p>
+        <hr>
 
-<strong><i class="fas fa-birthday-cake mr-1"></i> Day Of Birth</strong>
-
-<p class="text-muted">@Model.Birthday</p>
-
-<hr>
-
-<strong><i class="fas fa-briefcase mr-1"></i> Job</strong>
-
-<p class="text-muted">@Model.Job</p>
-
-<hr>
-
-<strong><i class="fas fa-phone mr-1"></i> Phone number</strong>
-
-<p class="text-muted">@Model.PhoneNumber</p>
+        <strong><i class="fas fa-phone mr-1"></i> @Html.DisplayNameFor(value => Model.PhoneNumber)</strong>
+        <p class="text-muted">@Model.PhoneNumber</p>

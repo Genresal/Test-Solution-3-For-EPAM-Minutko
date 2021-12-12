@@ -1,0 +1,37 @@
+﻿@model SickLeaveViewModel
+
+<div class="col-md-6">
+    <div class="card card-primary card-outline">
+        <div class="card-header">
+            <h3 class="card-title">User</h3>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="AddOrEdit" asp-route-id="@Model.Id">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="RecordId" />
+
+                <div class="form-group">
+                    <label asp-for="StartDate" class="control-label"></label>
+                    <input type="date" asp-for="StartDate" class="form-control">
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FinalDate" class="control-label"></label>
+                    <input type="date" asp-for="FinalDate" class="form-control">
+                    <span asp-validation-for="FinalDate" class="text-danger"></span>
+                </div>
+
+                <hr />
+
+                <div class="form-group">
+                    <div class="col-md-6 offset-md-3">
+                        <input type="submit" value="Save" class="btn btn-primary btn-block" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <partial name="_ValidationScriptsPartial" />

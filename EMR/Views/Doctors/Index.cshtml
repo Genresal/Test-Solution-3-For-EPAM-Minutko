@@ -1,0 +1,48 @@
+﻿@model DoctorViewModel
+@{
+    ViewData["Title"] = "Doctor's patients";
+
+}
+
+<partial name="_TableScriptsAndStyles" />
+
+<div class="row">
+
+    @if (!User.IsInRole("Doctor"))
+    {
+        <div class="col-md-2">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">Doctor</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    @await Html.PartialAsync("_DoctorDetailsPartialView.cshtml", Model)
+                    <a href="/Doctors/Details?userId=@Model.Id" class="btn btn-primary btn-block"><b>Details</b></a>
+
+                </div>
+            </div>
+        </div>
+    }
+    <div class="col-md-10">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    @ViewData["Title"]
+                </h3>
+                <div class="card-tools">
+                    <a asp-controller="Records" asp-action="AddOrEdit">
+                        <button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add record</button>
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                @await Html.PartialAsync("~/Views/Patients/_PatientsInfoTable.cshtml", new EMR.ViewModels.PatientInfoSearchModel() { DoctorId = Model.Id })
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

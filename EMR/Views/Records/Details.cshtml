@@ -1,8 +1,6 @@
-﻿@using ERM.Models;
-@model Tuple<Doctor, Patient, SickLeaveSearchModel, List<Treatment>>
+﻿@model RecordDetailsViewModel
 @{
     ViewData["Title"] = "Home Page";
-    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
 }
 
 <div class="text-center">
@@ -10,27 +8,82 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">Patient</h3>
             </div>
-            <!-- /.card-header -->
             <div class="card-body">
-                @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model.Item2)
-                <a href="/PatientsController/Details?id=@Model.Item2.Id" class="btn btn-primary btn-block"><b>View patient profile</b></a>
+                @await Html.PartialAsync("~/Views/Patients/_PatientDetailsPartialView.cshtml", Model.Patient)
+                @if (Model.isUserAllowedToEdit)
+                {
+                    <a href="/Patients/Details?userId=@Model.Patient.UserId" class="btn btn-primary btn-block"><b>View profile</b></a>
+                }
             </div>
         </div>
     </div>
-    <div class="col-md-6">
+
+    <div class="col-md-3">
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">Doctor</h3>
             </div>
-            <!-- /.card-header -->
             <div class="card-body">
-                @await Html.PartialAsync("~/Views/Doctors/_DoctorDetailsPartialView.cshtml", Model.Item1)
-                <a href="/DoctorsController/Details?id=@Model.Item1.Id" class="btn btn-primary btn-block"><b>View doctor profile</b></a>
+                @await Html.PartialAsync("~/Views/Doctors/_DoctorDetailsPartialView.cshtml", Model.Doctor)
+                @if (Model.isUserAllowedToEdit)
+                {
+                    <a href="/Doctors/Details?userId=@Model.Doctor.UserId" class="btn btn-primary btn-block"><b>View profile</b></a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Diagnosis</h3>
+            </div>
+            <div class="card-body">
+
+                <h3 class="profile-username text-center">
+                    <span>@Model.Diagnosis.Name</span>
+                </h3>
+                
+                @if (Model.isUserAllowedToEdit)
+                {
+                    <a href="/Records/AddOrEdit?id=@Model.Id" class="btn btn-primary btn-block"><b>Edit record</b></a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Sick Leave</h3>
+            </div>
+            <div class="card-body">
+                @{if (Model.SickLeave.Id != 0)
+                    {
+                        @await Html.PartialAsync("~/Views/SickLeaves/_DetailsPartial.cshtml", Model.SickLeave)
+
+                        @if (Model.isUserAllowedToEdit)
+                        {
+                            <a href="/SickLeaves/AddOrEdit?id=@Model.Id&recordId=@Model.Id" class="btn btn-primary btn-block"><b>Edit</b></a>
+                            <a href="/SickLeaves/Delete?id=@Model.Id&recordId=@Model.Id" class="btn btn-primary btn-block"><b>Delete</b></a>
+                        }
+                    }
+                    else
+                    {
+                        <h3 class="profile-username text-center">
+                            <span>No sick leave</span>
+                        </h3>
+                        @if (Model.isUserAllowedToEdit)
+                        {
+                            <a href="/SickLeaves/AddOrEdit?recordId=@Model.Id" class="btn btn-primary btn-block"><b>Add sick leave</b></a>
+                        }
+                    }
+                }
             </div>
         </div>
     </div>
@@ -40,21 +93,44 @@
     <div class="col-md-6">
         <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title">Sick Leaves for the case</h3>
+                <h3 class="card-title">Used drugs for the case</h3>
+                <div class="card-tools">
+                    @if (Model.isUserAllowedToEdit)
+                    {
+                        <a asp-controller="Drugs" asp-action="AddOrEdit" asp-route-recordId="@Model.Id">
+                            <button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add drug</button>
+                        </a>
+                    }
+                    </div>
             </div>
-            <!-- /.card-header -->
             <div class="card-body">
-                @await Html.PartialAsync("~/Views/SickLeaves/_SickLeavesTable.cshtml", Model.Item3)
+                @await Html.PartialAsync("~/Views/Drugs/_DrugsTable.cshtml", new DrugSearchModel() 
+           { 
+               RecordId = Model.Id,
+               isUserAllowedToEdit = Model.isUserAllowedToEdit 
+           })
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title">bggnn</h3>
+                <h3 class="card-title">Procedures</h3>
+                <div class="card-tools">
+                    @if (Model.isUserAllowedToEdit)
+                    {
+                        <a asp-controller="Procedures" asp-action="AddOrEdit" asp-route-recordId="@Model.Id">
+                            <button class="btn btn-sm btn-info btn-flat margin-r-5"><i class="fas fa-plus"></i> Add procedure</button>
+                        </a>
+                    }
+                    </div>
             </div>
-            <!-- /.card-header -->
             <div class="card-body">
+                @await Html.PartialAsync("~/Views/Procedures/_ProceduresTable.cshtml", new ProcedureSearchModel() 
+           { 
+               RecordId = Model.Id ,
+               isUserAllowedToEdit = Model.isUserAllowedToEdit
+           })
             </div>
         </div>
     </div>

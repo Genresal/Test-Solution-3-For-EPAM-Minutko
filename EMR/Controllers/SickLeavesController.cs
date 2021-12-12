@@ -1,109 +1,100 @@
-﻿using ERM.Helpers;
-using ERM.DataTables;
-using ERM.Models;
-using ERM.Repositories;
-using ERM.ViewModels;
-using Microsoft.AspNetCore.Http;
+﻿using EMR.Services;
+using EMR.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ERM.Controllers
+namespace EMR.Controllers
 {
+    [Authorize(Roles = "Doctor, Editor, Admin")]
     public class SickLeavesController : Controller
     {
-        IRepository<SickLeave> _sickLeavesRepository;
+        readonly ISickLeavePageService _pageService;
+        private readonly ILogger<SickLeavesController> _logger;
 
-        public SickLeavesController(IRepository<SickLeave> r)
+        public SickLeavesController(ISickLeavePageService pageService, ILogger<SickLeavesController> logger)
         {
-            _sickLeavesRepository = r;
+            _pageService = pageService;
+            _logger = logger;
         }
-        // GET: HomeController
-        public ActionResult Index()
+
+        [Authorize]
+        public IActionResult Index()
         {
-            SickLeaveSearchModel searchModel = new SickLeaveSearchModel();
-            //
-            return View(searchModel);
+            return View();
+        }
+
+        public IActionResult AddOrEdit(int id = 0, int recordId = 0)
+        {
+            if (id == 0)
+            {
+                var model = new SickLeaveViewModel();
+                model.Id = 0;
+                model.RecordId = recordId;
+                model.StartDate = DateTime.Now;
+                model.FinalDate = DateTime.Now.AddDays(3);
+                return View(model);
+            }
+            else
+            {
+                var model = _pageService.GetById(id);
+                if (model == null)
+                {
+                    return NotFound();
+                }
+
+                return View(model);
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoadTable([FromBody] SickLeaveSearchModel SearchParameters)
+        public IActionResult AddOrEdit(SickLeaveViewModel model)
         {
-            var result = Filtering(SearchParameters);
-
-            var filteredResultsCount = result.Count();
-            var totalResultsCount = result.Count();
-            return Json(new
+            if (ModelState.IsValid)
             {
-                draw = SearchParameters.Draw,
-                recordsTotal = totalResultsCount,
-                recordsFiltered = filteredResultsCount,
-                data = result
-                .Skip(SearchParameters.Start)
-                .Take(SearchParameters.Length)
-                .ToList()
-            });
+                if (model.Id == 0)
+                {
+                    _pageService.Create(model);
+                    _logger.LogInformation($"{User.Identity.Name} created new sick leave {model.StartDate} - {model.FinalDate}.");
+                }
+                else
+                {
+                    try
+                    {
+                        _pageService.Update(model);
+                        _logger.LogInformation($"{User.Identity.Name} updated sick leave with id {model.Id}.");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"{User.Identity.Name} failed to update sick leave with id {model.Id}. {ex.Message}");
+                        return NotFound();
+                    }
+                }
+
+                return RedirectToAction("Details", "Records", new { id = model.RecordId });
+            }
+            return View(model);
         }
 
-        public IQueryable<SickLeave> Filtering(SickLeaveSearchModel searchParameters)
+        public IActionResult Delete(int id, int recordId)
         {
-            var searchBy = searchParameters.Search?.Value;
-
-            // if we have an empty search then just order the results by Id ascending
-            var orderCriteria = "Id";
-            var orderAscendingDirection = true;
-
-            if (searchParameters.Order != null)
+            try
             {
-                // in this example we just default sort on the 1st column
-                orderCriteria = searchParameters.Columns[searchParameters.Order[0].Column].Data;
-                orderAscendingDirection = searchParameters.Order[0].Dir.ToString().ToLower() == "asc";
+                _pageService.Delete(id);
+                _logger.LogInformation($"{User.Identity.Name} deleted sick leave with id {id} inside record with id {recordId}.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{User.Identity.Name} failed to delete sick leave with id {id}. {ex.Message}");
             }
 
-            IQueryable<SickLeave> result;
-            if (searchParameters.RecordId == 0)
+            if (recordId == 0)
             {
-                result = _sickLeavesRepository.GetAll().AsQueryable();
-            }
-            else 
-            {
-                result = _sickLeavesRepository.GetByField(nameof(SickLeave.RecordId), searchParameters.RecordId.ToString()).ToList().AsQueryable();
+                return RedirectToAction("Index", "Records");
             }
 
-            // Filters
-            //date
-            DateTime date1 = new DateTime();
-            DateTime date2 = new DateTime();
-            
-            if (searchParameters.DateRange != null)
-            {
-                if (!string.IsNullOrEmpty(searchParameters.DateRange.Start))
-                    date1 = DateTime.Parse(searchParameters.DateRange.Start);
-
-                if (!string.IsNullOrEmpty(searchParameters.DateRange.End))
-                    date2 = DateTime.Parse(searchParameters.DateRange.End);
-            }
-            
-
-            if (date1 != DateTime.MinValue)
-                result = result.Where(u => u.StartDate >= date1);
-
-            if (date2 != DateTime.MinValue)
-                result = result.Where(u => u.StartDate <= date2);
-
-            if (!string.IsNullOrEmpty(searchBy))
-            {
-                result = result.Where(r => r.DiagnosisCode != null && r.DiagnosisCode.ToString().ToUpper().Contains(searchBy.ToUpper()));
-            }
-
-            result = orderAscendingDirection ? result.OrderByDynamic(orderCriteria, TableOrder.Asc) : result.OrderByDynamic(orderCriteria, TableOrder.Desc);
-
-            return result;
-
+            return RedirectToAction("Details", "Records", new { id = recordId });
         }
     }
 }

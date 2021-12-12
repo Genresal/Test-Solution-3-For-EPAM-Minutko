@@ -1,17 +1,17 @@
-﻿@model ERM.DataTables.DataTablesModel
+﻿@model EMR.DataTables.DataTablesModel
 @using System.Net;
 @{
 }
 <script>
-    //Функция перезагрузки
+    //Reload function
     function Refresh() {
         @{@Model.Name}.ajax.reload();
-        //Если определена вспомогательная функция то вызываем и ее
+        //If an aux function is exist call it then
         if (typeof AuxFunction === "function") {
             AuxFunction();
         }
     }
-    //Сбрасывает поле поиска ДТ
+    //Reset the search field of Datatables
     function ResetToDefault() {
         @{@Model.Name}.search("").draw();
     }

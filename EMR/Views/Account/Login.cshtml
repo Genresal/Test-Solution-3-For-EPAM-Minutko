@@ -1,0 +1,59 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Authorization";
+}
+
+<div class="col-lg-3 col-md-6 col-sm-8 col-12">
+    @await Html.PartialAsync("_Message", Model.Message)
+    <div class="card card-primary card-outline">
+        <div class="card-header">
+            <h3 class="card-title">@ViewData["Title"]</h3>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Login" asp-controller="Account" method="post" asp-anti-forgery="true">
+                <div class="validation" asp-validation-summary="ModelOnly"></div>
+                <div>
+                    <div class="form-group col-xs-3">
+                        <label asp-for="Login" class="control-label">Login</label>
+                        <input type="text" asp-for="Login" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="Login" class="text-danger" />
+                    </div>
+                    <div class="form-group col-xs-3">
+                        <label asp-for="Password" class="control-label">Password</label>
+                        <input asp-for="Password" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="Password" class="text-danger" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="LogIn" class="btn btn-primary" />
+                    </div>
+                </div>
+            </form>
+
+            <br/>
+
+            <div class="form-group">
+                <a asp-controller="Account" asp-action="LoginRandom" asp-route-roleId="1">
+                    <input type="button" class="btn btn-outline-primary" value="Login as random user" />
+                </a>
+            </div>
+            <div class="form-group">
+                <a asp-controller="Account" asp-action="LoginRandom" asp-route-roleId="2">
+                    <input type="button" class="btn btn-outline-primary" value="Login as random doctor" />
+                </a>
+            </div>
+            <div class="form-group">
+                <a asp-controller="Account" asp-action="LoginRandom" asp-route-roleId="3">
+                    <input type="button" class="btn btn-outline-primary" value="Login as random editor" />
+                </a>
+            </div>
+            <div class="form-group">
+                <a asp-controller="Account" asp-action="LoginRandom" asp-route-roleId="4">
+                    <input type="button" class="btn btn-outline-primary" value="Login as random admin" />
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")

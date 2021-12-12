@@ -1,0 +1,66 @@
+﻿@model DoctorEditViewModel
+
+<div class="col-md-6">
+    <div class="card card-primary card-outline">
+        <div class="card-header">
+            <h3 class="card-title">Doctor</h3>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="AddOrEdit" asp-route-id="@Model.Id">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="UserId" />
+                <input type="hidden" asp-for="RoleId" />
+                <input type="hidden" asp-for="Login" />
+                <input type="hidden" asp-for="Password" />
+                <input type="hidden" asp-for="PhotoUrl" />
+
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control">
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control">
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="PositionId" class="control-label"></label><br />
+                    <select asp-for="PositionId" asp-items="Model.Positions" class="form-control"></select>
+                    <span asp-validation-for="PositionId" class="text-danger" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Birthday" class="control-label"></label>
+                    <input type="date" asp-for="Birthday" class="form-control">
+                    <span asp-validation-for="Birthday" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control">
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <hr />
+
+                <div class="form-group">
+                    <div class="col-md-6 offset-md-3">
+                        <input type="submit" value="Save" class="btn btn-primary btn-block" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<partial name="_ValidationScriptsPartial" />

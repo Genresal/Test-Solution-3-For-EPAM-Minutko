@@ -1,0 +1,75 @@
+﻿@model PatientInfoSearchModel
+@using EMR.DataTables
+@{
+
+    var _model = new EMR.ViewModels.PatientInfoViewModel();
+    var _filters = new List<FilterParameter>
+{
+        new FilterParameter(nameof(Model.DoctorId), Model.DoctorId, typeof(int)),
+        new FilterParameter(nameof(Model.DateRange), Model.DateRange, Html.DisplayNameFor(value => Model.DateRange))
+};
+}
+
+<div class="row">
+    <div class="col-md-2 border-right">
+        @await Html.PartialAsync("_Filters", _filters)
+
+        <form method="post" action="~/Doctors/Index">
+            <div class="form-group">
+                <input type="submit" value="Reset Filters" class="btn btn-secondary btn btn-block" />
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-10">
+        <table id="patientsInfoTable" class="table table-sm table-striped table-bordered h-auto" style="width:100%">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(value => _model.PatientId)</th>
+                    <th>@Html.DisplayNameFor(value => _model.FullName)</th>
+                    <th>@Html.DisplayNameFor(value => _model.RecordsNumber)</th>
+                    <th>@Html.DisplayNameFor(value => _model.LastRecordModified)</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@{
+    var gridModel = new DataTablesModel
+    {
+        StateSave = true,
+        AutoWidth = true,
+        Processing = true,
+        ServerSide = true,
+        Paging = true,
+        Searching = true,
+        Order = "3, 'desc'",
+        LengthMenu = "12, 24, 100, 500",
+        PageLength = 12,
+        Name = "patientsInfoTable",
+        Url = "/Patients/LoadPatientInfoTable",
+        Filters = _filters
+    };
+
+    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.PatientId)));
+    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.FullName)));
+    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.RecordsNumber)));
+    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.LastRecordModified))
+    {
+        Render = new RenderDate()
+    }
+    );
+
+string button = " <a href =\"/Patients/Index?id=' + row.patientId + '\" class=\"btn btn-light btn btn-sm py-0\" style=\"font-size: 1em;\"><i class=\"far fa-eye\"></i></a>";
+
+    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(_model.PatientId))
+    {
+        Orderable = false,
+        Render = new RenderRandom(button)
+    }
+);
+
+}
+@await Html.PartialAsync("Table", gridModel)
