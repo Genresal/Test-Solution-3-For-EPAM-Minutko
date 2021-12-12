@@ -1,5 +1,4 @@
-﻿using EMR.Business.Models;
-using EMR.Services;
+﻿using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

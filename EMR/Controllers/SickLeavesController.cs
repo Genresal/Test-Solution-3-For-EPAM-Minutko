@@ -1,11 +1,9 @@
-﻿using EMR.Business.Models;
-using EMR.Services;
+﻿using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 
 namespace EMR.Controllers
 {
@@ -74,7 +72,7 @@ namespace EMR.Controllers
                     }
                 }
 
-                return RedirectToAction("Details", "Records", new { id = model.RecordId});
+                return RedirectToAction("Details", "Records", new { id = model.RecordId });
             }
             return View(model);
         }
@@ -96,7 +94,7 @@ namespace EMR.Controllers
                 return RedirectToAction("Index", "Records");
             }
 
-            return RedirectToAction("Details", "Records", new {id = recordId});
+            return RedirectToAction("Details", "Records", new { id = recordId });
         }
     }
 }

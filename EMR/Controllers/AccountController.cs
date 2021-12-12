@@ -1,6 +1,4 @@
-﻿using EMR.Helpers;
-using EMR.Models;
-using EMR.Services;
+﻿using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -51,8 +49,6 @@ namespace EMR.Controllers
                 if (user != null)
                 {
                     await Authenticate(user);
-
-                    _logger.LogInformation($"{User.Identity.Name} is logged into the account.");
 
                     return user.RoleId switch
                     {
@@ -123,6 +119,8 @@ namespace EMR.Controllers
 
                 model.Message = "Error, the login already exists";
             }
+
+            //TODO: delete viewbag
             PrepareViewBag();
             return View(model);
         }
@@ -183,6 +181,8 @@ namespace EMR.Controllers
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
                 ClaimsIdentity.DefaultRoleClaimType);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+
+            _logger.LogInformation($"{user.Login} is logged into the account.");
         }
 
         private void PrepareViewBag()

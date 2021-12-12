@@ -3,6 +3,7 @@ using EMR.Models;
 using EMR.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -15,12 +16,15 @@ namespace EMR.Controllers
     {
         private readonly AzureStorageConfig _storageConfig;
         private readonly IUserPageService _userPageService;
+        private readonly ILogger<ImagesController> _logger;
 
-        public ImagesController(IOptions<AzureStorageConfig> config, 
-                            IUserPageService userPageService)
+        public ImagesController(IOptions<AzureStorageConfig> config,
+                            IUserPageService userPageService,
+                            ILogger<ImagesController> logger)
         {
             _storageConfig = config.Value;
             _userPageService = userPageService;
+            _logger = logger;
         }
 
         public IActionResult Index(int userId)
@@ -61,6 +65,7 @@ namespace EMR.Controllers
                                             "/" + userId.ToString();
 
                                 _userPageService.SetPhotoUrl(userId, blobUri);
+                                _logger.LogWarning($"{User.Identity.Name} loaded new photo for userId = {userId}.");
                             }
                         }
                     }

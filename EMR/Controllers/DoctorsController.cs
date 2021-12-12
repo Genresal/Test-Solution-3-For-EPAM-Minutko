@@ -1,17 +1,13 @@
-﻿using EMR.Business.Models;
-using EMR.Helpers;
+﻿using EMR.Helpers;
 using EMR.Models;
 using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace EMR.Controllers
 {
@@ -128,7 +124,7 @@ namespace EMR.Controllers
 
                 var userId = _pageService.GetByLogin(model.Login).Id;
 
-                return RedirectToAction(nameof(Index), new { id = userId});
+                return RedirectToAction(nameof(Index), new { id = userId });
             }
 
             return View(model);

@@ -176,7 +176,7 @@ namespace EMR.Controllers
 
             patients.AddRange(_pageService.GetPatients()
                     .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.User.FirstName + " " + x.User.LastName }).ToList());
-
+            //TODO: delete viewbag
             ViewBag.Doctors = new SelectList(doctors, "Value", "Text");
             ViewBag.Patients = new SelectList(patients, "Value", "Text");
         }

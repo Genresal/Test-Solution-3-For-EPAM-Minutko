@@ -1,14 +1,7 @@
-﻿using EMR.Helpers;
-using EMR.DataTables;
-using EMR.ViewModels;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using EMR.Services;
+﻿using EMR.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace EMR.Controllers
 {
@@ -16,10 +9,12 @@ namespace EMR.Controllers
     {
         private readonly IHomePageService _pageService;
         private readonly IUserPageService _userPageService;
-        public HomeController(IHomePageService pageService, IUserPageService userPageService)
+        private readonly ILogger<HomeController> _logger;
+        public HomeController(IHomePageService pageService, IUserPageService userPageService, ILogger<HomeController> logger)
         {
             _pageService = pageService;
             _userPageService = userPageService;
+            _logger = logger;
         }
 
         //[Authorize]
@@ -71,12 +66,14 @@ namespace EMR.Controllers
         public IActionResult CreateBaseDate()
         {
             _pageService.CreateDefaultDate();
+            _logger.LogWarning($"{User.Identity.Name} created default database data.");
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult DropTables()
         {
             _pageService.DropTables();
+            _logger.LogWarning($"{User.Identity.Name} droped database tables.");
             return RedirectToAction(nameof(Index));
         }
     }

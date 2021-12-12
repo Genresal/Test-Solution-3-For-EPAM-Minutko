@@ -32,18 +32,20 @@ namespace EMR.Business.Services
 
         public virtual void Create(T model)
         {
-            _logger.LogInformation($"Create new model");
             _mainRepository.Create(model);
+            _logger.LogInformation($"Service created new {typeof(T).Name}");
         }
 
         public virtual void Update(T model)
         {
             _mainRepository.Update(model);
+            _logger.LogInformation($"Service updated new {typeof(T).Name}");
         }
 
         public virtual void Delete(int id)
         {
             _mainRepository.Delete(id);
+            _logger.LogInformation($"Service deleted {typeof(T).Name} with id = {id}");
         }
     }
 }

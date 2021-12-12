@@ -51,11 +51,12 @@ namespace EMR.Controllers
                                             .Select(x => new FilterCondition(x.Id, x.Name))
                                             .ToList();
             searchModel.PatientId = model.Id;
-            if(User.IsInRole("Editor") || User.IsInRole("Admin"))
+            if (User.IsInRole("Editor") || User.IsInRole("Admin"))
             {
                 searchModel.IsUserEditor = true;
             }
 
+            //TODO: delete viewbag
             ViewBag.SearchModel = searchModel;
 
             return View(model);
@@ -171,7 +172,7 @@ namespace EMR.Controllers
                 _pageService.Delete(id);
                 _ = StorageHelper.DeleteFileFromStorage(userId.ToString(), _storageConfig);
                 _logger.LogInformation($"{User.Identity.Name} deleted user with id {id}.");
-                
+
             }
             catch (Exception ex)
             {
