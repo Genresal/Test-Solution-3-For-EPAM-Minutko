@@ -65,7 +65,7 @@ namespace EMR.Controllers
                 var model = new RecordViewModel();
                 model.Id = 0;
                 model.Doctors = _pageService.PrepareDoctors();
-                model.Patients = _pageService.PrepareDoctors();
+                model.Patients = _pageService.PreparePatients();
                 model.PatientId = patientId;
                 if (User.IsInRole("Doctor"))
                 {
@@ -119,7 +119,7 @@ namespace EMR.Controllers
                 return RedirectToAction(nameof(Details), new { id = model.Id });
             }
             model.Doctors = _pageService.PrepareDoctors();
-            model.Patients = _pageService.PrepareDoctors();
+            model.Patients = _pageService.PreparePatients();
             return View(model);
         }
 
