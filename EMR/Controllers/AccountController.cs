@@ -96,8 +96,8 @@ namespace EMR.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Register()
         {
-            PrepareViewBag();
-            return View(new RegisterViewModel());
+            var viewModel = new RegisterViewModel() { Roles = _accountService.PrepareRoles() };
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -118,10 +118,9 @@ namespace EMR.Controllers
                 }
 
                 model.Message = "Error, the login already exists";
+                model.Roles = _accountService.PrepareRoles();
             }
 
-            //TODO: delete viewbag
-            PrepareViewBag();
             return View(model);
         }
 
@@ -183,14 +182,6 @@ namespace EMR.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
 
             _logger.LogInformation($"{user.Login} is logged into the account.");
-        }
-
-        private void PrepareViewBag()
-        {
-            List<SelectListItem> roles = new List<SelectListItem>();
-            roles.AddRange(_userService.GetRoles()
-                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList());
-            ViewBag.Roles = new SelectList(roles, "Value", "Text");
         }
     }
 }

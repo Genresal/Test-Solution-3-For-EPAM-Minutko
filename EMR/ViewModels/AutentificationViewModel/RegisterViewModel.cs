@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace EMR.ViewModels
 {
@@ -24,5 +26,6 @@ namespace EMR.ViewModels
         public string ConfirmPassword { get; set; }
 
         public string Message { get; set; }
+        public List<SelectListItem> Roles { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using EMR.Helpers;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -33,6 +34,15 @@ namespace EMR.Services
         public bool IsLoginExist(string login)
         {
             return _userService.GetByColumn(nameof(User.Login), login).Any();
+        }
+
+        public List<SelectListItem> PrepareRoles()
+        {
+            List<SelectListItem> roles = new List<SelectListItem>();
+            roles.AddRange(_roleService.GetAll()
+                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList());
+
+            return roles;
         }
     }
 }

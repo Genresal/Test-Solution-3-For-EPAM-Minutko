@@ -65,7 +65,6 @@ namespace EMR.Controllers
                                             "/" + userId.ToString();
 
                                 _userPageService.SetPhotoUrl(userId, blobUri);
-                                _logger.LogWarning($"{User.Identity.Name} loaded new photo for userId = {userId}.");
                             }
                         }
                     }
@@ -77,6 +76,7 @@ namespace EMR.Controllers
 
                 if (isUploaded)
                 {
+                    _logger.LogInformation($"{User.Identity.Name} loaded new photo for userId = {userId}.");
                     return RedirectToAction("Details", "Users", new { id = userId });
                 }
                 else

@@ -5,6 +5,7 @@ namespace EMR.ViewModels
 {
     public class PatientInfoViewModel
     {
+        [Display(Name = "Patient Id")]
         public int PatientId { get; set; }
         [Display(Name = "Records number")]
         public int RecordsNumber { get; set; }
