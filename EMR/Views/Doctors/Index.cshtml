@@ -1,12 +1,10 @@
 ﻿@model DoctorViewModel
 @{
-    ViewData["Title"] = "Doctor's page";
+    ViewData["Title"] = "Doctor's patients";
 
 }
 
 <partial name="_TableScriptsAndStyles" />
-
-<h3>@ViewData["Title"]</h3>
 
 <div class="row">
 
@@ -30,7 +28,7 @@
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">
-                    Records
+                    @ViewData["Title"]
                 </h3>
                 <div class="card-tools">
                     <a asp-controller="Records" asp-action="AddOrEdit">

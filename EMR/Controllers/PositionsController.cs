@@ -22,7 +22,7 @@ namespace EMR.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(new PositionSearchModel());
         }
 
         [HttpPost]
@@ -98,20 +98,21 @@ namespace EMR.Controllers
         {
             if (_pageService.IsPositionInUse(id))
             {
-                ViewBag.Message = "Error! Cannot be deleted. Doctors with that position still exist, change their position first!";
-                return View(nameof(Index));
+                string message = "Error! Cannot be deleted. Doctors with that position still exist, change their position first!";
+                var positionSearchModel = new PositionSearchModel() { Message = message };
+                return View(nameof(Index), positionSearchModel);
             }
 
             try
             {
                 _pageService.Delete(id);
-                _logger.LogInformation($"{User.Identity.Name} deleted user with id {id}.");
+                _logger.LogInformation($"{User.Identity.Name} deleted position with id {id}.");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{User.Identity.Name} failed to delete user with id {id}. {ex.Message}");
+                _logger.LogError($"{User.Identity.Name} failed to delete position with id {id}. {ex.Message}");
             }
-            return View(nameof(Index));
+            return View(nameof(Index), new PositionSearchModel());
         }
     }
 }

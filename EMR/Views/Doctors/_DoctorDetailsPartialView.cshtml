@@ -8,27 +8,19 @@
             <span>@Model.FirstName</span>
             <span>@Model.LastName</span>
         </h3>
-
         <hr>
 
-        <strong><i class="fas fa-birthday-cake mr-1"></i> Day Of Birth</strong>
-
+        <strong><i class="fas fa-birthday-cake mr-1"></i> @Html.DisplayNameFor(value => Model.Birthday)</strong>
         <p class="text-muted">@Model.Birthday</p>
-
         <hr>
 
-        <strong><i class="fas fa-briefcase-medical mr-1"></i> Position</strong>
-
+        <strong><i class="fas fa-briefcase-medical mr-1"></i> @Html.DisplayNameFor(value => Model.Position)</strong>
         <p class="text-muted">@Model.Position</p>
-
         <hr>
 
-        <strong><i class="fas fa-at mr-1"></i> E-mail</strong>
-
+        <strong><i class="fas fa-at mr-1"></i> @Html.DisplayNameFor(value => Model.Email)</strong>
         <p class="text-muted">@Model.Email</p>
-
         <hr>
 
-        <strong><i class="fas fa-phone mr-1"></i> Phone number</strong>
-
+        <strong><i class="fas fa-phone mr-1"></i> @Html.DisplayNameFor(value => Model.PhoneNumber)</strong>
         <p class="text-muted">@Model.PhoneNumber</p>
