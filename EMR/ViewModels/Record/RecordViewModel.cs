@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace EMR.ViewModels
@@ -24,5 +26,8 @@ namespace EMR.ViewModels
         public int DoctorPositionId { get; set; }
         [Display(Name = "Modified date")]
         public DateTime ModifiedDate { get; set; }
+
+        public List<SelectListItem> Doctors { get; set; }
+        public List<SelectListItem> Patients { get; set; }
     }
 }

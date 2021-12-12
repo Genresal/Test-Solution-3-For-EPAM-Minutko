@@ -60,12 +60,12 @@ namespace EMR.Controllers
         [Authorize(Roles = "Doctor, Editor, Admin")]
         public IActionResult AddOrEdit(int id = 0, int patientId = 0)
         {
-            PrepareViewBag();
-
             if (id == 0)
             {
                 var model = new RecordViewModel();
                 model.Id = 0;
+                model.Doctors = _pageService.PrepareDoctors();
+                model.Patients = _pageService.PrepareDoctors();
                 model.PatientId = patientId;
                 if (User.IsInRole("Doctor"))
                 {
@@ -118,7 +118,8 @@ namespace EMR.Controllers
 
                 return RedirectToAction(nameof(Details), new { id = model.Id });
             }
-            PrepareViewBag();
+            model.Doctors = _pageService.PrepareDoctors();
+            model.Patients = _pageService.PrepareDoctors();
             return View(model);
         }
 
@@ -165,20 +166,6 @@ namespace EMR.Controllers
             }
 
             return View(model);
-        }
-
-        private void PrepareViewBag()
-        {
-            List<SelectListItem> doctors = new List<SelectListItem>();
-            List<SelectListItem> patients = new List<SelectListItem>();
-            doctors.AddRange(_pageService.GetDoctors()
-                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = "Dr. " + x.User.FirstName + " " + x.User.LastName }).ToList());
-
-            patients.AddRange(_pageService.GetPatients()
-                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.User.FirstName + " " + x.User.LastName }).ToList());
-            //TODO: delete viewbag
-            ViewBag.Doctors = new SelectList(doctors, "Value", "Text");
-            ViewBag.Patients = new SelectList(patients, "Value", "Text");
         }
     }
 }

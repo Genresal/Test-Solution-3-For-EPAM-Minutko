@@ -43,5 +43,6 @@ namespace EMR.ViewModels
         public string FullName { get; set; }
 
         public bool isUserAllowedToEdit { get; set; }
+        public RecordSearchModel RecordSearchModel { get; set; }
     }
 }

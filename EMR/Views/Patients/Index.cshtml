@@ -35,7 +35,7 @@
                         </div>
                 </div>
                 <div class="card-body">
-                    @await Html.PartialAsync("~/Views/Records/_PatientRecordsTable.cshtml", (RecordSearchModel)ViewBag.SearchModel)
+                    @await Html.PartialAsync("~/Views/Records/_PatientRecordsTable.cshtml", Model.RecordSearchModel)
                 </div>
             </div>
         </div>

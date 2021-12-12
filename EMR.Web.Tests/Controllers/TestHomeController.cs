@@ -3,6 +3,7 @@ using EMR.Services;
 using EMR.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace EMR.Web.Tests
 
         private Mock<IUserPageService> _mockUserService;
         private Mock<IHomePageService> _mockHomeService;
+        private Mock<ILogger<HomeController>> _mockLogger;
         private List<UserViewModel> _users;
 
         [SetUp]
@@ -24,6 +26,7 @@ namespace EMR.Web.Tests
         {
             _mockUserService = new Mock<IUserPageService>();
             _mockHomeService = new Mock<IHomePageService>();
+            _mockLogger = new Mock<ILogger<HomeController>>();
 
             _users = new List<UserViewModel>
             {
@@ -47,7 +50,7 @@ namespace EMR.Web.Tests
             var mockHttpContext = new Mock<HttpContext>();
             mockHttpContext.Setup(m => m.User).Returns(mockPrincipal.Object);
 
-            var controller = new HomeController(_mockHomeService.Object, _mockUserService.Object)
+            var controller = new HomeController(_mockHomeService.Object, _mockUserService.Object, _mockLogger.Object)
             {
                 ControllerContext = new ControllerContext
                 {
@@ -69,7 +72,7 @@ namespace EMR.Web.Tests
         {
             int id = 1;
             _mockUserService.Setup(s => s.GetById(id)).Returns(GetTestUser(id));
-            var controller = new HomeController(_mockHomeService.Object, _mockUserService.Object);
+            var controller = new HomeController(_mockHomeService.Object, _mockUserService.Object, _mockLogger.Object);
 
             var result = controller.Details(id) as RedirectToActionResult;
 
@@ -85,7 +88,7 @@ namespace EMR.Web.Tests
         {
             int id = 2;
             _mockUserService.Setup(s => s.GetById(id)).Returns(GetTestUser(id));
-            var controller = new Controllers.HomeController(_mockHomeService.Object, _mockUserService.Object);
+            var controller = new Controllers.HomeController(_mockHomeService.Object, _mockUserService.Object, _mockLogger.Object);
 
             var result = controller.Details(id) as RedirectToActionResult;
 
@@ -101,7 +104,7 @@ namespace EMR.Web.Tests
         {
             int id = 3;
             _mockUserService.Setup(s => s.GetById(id)).Returns(GetTestUser(id));
-            var controller = new HomeController(_mockHomeService.Object, _mockUserService.Object);
+            var controller = new HomeController(_mockHomeService.Object, _mockUserService.Object, _mockLogger.Object);
 
             var result = controller.Details(id) as RedirectToActionResult;
 
@@ -117,7 +120,7 @@ namespace EMR.Web.Tests
         {
             int id = 4;
             _mockUserService.Setup(s => s.GetById(id)).Returns(GetTestUser(id));
-            var controller = new HomeController(_mockHomeService.Object, _mockUserService.Object);
+            var controller = new HomeController(_mockHomeService.Object, _mockUserService.Object, _mockLogger.Object);
 
             var result = controller.Details(id) as RedirectToActionResult;
 

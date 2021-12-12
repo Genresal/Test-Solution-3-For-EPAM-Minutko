@@ -41,7 +41,6 @@ namespace EMR.Data.Repositories
             return ExecuteReader(sqlExpression, new SqlParameter("@value", value));
         }
 
-        // TODO: make from get by column
         public override User GetById(int id)
         {
             string sqlExpression = $"{baseQuery} " +
@@ -122,7 +121,7 @@ $",'https://azuresklad.blob.core.windows.net/images/102')";
             model.Birthday = (DateTime)reader[nameof(model.Birthday)];
             model.Email = (string)reader[nameof(model.Email)];
             model.PhoneNumber = (string)reader[nameof(model.PhoneNumber)];
-            model.PhotoUrl = Convert.IsDBNull(reader[nameof(model.PhotoUrl)]) ? null : (string?)reader[nameof(model.PhotoUrl)];
+            model.PhotoUrl = Convert.IsDBNull(reader[nameof(model.PhotoUrl)]) ? null : (string)reader[nameof(model.PhotoUrl)];
             model.Role.Name = (string)reader[$"{nameof(Role)}{nameof(Role.Name)}"];
 
             return model;

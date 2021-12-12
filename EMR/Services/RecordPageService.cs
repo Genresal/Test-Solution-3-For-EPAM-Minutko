@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EMR.Helpers;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EMR.Services
 {
@@ -131,6 +132,30 @@ namespace EMR.Services
         {
             var result = _patientService.GetById(id);
             return result;
+        }
+
+        public List<SelectListItem> PrepareDoctors()
+        {
+            var rawResult = _doctorService.GetAll();
+            var result = _mapper.Map<IEnumerable<Doctor>, IEnumerable<DoctorViewModel>>(rawResult);
+
+            List<SelectListItem> positions = new List<SelectListItem>();
+            positions.AddRange(result
+                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = "Dr. " + x.FirstName + " " + x.LastName }).ToList());
+
+            return positions;
+        }
+
+        public List<SelectListItem> PreparePatients()
+        {
+            var rawResult = _patientService.GetAll();
+            var result = _mapper.Map<IEnumerable<Patient>, IEnumerable<PatientViewModel>>(rawResult);
+
+            List<SelectListItem> positions = new List<SelectListItem>();
+            positions.AddRange(result
+                    .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.FirstName + " " + x.LastName }).ToList());
+
+            return positions;
         }
     }
 }

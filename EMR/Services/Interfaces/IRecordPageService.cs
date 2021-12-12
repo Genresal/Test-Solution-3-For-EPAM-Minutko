@@ -1,5 +1,6 @@
 ﻿using EMR.Business.Models;
 using EMR.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
 namespace EMR.Services
@@ -12,5 +13,7 @@ namespace EMR.Services
         public Patient GetPatient(int id);
         public IEnumerable<Position> GetDoctorPositions();
         public RecordDetailsViewModel Details(int id);
+        public List<SelectListItem> PrepareDoctors();
+        public List<SelectListItem> PreparePatients();
     }
 }

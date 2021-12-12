@@ -30,15 +30,9 @@ namespace EMR
 
         public void ConfigureServices(IServiceCollection services)
         {
-             string conectionString = Configuration.GetConnectionString("EMR");
-            //string conectionString = Configuration.GetConnectionString("AZURE");
-            /*
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File("Logs\\log.txt", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-            services.AddSingleton(Log.Logger);
-            */
+             //string conectionString = Configuration.GetConnectionString("EMR");
+            string conectionString = Configuration.GetConnectionString("AZURE");
+
             services.AddOptions();
             services.Configure<AzureStorageConfig>(Configuration.GetSection("AzureStorageConfig"));
 

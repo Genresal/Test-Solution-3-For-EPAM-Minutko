@@ -56,8 +56,7 @@ namespace EMR.Controllers
                 searchModel.IsUserEditor = true;
             }
 
-            //TODO: delete viewbag
-            ViewBag.SearchModel = searchModel;
+            model.RecordSearchModel = searchModel;
 
             return View(model);
         }
