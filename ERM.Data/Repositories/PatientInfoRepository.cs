@@ -13,7 +13,17 @@ namespace EMR.Data.Repositories
         }
         public IEnumerable<PatientInfo> GetPatientsInfo(int doctorId)
         {
-            return StoredExecuteReader("GetPatientsInfo", new SqlParameter("@doctorId", doctorId));
+            string sqlExpression = $"SELECT [PatientId], " +
+                $"COUNT(t.Id) as {nameof(PatientInfo.RecordsNumber)}, " +
+                $"MAX([ModifiedDate]) as {nameof(PatientInfo.LastRecordModified)}, " +
+                $"(SELECT [FirstName] FROM [tUser] WHERE [Id] = MAX(p.UserId)) as {nameof(PatientInfo.FirstName)}, " +
+                $"(SELECT [LastName] FROM [tUser] WHERE [Id] = MAX(p.UserId)) as {nameof(PatientInfo.LastName)} " +
+                $"FROM [tRecord] as t " +
+                $"LEFT JOIN [tPatient] as p on p.Id = t.PatientId " +
+                $"WHERE [DoctorId] = @doctorId " +
+                $"GROUP BY [PatientId]";
+
+            return ExecuteReader(sqlExpression, new SqlParameter("@doctorId", doctorId));
         }
 
         protected override PatientInfo Map(SqlDataReader reader)

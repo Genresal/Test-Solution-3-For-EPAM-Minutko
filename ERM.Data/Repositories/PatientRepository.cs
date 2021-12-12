@@ -11,31 +11,42 @@ namespace EMR.Data.Repositories
 {
     public class PatientsRepository : BaseRepository<Patient>, IPatientRepository
     {
+        private readonly string baseQuery;
         public PatientsRepository(string conn) : base(conn)
         {
+            baseQuery = $"SELECT p.{nameof(Patient.Id)}, " +
+                        $"{nameof(Patient.UserId)}, " +
+                        $"{nameof(Patient.Job)}, " +
+                        $"up.{nameof(User.Login)} as {nameof(Patient)}{nameof(User.Login)}, " +
+                        $"up.{nameof(User.Password)} as {nameof(Patient)}{nameof(User.Password)}, " +
+                        $"up.{nameof(User.FirstName)} as {nameof(Patient)}{nameof(User.FirstName)}, " +
+                        $"up.{nameof(User.LastName)} as {nameof(Patient)}{nameof(User.LastName)}, " +
+                        $"up.{nameof(User.RoleId)} as {nameof(Patient)}{nameof(User.RoleId)}, " +
+                        $"up.{nameof(User.Birthday)} as {nameof(Patient)}{nameof(User.Birthday)}, " +
+                        $"up.{nameof(User.Email)} as {nameof(Patient)}{nameof(User.Email)}, " +
+                        $"up.{nameof(User.PhoneNumber)} as {nameof(Patient)}{nameof(User.PhoneNumber)}, " +
+                        $"up.{nameof(User.PhotoUrl)} as {nameof(Patient)}{nameof(User.PhotoUrl)} " +
+                        $"FROM {nameof(Patient).ConvertToTableName()} as p " +
+                        $"LEFT JOIN {nameof(User).ConvertToTableName()} as up ON up.{nameof(User.Id)} = p.{nameof(Patient.UserId)}";
         }
 
         public override IEnumerable<Patient> GetAll()
         {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@COLUMN", DBNull.Value));
-            parameters.Add(new SqlParameter("@OPERATOR", DBNull.Value));
-            parameters.Add(new SqlParameter("@VALUE", DBNull.Value));
-            return StoredExecuteReader("GetPatients", parameters);
+            return ExecuteReader(baseQuery);
         }
 
         public override IEnumerable<Patient> GetByColumn(string column, string value)
         {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@COLUMN", column));
-            parameters.Add(new SqlParameter("@OPERATOR", "="));
-            parameters.Add(new SqlParameter("@VALUE", value));
-            return StoredExecuteReader("GetPatients", parameters);
+            string sqlExpression = $"{baseQuery} WHERE [{column}] = @value";
+            return ExecuteReader(sqlExpression, new SqlParameter("@value", value));
         }
 
         public override Patient GetById(int id)
         {
-            return GetByColumn("pat.Id", id).FirstOrDefault();
+            string sqlExpression = $"{baseQuery} " +
+                                   $"WHERE p.[Id] = @Id";
+
+            return ExecuteReader(sqlExpression, new SqlParameter("@Id", id)).FirstOrDefault();
         }
 
         public IEnumerable<Patient> GetByDoctorId(int doctorId)
