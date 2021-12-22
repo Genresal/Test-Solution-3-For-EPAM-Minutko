@@ -195,7 +195,6 @@ namespace EMR.Data.Repositories
             string sqlExpression = $@"IF OBJECT_ID('dbo.{typeof(T).Name.ConvertToTableName()}', 'U') IS NOT NULL " +
                                                                                         $"SELECT 1 as {valueName} " +
                                                                                         $"ELSE " +
-
                                                                                         $"SELECT 0 as {valueName}";
             return (int)ExecuteScalar(sqlExpression, valueName) == 1;
         }
@@ -215,7 +214,7 @@ namespace EMR.Data.Repositories
 
         #endregion
 
-        #region Exrecutors
+        #region Executors
         protected object ExecuteScalar(string sqlExpression, string valueName)
         {
             object result = null;
@@ -442,6 +441,9 @@ namespace EMR.Data.Repositories
             }
         }
 
+        #endregion
+
+        #region Helpers
         protected List<SqlParameter> ProrertiesToSqlParameters(BaseModel model, List<PropertyInfo> properties)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -457,7 +459,6 @@ namespace EMR.Data.Repositories
             }
             return parameters;
         }
-
         #endregion
     }
 }
