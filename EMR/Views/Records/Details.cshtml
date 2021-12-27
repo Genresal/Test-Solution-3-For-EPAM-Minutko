@@ -70,7 +70,7 @@
                         @if (Model.isUserAllowedToEdit)
                         {
                             <a href="/SickLeaves/AddOrEdit?id=@Model.Id&recordId=@Model.Id" class="btn btn-primary btn-block"><b>Edit</b></a>
-                            <a href="/SickLeaves/Delete?id=@Model.Id&recordId=@Model.Id" class="btn btn-primary btn-block"><b>Delete</b></a>
+                            <a href="/SickLeaves/Delete?id=@Model.SickLeave.Id&recordId=@Model.Id" class="btn btn-primary btn-block"><b>Delete</b></a>
                         }
                     }
                     else

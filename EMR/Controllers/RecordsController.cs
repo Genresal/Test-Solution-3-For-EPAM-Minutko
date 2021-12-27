@@ -86,6 +86,10 @@ namespace EMR.Controllers
                 {
                     return NotFound();
                 }
+
+                model.Doctors = _pageService.PrepareDoctors();
+                model.Patients = _pageService.PreparePatients();
+
                 return View(model);
             }
         }

@@ -19,7 +19,7 @@ namespace EMR.ViewModels
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Please enter name")]
-        [Display(Name = "First name")]
+        [Display(Name = "Position")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Please enter last name")]
@@ -42,8 +42,6 @@ namespace EMR.ViewModels
 
         [Display(Name = "Photo")]
         public string PhotoUrl { get; set; }
-
-        public bool isUserAllowedToEdit { get; set; }
         public List<SelectListItem> Positions { get; set; }
     }
 }

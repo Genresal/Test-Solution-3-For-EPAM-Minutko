@@ -10,7 +10,7 @@ namespace EMR.ViewModels
         public int RoleId { get; set; }
 
         [Required(ErrorMessage = "Please select doctor's position")]
-        [Display(Name = "First name")]
+        [Display(Name = "Position")]
         public int PositionId { get; set; }
         public string Position { get; set; }
         public string Login { get; set; }
