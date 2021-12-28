@@ -13,6 +13,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Text.Json.Serialization;
+using Serilog;
+using Serilog.Events;
 
 namespace EMR
 {
@@ -86,13 +88,21 @@ namespace EMR
             services.AddTransient<ISickLeavePageService, SickLeavePageService>();
 
             services.AddSingleton<IDbService, DbService>();
+
+            var path = AppContext.BaseDirectory;
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.File($"{path}\\Logs\\Log.txt")//, rollingInterval: RollingInterval.Day)
+                .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Information)
+                .CreateLogger();
+            services.AddSingleton(Log.Logger);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)//, ILoggerFactory loggerFactory)
         {
-            var path = AppContext.BaseDirectory;
-            loggerFactory.AddFile($"{path}\\Logs\\Log.txt");
+            //var path = AppContext.BaseDirectory;
+            //loggerFactory.AddFile($"{path}\\Logs\\Log.txt");
 
             if (env.IsDevelopment())
             {
@@ -103,6 +113,7 @@ namespace EMR
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
